@@ -1,0 +1,41 @@
+<?php $__env->startSection('content'); ?>
+    <!--tool bar-->
+    <div class="">
+        <a href="/PD/AddProject" class="btn btn-primary">新增</a>
+        <a href="/PD/ImportProject" class="btn btn-primary">匯入範本</a>
+    <div>
+    <!--data table-->
+    <table class="table table-bordered" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <td width=60></td>
+                <td width=60></td>
+                <td>開發案號</td>
+                <td>開發案名稱</td>
+                <td width=120>客戶名稱</td>
+                <td width=120>業務員</td>
+                <td>開始時間</td>
+                <td>完成時間</td>
+                <td width=50>狀態</td>
+                <td width=60></td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($ProjectList as $list): ?>
+                <tr>
+                    <td><a href="/PD/EditProject/<?php echo e($list->ID); ?>" class="btn btn-sm btn-default">編輯</a></td>
+                    <td><a href="/PD/ProductList/<?php echo e($list->ID); ?>" class="btn btn-sm btn-info">產品</a></td>
+                    <td><?php echo e($list->referenceNumber); ?></td>
+                    <td><?php echo e($list->referenceName); ?></td>
+                    <td><?php echo e($list->ClientName); ?></td>
+                    <td><?php echo e($list->NodeName . '_' . $list->StaffName); ?></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete()"></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

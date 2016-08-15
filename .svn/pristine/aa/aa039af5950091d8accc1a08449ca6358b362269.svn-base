@@ -1,0 +1,27 @@
+<?php $__env->startSection('content'); ?>
+    <!--tool bar-->
+    <div class="">
+        <a href="/PD/AddProject" class="btn btn-primary">新增</a>
+        <a href="/PD/ImportProject" class="btn btn-primary">匯入範本</a>
+    <div>
+    <!--data table-->
+    <table class="table table-bordered" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <td width="40"></td>
+                <td>開發案號</td>
+                <td>開發案名稱</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($ProjectList as $list): ?>
+                <tr>
+                    <td><input type="button" class="btn btn-sm btn-default" name="" value="編輯"></td>
+                    <td><?php echo e($list->referenceNumber); ?></td>
+                    <td><?php echo e($list->referenceName); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

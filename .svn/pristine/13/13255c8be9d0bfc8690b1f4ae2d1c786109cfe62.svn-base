@@ -1,0 +1,158 @@
+<?php
+
+namespace App\Http\Controllers\ProductDevelopment;
+
+//use Class
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
+use App\Http\Controllers\Common;
+
+//use DB
+use DB;
+use App\Models\productDevelopment\Project;
+use App\Models\productDevelopment\vProjectList;
+use App\Models\productDevelopment\ProjectContent;
+use App\Models\productDevelopment\para;
+use App\Models\companyStructure\vStaff;
+use App\Models\companyStructure\Staff;
+use App\Models\companyStructure\Node;
+use App\Models\sales\Client;
+
+class ProductController extends Controller
+{
+    public function ProductList($ProjectID)
+    {
+        $Project = new vProjectList();
+        $ProjectData = $Project
+            ->where('ID', $ProjectID)
+            ->get()
+            ->first();
+
+        $ProjectContent = new ProjectContent();
+        $ProductList = $ProjectContent
+            ->where('projectID',$ProjectID)
+            ->get();
+
+        return view('Product.ProductList')
+            ->with('ProductList', $ProductList)
+            ->with('ProjectData', $ProjectData);
+    }
+    
+    public function AddProduct($ProjectID)
+    {
+        $para = new para();
+        $priorityLevelList = $para
+            ->where('paracode','priorityLevel')
+            ->get();
+
+        return view('Product.AddProduct')
+            ->with('ProjectID', $ProjectID)
+            ->with('PriorityLevelList', $priorityLevelList);
+    }
+
+    public function InsertProduct(Request $request)
+    {
+        $ProjectID = $request->input('ProjectID');
+        $ProductNumber = $request->input('ProductNumber');
+        $ProductName = $request->input('ProductName');
+        $RequiredQuantity = $request->input('RequiredQuantity');
+        $DeliveredQuantity = $request->input('DeliveredQuantity');
+        $Deadline = $request->input('Deadline');
+        $StartDate = $request->input('StartDate');
+        $priorityLevel = $request->input('PriorityLevel');
+
+        try {
+            DB::beginTransaction();
+
+            $oProjectContent = new ProjectContent();
+            $oProjectContent->ID = Common::GetNewGUID();
+            $oProjectContent->projectID = $ProjectID;
+            $oProjectContent->referenceName = $ProductName;
+            $oProjectContent->referenceNumber = $ProductNumber;
+            $oProjectContent->requiredQuantity = $RequiredQuantity;
+            $oProjectContent->deliveredQuantity = $DeliveredQuantity;
+            $oProjectContent->deadline = $Deadline;
+            $oProjectContent->priorityLevel = $priorityLevel;
+            $oProjectContent->save();
+            
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '新增開發產品成功!',
+            );
+        } 
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
+
+    public function EditProduct($ProductID)
+    {
+        $ProjectContent = new ProjectContent();
+        $ProductData = $ProjectContent
+            ->where('ID', $ProductID)
+            ->get()
+            ->first();
+
+        $para = new para();
+        $priorityLevelList = $para
+            ->where('paracode','priorityLevel')
+            ->get();
+
+        return view('Product.EditProduct')
+            ->with('ProductData', $ProductData)
+            ->with('PriorityLevelList', $priorityLevelList);
+    }
+
+    public function UpdateProduct(Request $request, $ProductID)
+    {
+        $params = array();
+        $params['referenceNumber'] = $request->input('ProductNumber');
+        $params['referenceName'] = $request->input('ProductName');
+        $params['requiredQuantity'] = $request->input('RequiredQuantity');
+        $params['deliveredQuantity'] = $request->input('DeliveredQuantity');
+        $params['deadline'] = $request->input('Deadline');
+        $params['startDate'] = $request->input('StartDate');
+        $params['priorityLevel'] = $request->input('PriorityLevel');
+
+        try {
+            DB::beginTransaction();
+
+            $ProjectContent = new ProjectContent();
+            $ProjectContent = $ProjectContent
+                ->where('ID',$ProductID);
+            
+            if($ProjectContent->count() < 1)
+            {
+                $jo = array(
+                    'success' => false,
+                    'msg' => '找不到該開發產品資訊!',
+                );
+                return $jo;
+            }
+            $ProjectContent->update($params);
+            
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '更新開發產品成功!',
+            );
+        } 
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
+}

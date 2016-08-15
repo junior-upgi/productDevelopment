@@ -1,0 +1,131 @@
+<?php
+
+namespace App\Http\Controllers\ProductDevelopment;
+
+//use Class
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Http\Requests;
+
+//use DB
+use App\Models\productDevelopment\Project;
+use App\Models\companyStructure\vStaff;
+use App\Models\companyStructure\Staff;
+use App\Models\companyStructure\Node;
+use App\Models\sales\Client;
+//use App\Models;
+
+use DB;
+
+class ProductDevelopmentController extends Controller
+{
+    public function ProjectList()
+    {
+        $oProject = new Project();
+        //$oProjectList = new Staff();
+        $ProjectList = $oProject::all();
+        return view('ProductDevelopment.ProjectList')
+            ->with('ProjectList', $ProjectList);
+    }
+
+    public function AddProject()
+    {
+        $oClient = new Client();
+        $ClientList = $oClient
+            ->orderBy('reference')
+            ->get();
+
+        $oNode = new Node();
+        $NodeList = $oNode->orderBy('id')->get();
+
+        return view('ProductDevelopment.AddProject')
+            ->with('ClientList', $ClientList)
+            ->with('NodeList', $NodeList);
+    }
+
+    public function InsertProject()
+    {
+        
+        //return json
+    }
+
+    public function GetStaffByNodeID($NodeID)
+    {
+        $oStaff = new Staff();
+        $StaffData = $oStaff
+            ->where('nodeID','=',$NodeID)
+            ->get();
+        return $StaffData;
+    }
+
+
+    public function ProductList()
+    {
+        /*
+        try {
+            DB::beginTransaction();
+            // database queries here
+            
+            $project = new Project;
+            $project->id = "10";
+            $project->save();
+            
+            
+            DB::commit();
+        } 
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            return $e;
+        }
+        */
+        
+        $project =  DB::table('project')->get();
+        //$project = Project::find(1);
+        return $project;
+        //return view('home');
+    }
+    public function UserList()
+    {
+        /*
+        $UserConn = DB::connection('DB_companyStructure');
+        $UserList = $UserConn->select('
+            SELECT * 
+            FROM companyStructure.staff
+            WHERE id = 1'
+        );
+        */
+        $Staff = new Staff;
+        $u = $Staff::find(1);
+        return $u;
+    }
+
+    public function phpinfo()
+    {
+        phpinfo();
+    }
+
+    public function text()
+    {
+        //insert
+        $post = new Post;
+        $post->title = 'Laravel 學習筆記';
+        $post->content = 'Laravel 是一個 PHP Web 開發框架。';
+        $post->save();
+
+        //delect
+        $post = Post::find(1);
+        $post->delete();
+
+        //update
+        $post = Post::find(1);
+        $post->content = '修改後的內容';
+        $post->save();
+
+        //select
+        $posts = Post::all();
+        Post::where('id','=',1)->get();
+        Post::where('id','=',1)->first();
+
+    }
+}

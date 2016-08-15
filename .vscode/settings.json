@@ -1,0 +1,6 @@
+// 將您的設定放入此檔案中以覆寫預設值和使用者設定。
+{
+    "php.validate.enable": true,
+    "php.validate.executablePath": null,
+    "php.validate.run": "onSave"
+}

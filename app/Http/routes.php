@@ -15,20 +15,42 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//Route::get('/', 'WelcomeController@Hello');
-
-//Route::get('home', 'HomeController@home');
-
-Route::group(['prefix' => 'ProductDevelopment'], function() {
-    Route::get('ProductList', 'ProductDevelopment\ProductDevelopmentController@ProductList');
+Route::group(['prefix' => 'Service'], function() {
+    Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@UserLogin');
+    Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@CheckDevice');
+    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@MessageTIme');
 });
-//Route::get('Login', 'Logincontroller@index');
 
-//Route::get('auth/login', 'Auth/AuthController@login');
-/*
-Route::group(['prefix' => 'auth'], function() {
-    Route::get('login', 'Auth\AuthController@Login');
-    Route::post('login', 'Auth\AuthController@CreateAccount');
-    Route::get('register', 'Auth\AuthController@Register');
+Route::group(['prefix' => 'Project'], function() {
+    Route::get('phpinfo', 'ProductDevelopment\ProjectController@phpinfo');
+
+    Route::get('ProjectList', 'ProductDevelopment\ProjectController@ProjectList');
+
+    Route::get('AddProject', 'ProductDevelopment\ProjectController@AddProject');
+    Route::post('InsertProject', 'ProductDevelopment\ProjectController@InsertProject');
+
+    Route::get('EditProject/{ProjectID}', 'ProductDevelopment\ProjectController@EditProject');
+    Route::post('UpdateProject/{ProjectID}', 'ProductDevelopment\ProjectController@UpdateProject');
+
+    Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@GetStaffByNodeID');
 });
-*/
+
+Route::group(['prefix' => 'Product'], function() {
+    Route::get('ProductList/{ProjectID}', 'ProductDevelopment\ProductController@ProductList');
+
+    Route::get('AddProduct/{ProjectID}', 'ProductDevelopment\ProductController@AddProduct');
+    Route::post('InsertProduct', 'ProductDevelopment\ProductController@InsertProduct');
+
+    Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@EditProduct');
+    Route::post('UpdateProduct/{ProductID}', 'ProductDevelopment\ProductController@UpdateProduct');
+});
+
+Route::group(['prefix' => 'Process'], function() {
+    Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@ProcessList');
+
+    Route::get('AddProcess', 'ProductDevelopment\ProcessController@AddProcess');
+    Route::post('InsertProcess', 'ProductDevelopment\ProcessController@InsertProcess');
+    
+    Route::get('EditProcess/{ProcessID}', 'ProductDevelopment\ProcessController@EditProcess');
+    Route::post('UpdateProcess/{ProcessID}', 'ProductDevelopment\ProcessController@UpdateProcess');
+});
