@@ -27,6 +27,14 @@ $(function(){
             */
         }  
     });
+    $("#sTable tbody").sortable({
+        opacity: 0.6,    //拖曳時透明
+        cursor: 'move',  //游標設定
+        axis: 'y',       //只能垂直拖曳
+        update: function () {
+            $("input#test-log").val($('.sort').sortable('serialize'));
+        }
+    });    
     $('#AddModal').on('show.bs.modal', function (event) { 
         $('#AddProcessForm #ProcessNumber').val('');
         $('#AddProcessForm #ProcessName').val('');

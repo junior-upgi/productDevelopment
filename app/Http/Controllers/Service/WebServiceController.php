@@ -27,7 +27,7 @@ use App\Models\mobileMessagingSystem\message;
 use App\Models\mobileMessagingSystem\messageCategory;
 use App\Models\mobileMessagingSystem\systemCategory;
 use App\Models\mobileMessagingSystem\vBroadcastList;
-//use App\Models;
+use App\Models;
 
 use DB;
 /*
@@ -62,7 +62,7 @@ class WebServiceController extends Controller
                 DB::commit();
                 $jo = array(
                     'success' => true,
-                    'msg' => 'Yes',
+                    'msg' => '驗證通過，設備訊息已寫入!',
                 );
             }
             catch (\PDOException $e)
@@ -122,11 +122,14 @@ class WebServiceController extends Controller
         $MessageTime = new broadcastStatus();
         $jo = array();
         $Now = Carbon::now();
+        $Params = array();
+        $MessageTime = $MessageTime->where('ID', $BroadcastID);
         //檢查訊息是否存在
-        if($MessageTime->where('ID', $BroadcastID)->first())
+        if($MessageTime->first())
         {
             switch($Action)
             {
+                case 'sent':
                 case 'retracted':
                 case 'received':
                 case 'acknowledged':
@@ -158,6 +161,7 @@ class WebServiceController extends Controller
             }
             else
             {
+                //Action 參數不正確
                 $jo = array(
                     'success' => false,
                     'msg' => 'Action參數不正確(Action=' . $Action .')',
@@ -166,6 +170,7 @@ class WebServiceController extends Controller
         }
         else
         {
+            //broadcastID不存在
             $jo = array(
                 'success' => false,
                 'msg' => 'broadcastID不存在!!'

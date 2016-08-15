@@ -29,19 +29,47 @@
     </nav>
     <div id="Sort">
         <ul class="items" id="Process" style="list-style-type:none;">
+            @if($ProcessList->count() < 1 )
+                <li class="" style="visibility:hidden;"></li>
+            @endif
             @foreach($ProcessList as $list)
-            <li class="list bg-warning" id="{{$list->ID}}">
-                <label for="">
-                    {{$list->PhaseName}}
-                    {{$list->referenceNumber}}
-                    {{$list->referenceName}}
-                    {{$list->NodeName}}
-                    {{$list->name}}
-                </label>
-            </li>
+                <li class="list bg-warning" id="{{$list->ID}}">
+                    <label for="">
+                        {{$list->PhaseName}}
+                        {{$list->referenceNumber}}
+                        {{$list->referenceName}}
+                        {{$list->NodeName}}
+                        {{$list->name}}
+                    </label>
+                </li>
             @endforeach
         </ul>
     </div>
+
+    <table id="sTable" class="table table-table-borderless">
+        <tbody >
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>2</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>4</td>
+                <td>4</td>
+            </tr>
+        </tbody>
+    </table>
     <button type="button" onclick="a()">send</button>
     @include('Process.AddProcess')
     @include('Process.EditProcess')
