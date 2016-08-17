@@ -1,0 +1,72 @@
+<?php $__env->startSection('content'); ?>
+    <script src="<?php echo e(url('/')); ?>/js/Product/EditProduct.js?x=1"></script>
+    <!--breadcrumb-->
+    <ol class="breadcrumb">
+        <li><a href="<?php echo e(url('/')); ?>/Project/ProjectList">開發案清單</a></li>
+        <li><a href="<?php echo e(url('/')); ?>/Product/ProductList/<?php echo e($ProductData->projectID); ?>">開發產品清單</a></li>
+        <li class="active">編輯開發產品</li>
+    </ol>
+    <!--add project form-->
+    <form id="EditProductForm" class="form-horizontal" action method="POST">
+        <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
+        <input type="hidden" id="ProjectID" name="ProjectID" value="<?php echo e($ProductData->projectID); ?>">
+        <input type="hidden" id="ProductID" name="ProductID" value="<?php echo e($ProductData->ID); ?>">
+        <div class="form-group">
+            <label for="ProductNumber" class="col-md-2 control-label">開發產品代號</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="ProductNumber" value="<?php echo e($ProductData->referenceNumber); ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ProductName" class="col-md-2 control-label">開發產品名稱</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="ProductName" value="<?php echo e($ProductData->referenceName); ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="RequiredQuantity" class="col-md-2 control-label">需求數量</label>
+            <div class="col-md-2">
+                <input type="number" class="form-control text-right" name="RequiredQuantity" value="<?php echo e($ProductData->requiredQuantity); ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="DeliveredQuantity" class="col-md-2 control-label">交貨數量</label>
+            <div class="col-md-2">
+                <input type="number" class="form-control text-right" name="DeliveredQuantity" value="<?php echo e($ProductData->deliveredQuantity); ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Deadline" class="col-md-2 control-label">交貨期限</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control date form_datetime" readonly id="Deadline" name="Deadline" value="<?php echo e(date('Y-m-d', strtotime($ProductData->deadline))); ?>" required>
+            </div>
+        </div>
+         <div class="form-group">
+            <label for="StartDate" class="col-md-2 control-label date">開發啟始時間</label>
+            <div class="col-md-2">
+                <input type="text" class="form-control date form_datetime" readonly id="StartDate" name="StartDate" value="<?php echo e(date('Y-m-d', strtotime($ProductData->startDate))); ?>" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="PriorityLevel" class="col-md-2 control-label">優先等級</label>
+            <div class="col-md-2">
+                <select name="PriorityLevel" id="PriorityLevel" class="form-control" required>
+                    <option value="">請選擇優先等級</option>
+                    <?php foreach($PriorityLevelList as $list): ?>
+                        <?php if($list->paracodeno == $ProductData->priorityLevel): ?>
+                            <option value="<?php echo e($list->paracodeno); ?>" selected><?php echo e($list->paracodename); ?></option>
+                        <?php else: ?>
+                            <option value="<?php echo e($list->paracodeno); ?>"><?php echo e($list->paracodename); ?></option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div class="form-group text-right col-md-7">
+            <a href="<?php echo e(url('/')); ?>/Product/ProductList/<?php echo e($ProductData->projectID); ?>" class="btn btn-default">取消</a>
+            <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
+                id="BtnSave" name="BtnSave" onclick="DoUpdate()">儲存</button>
+        </div>
+    </form>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
