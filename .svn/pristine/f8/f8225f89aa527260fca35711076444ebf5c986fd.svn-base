@@ -1,0 +1,57 @@
+@extends('layouts.masterpage')
+
+@section('content')
+    <script src="/js/Project/AddProject.js?x=2"></script>
+    <!--breadcrumb-->
+    <ol class="breadcrumb">
+        <li><a href="/Project/ProjectList">開發案清單</a></li>
+        <li class="active">新增開發案</li>
+    </ol>
+    <!--add project form-->
+    <form id="AddProjectForm" class="form-horizontal" role="form" action method="POST">
+        <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
+        <div class="form-group">
+            <label for="referenceNumber" class="col-md-2 control-label">開發案代號</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="referenceNumber" value="" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ProjectName" class="col-md-2 control-label">開發案名稱</label>
+            <div class="col-md-5">
+                <input type="text" class="form-control" name="ProjectName" value="" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ClientID" class="col-md-2 control-label">顧客名稱</label>
+            <div class="col-md-5">
+                <select class="form-control" id="ClientID" name="ClientID" required>
+                    <option value="">請選擇顧客</option>
+                    @foreach($ClientList as $list)
+                        <option value="{{$list->id}}">{{$list->reference}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="NodeID" class="col-md-2 control-label">業務員</label>
+            <div class="col-md-3">
+                <select class="form-control" id="NodeID" name="NodeID" onchange="GetSales()" required>
+                    <option value="">請選擇單位</option>
+                    @foreach($NodeList as $list)
+                        <option value="{{$list->id}}">{{$list->reference}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="SalesID" name="SalesID" required>
+                </select>
+            </div>
+        </div>
+        <div class="form-group text-right col-md-7">
+            <a href="/Project/ProjectList" class="btn btn-default">取消</a>
+            <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
+                id="BtnSave" name="BtnSave" onclick="DoInsert()">儲存</button>
+        </div>
+    </form>
+@endsection

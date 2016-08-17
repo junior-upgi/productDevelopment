@@ -9,16 +9,16 @@ function DoUpdate() {
         },
         success: function (obj) {
             if (obj.success) {
-                alert(obj.msg);
+                swal("新增資料成功!", obj.msg, "success");
                 document.location.href = '/Project/ProjectList';
             }
             else {
-                alert(obj.msg.errorInfo[2])
+                swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
                 $('#BtnSave').button('reset');
             }
         }, 
         error: function (obj) {
-            alert('發生異常錯誤!!');
+            swal("發生異常錯誤!", xhr.statusText, "error");
             $('#BtnSave').button('reset');
         }
     });
@@ -30,7 +30,7 @@ function GetSales() {
         type: 'GET',
         dataType: 'JSON',
         error: function(xhr) {
-            alert('取得業務員資料失敗!\n ERROR:' + xhr.statusText);
+            swal("取得資料失敗!", xhr.statusText, "error");
         },
         success: function(result) {
             $("#SalesID option").remove();

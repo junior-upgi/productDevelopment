@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 
 class Common extends Controller
 {
-    public function GetNewGUID()
+    public static function GetNewGUID()
     {
         $charid = strtoupper(md5(uniqid(mt_rand(), true)));
         $hyphen = chr(45);// "-"
@@ -18,7 +18,7 @@ class Common extends Controller
         .substr($charid,20,12);
         return $uuid;
     }
-    public function GetERPIDBYStaffID($StaffID)
+    public static function GetERPIDBYStaffID($StaffID)
     {
         
         $ERPID="";

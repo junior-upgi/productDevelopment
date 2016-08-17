@@ -17,8 +17,8 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <td class="col-md-1"></td>
-                <td class="col-md-1"></td>
+                <td width="60"></td>
+                <td width="60"></td>
                 <td>開發案號</td>
                 <td>開發案名稱</td>
                 <td>客戶名稱</td>

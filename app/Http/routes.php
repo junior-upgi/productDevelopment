@@ -48,9 +48,9 @@ Route::group(['prefix' => 'Product'], function() {
 Route::group(['prefix' => 'Process'], function() {
     Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@ProcessList');
 
-    Route::get('AddProcess', 'ProductDevelopment\ProcessController@AddProcess');
     Route::post('InsertProcess', 'ProductDevelopment\ProcessController@InsertProcess');
     
-    Route::get('EditProcess/{ProcessID}', 'ProductDevelopment\ProcessController@EditProcess');
+    Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@GetProcessData');
+    Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@SaveProcessSort');
     Route::post('UpdateProcess/{ProcessID}', 'ProductDevelopment\ProcessController@UpdateProcess');
 });

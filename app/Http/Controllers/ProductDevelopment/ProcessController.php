@@ -15,6 +15,7 @@ use App\Models\productDevelopment\vProjectList;
 use App\Models\productDevelopment\vProcessList;
 use App\Models\productDevelopment\projectContent;
 use App\Models\productDevelopment\projectProcess;
+use App\Models\productDevelopment\processTree;
 use App\Models\companyStructure\vStaff;
 use App\Models\companyStructure\staff;
 use App\Models\companyStructure\node;
@@ -36,6 +37,7 @@ class ProcessController extends Controller
         $Process = new vProcessList();
         $ProcessList = $Process
             ->where('projectContentID', $ProductID)
+            ->orderBy('seq', 'asc')->orderBy('created')
             ->get();
 
         $oNode = new node();
@@ -56,11 +58,6 @@ class ProcessController extends Controller
             ->with('PhaseList', $PhaseList);
     }
 
-    public function AddProcess()
-    {
-        
-    }
-
     public function InsertProcess(Request $request)
     { 
         $ProjectContentID = $request->input('ProductID');
@@ -72,16 +69,33 @@ class ProcessController extends Controller
 
         try {
             DB::beginTransaction();
-            $NewID = Common::GetNewGUID();
-            $oProjectProcess = new projectProcess();
-            $oProjectProcess->ID = $NewID;
-            $oProjectProcess->projectContentID = $ProjectContentID;
-            $oProjectProcess->referenceName = $ProcessName;
-            $oProjectProcess->referenceNumber = $ProcessNumber;
-            $oProjectProcess->projectProcessPhaseID = (int)$PhaseID;
-            $oProjectProcess->TimeCost = (int)$TimeCost;
-            $oProjectProcess->StaffID = (int)$StaffID;
-            $oProjectProcess->save();
+            $ProcessID = Common::GetNewGUID();
+            $Params = array(
+                'ID' => $ProcessID,
+                'projectContentID' => $ProjectContentID,
+                'referenceName' => $ProcessName,
+                'referenceNumber' => $ProcessNumber,
+                'projectProcessPhaseID' => $PhaseID,
+                'timeCost' => $TimeCost,
+                'staffID' => $StaffID,
+            );
+            $ProjectProcess = new projectProcess();
+            $ProjectProcess->insert($Params);
+
+            $MaxIndex = new processTree();
+            $MaxIndex = ($MaxIndex
+                ->where('projectContentID', $ProjectContentID)
+                ->max('seq')) + 1;
+            
+            $Params = array(
+                'projectContentID' => $ProjectContentID,
+                'projectProcessID' => $ProcessID,
+                'treeLevel' => 0,
+                'seq' => $MaxIndex,
+            );
+            $ProcessTree = new processTree();
+            $ProcessTree->insert($Params);
+            
             
             DB::commit();
 
@@ -95,11 +109,11 @@ class ProcessController extends Controller
             $StaffData = $vStaff
                 ->where('id', $StaffID)
                 ->first();
-
+            
             $jo = array(
                 'success' => true,
                 'msg' => '新增開發產品成功!',
-                'ProcessID' => $NewID,
+                'ProcessID' => $ProcessID,
                 'PhaseName' => $PhaseName->paracodename,
                 'ProcessName' => $ProcessName,
                 'ProcessNumber' => $ProcessNumber,
@@ -119,9 +133,73 @@ class ProcessController extends Controller
         return $jo;
     }
 
-    public function EditProcess()
+    public function GetProcessData($ProcessID)
     {
+        $Process = new vProcessList();
+        $ProcessData = $Process
+            ->where('ID', $ProcessID)
+            ->first();
+        $StaffList = new staff();
+        $StaffList = $StaffList
+            ->where('nodeID', $ProcessData->nodeID)
+            ->get();
+        $jo = array();
+        if($ProcessData && $StaffList)
+        {
+            $jo = array(
+                'success' => true,
+                'ID' => $ProcessData->ID,
+                'ProcessNumber' => $ProcessData->referenceNumber,
+                'ProcessName' => $ProcessData->referenceName,
+                'PhaseID' => $ProcessData->projectProcessPhaseID,
+                'TimeCost' => $ProcessData->timeCost,
+                'StaffID' => $ProcessData->staffID,
+                'NodeID' => $ProcessData->nodeID,
+                'StaffList' => $StaffList,
+            );
+        }
+        else
+        {
+            $jo = array(
+                'success' => false,
+                'msg' => '找不到程序資訊!',
+            );
+        }
+        return $jo;
+    }
 
+    public function SaveProcessSort(Request $request)
+    {
+        $Data = $request->json()->all();
+        try
+        {
+            DB::beginTransaction();
+            
+            foreach($Data as $list)
+            {
+                $ProcessTree = new processTree();
+                $ProcessTree = $ProcessTree
+                    ->where('projectProcessID', $list['pid']);
+                $Params = array(
+                    'seq' => $list['index'],
+                );
+                $ProcessTree->update($Params);
+            }
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '儲存排序成功',
+            );
+        }
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
     }
 
     public function UpdateProcess()

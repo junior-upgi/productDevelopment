@@ -52,7 +52,7 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-3">
                 <select class="form-control" id="SalesID" name="SalesID" required>
                     <option value="">請選擇姓名</option>
                     @foreach($StaffList as $list)

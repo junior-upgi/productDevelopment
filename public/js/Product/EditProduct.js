@@ -3,7 +3,7 @@ $(document).ready(function(){
     timInMs = timeInMs.getFullYear() + "-" + (timeInMs.getMonth()+1) + "-" + timeInMs.getDate();
     $(".date").datetimepicker({
         format: 'yyyy-mm-dd',
-        startDate: timInMs,
+        //startDate: timInMs,
         minView: 2,
         maxView: 4,
         autoclose: true,
@@ -24,16 +24,16 @@ function DoUpdate() {
         },
         success: function (obj) {
             if (obj.success) {
-                alert(obj.msg);
+                swal("更新資料成功!", obj.msg, "success");
                 document.location.href = '/Product/ProductList/' + ProjectID;
             }
             else {
-                alert(obj.msg.errorInfo[2])
+                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
                 $('#BtnSave').button('reset');
             }
         }, 
         error: function (obj) {
-            alert('發生異常錯誤!!');
+            swal("發生異常錯誤!", xhr.statusText, "error");
             $('#BtnSave').button('reset');
         }
     });
