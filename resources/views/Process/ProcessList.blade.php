@@ -1,12 +1,12 @@
 @extends('layouts.masterpage')
 
 @section('content')
-    <link rel="stylesheet" type="" href="/css/Process/ProcessList.css">
-    <script src="/js/Process/ProcessList.js?x=1"></script>
+    <link rel="stylesheet" type="" href="{{url('/')}}/css/Process/ProcessList.css">
+    <script src="{{url('/')}}/js/Process/ProcessList.js?x=1"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
-        <li><a href="/Project/ProjectList">開發案清單</a></li>
-        <li><a href="/Product/ProductList/{{$ProductData->projectID}}">開發產品清單</a></li>
+        <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
+        <li><a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}">開發產品清單</a></li>
         <li class="active">產品開發流程</li>
     </ol>
     <!--product info panel-->
@@ -25,6 +25,7 @@
             </form>
         </ul>
     </nav>
+    <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -36,6 +37,7 @@
                 <td>負責人</td>
                 <td class="col-md-1">工時</td>
                 <td class="col-md-3">工期</td>
+                <td width="100" class="text-center">完成時間</td>
                 <td width="60"></td>
             </tr>
         </thead>
@@ -45,7 +47,11 @@
             @foreach($ProcessList as $list)
                 {{--*/ $StartDate = $CostCount /*--}}
                 {{--*/ $EndDate = ($CostCount += $list->timeCost) - 1 /*--}}
-                <tr id="{{$list->ID}}">
+                @if($list->complete == "0")
+                    <tr id="{{$list->ID}}">
+                @else
+                    <tr id="{{$list->ID}}" class="ui-state-disabled">
+                @endif
                     <td>
                         <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>
                     </td>
@@ -69,6 +75,15 @@
                     <td>
                         <span>{{date('Y-m-d', strtotime($ProductData->startDate . '+' . $StartDate . ' day'))}} 
                             ~ {{date('Y-m-d', strtotime($ProductData->startDate . '+' . $EndDate . ' day'))}}</span>
+                    </td>
+                    <td class="text-center">
+                        @if($list->complete == "0")
+                            <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
+                        @else
+                            <span class="label label-danger">
+                                {{date('Y-m-d', strtotime($list->completeTime))}}
+                            </span>
+                        @endif
                     </td>
                     <td>
                         <button type="button" class="btn btn-sm btn-danger">刪除</button>

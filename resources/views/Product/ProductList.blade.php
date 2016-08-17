@@ -3,7 +3,7 @@
 @section('content')
     <!--breadcrumb-->
     <ol class="breadcrumb">
-        <li><a href="/Project/ProjectList">開發案清單</a></li>
+        <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
         <li class="active">開發產品清單</li>
     </ol>
     <!--project info panel-->
@@ -17,7 +17,7 @@
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <form action="" class="navbar-form">
-                <a href="/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary">新增</a>
+                <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary">新增</a>
             </form>
         </ul>
     </nav>
@@ -40,8 +40,8 @@
         <tbody>
             @foreach($ProductList as $list)
                 <tr>
-                    <td><a href="/Product/EditProduct/{{$list->ID}}" class="btn btn-sm btn-default">編輯</a></td>
-                    <td><a href="/Process/ProcessList/{{$list->ID}}" class="btn btn-sm btn-info">時程</a></td>
+                    <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" class="btn btn-sm btn-default">編輯</a></td>
+                    <td><a href="{{url('/')}}/Process/ProcessList/{{$list->ID}}" class="btn btn-sm btn-info">時程</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
                     <td>{{$list->requiredQuantity}}</td>

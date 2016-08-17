@@ -9,7 +9,7 @@
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <form action="" class="navbar-form">
-                <a href="/Project/AddProject" class="btn btn-primary">新增</a>
+                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary">新增</a>
             </form>
         </ul>
     </nav>
@@ -32,8 +32,8 @@
         <tbody>
             @foreach($ProjectList as $list)
                 <tr>
-                    <td class="text-center"><a href="/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default">編輯</a></td>
-                    <td class="text-center"><a href="/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
+                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default">編輯</a></td>
+                    <td class="text-center"><a href="{{url('/')}}/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
                     <td>{{$list->ClientName}}</td>

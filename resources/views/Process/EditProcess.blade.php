@@ -11,6 +11,7 @@
                     <div class="modal-body">
                         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
                         <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
+                        <input type="hidden" id="ProcessID" name="ProcessID" value="">
                         <div class="form-group">
                             <label for="ProcessNumber" class="col-md-4 control-label">開發程序代號</label>
                             <div class="col-md-5">
@@ -59,7 +60,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
                         <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
-                            id="BtnEdit" name="BtnEdit" onclick="DoInsert()">新增</button>
+                            id="BtnEdit" name="BtnEdit" onclick="DoUpdate()">更新</button>
                     </div>
                 </div>
             </form>

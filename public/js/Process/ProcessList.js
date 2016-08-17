@@ -31,11 +31,11 @@ function SaveSort() {
         };
         sort.push(data);
     });
-    //alert($('meta[name="csrf-token"]').attr('content'));
+    var ProductID = $('#ProductID').val();
     if(sort.length > 0)
     {
         $.ajax({
-            url: '/Process/SaveProcessSort/',
+            url: url + '/Process/SaveProcessSort/',
             type: 'POST',
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
             data: JSON.stringify(sort),
@@ -46,8 +46,19 @@ function SaveSort() {
             success: function(result) {
                 if(result.success)
                 {
-                    swal("資料儲存成功!", result.msg, "success");
-                    reload();
+                    swal({
+                        title: "資料儲存成功!",
+                        text: result.msg,
+                        type: "success",
+                        showCancelButton: false,
+                        confirmButtonClass: "btn-success",
+                        confirmButtonText: "OK",
+                        closeOnConfirm: false
+                    },
+                    function()
+                    {
+                        document.location.href = url + '/Process/ProcessList/' + ProductID;
+                    });
                 }
                 else
                 {
@@ -73,7 +84,7 @@ function AddShow(){
 //呼叫編輯程序視窗
 function EditShow(ID){
     $.ajax({
-        url: '/Process/GetProcessData/' + ID,
+        url: url + '/Process/GetProcessData/' + ID,
         type: 'GET',
         dataType: 'JSON',
         error: function(xhr) {
@@ -83,6 +94,7 @@ function EditShow(ID){
             if(result.success)
             {
                 var StaffList = result.StaffList;
+                $('#EditProcessForm #ProcessID').val(result.ID);
                 $('#EditProcessForm #ProcessNumber').val(result.ProcessNumber);
                 $('#EditProcessForm #ProcessName').val(result.ProcessName);
                 $("#EditProcessForm #PhaseID option[value=" + result.PhaseID + "]").attr('selected', true);
@@ -108,7 +120,7 @@ function GetStaff(type) {
     var FormID = "#" + type + "ProcessForm";
     var NodeID = $(FormID + " #NodeID").find(":selected").val();
     $.ajax({
-        url: '/Project/GetStaffByNodeID/' + NodeID,
+        url: url + '/Project/GetStaffByNodeID/' + NodeID,
         type: 'GET',
         dataType: 'JSON',
         error: function(xhr) {
@@ -122,31 +134,55 @@ function GetStaff(type) {
                     $(FormID + " #StaffID").append($("<option></option>").attr("value", result[i].id).text(result[i].name));
             }
         }
-    })
+    });
 }
 function DoInsert() {
     //var ProductID = $('#ProductID').val()
     $("#AddProcessForm").ajaxForm({
-        url: '/Process/InsertProcess',
+        url: url + '/Process/InsertProcess',
         beforeSubmit: function () {
             $('#BtnAdd').button('loading');
         },
         success: function (obj) {
             if (obj.success) {
-                swal("新增資料成功!", obj.msg, "success");
+                //swal("新增資料成功!", obj.msg, "success");
                 //new process
-                var msg = '<li class="list bg-warning" id="' + obj.ProcessID + '">'
+                /*
+                var msg = '<tr id="' + obj.ProcessID + '">'
+                            + '<td><button type="button" class="btn btn-sm btn-default" onclick="EditShow(\'' + obj.ProcessID + '\')">編輯</button></td>'
+                            + '<td>#</td>'
+                            + '<td class="text-center">' + obj.PhaseName + '</td>'
+                            + '<td>' + obj.ProcessNumber + '</td>'
+                            + '<td>' + obj.ProcessName + '</td>'
+                            + '<td>' + obj.NodeName + '</td>'
+                            + '<td>' + obj.name + '</td>'
+                            + '<td>' + obj.TimeCost + '</td>'
+                            + '<td></td>'
+                            + '<td></td>'
+                            + '<td></td>'
                             + '<label for="">'
-                            + '<span>' + obj.PhaseName + '</span>'
-                            + '<span>' + obj.ProcessNumber + '</span>'
-                            + '<span>' + obj.ProcessName + '</span>'
+
                             + '<span>' + obj.NodeName + '</span>'
                             + '<span>' + obj.name + '</span>'
                             + '<span>' + obj.TimeCost + '</span>'
                             + '</label>'
-                        + '</li>';
-                $("#Sort .items").append(msg);
+                        + '</tr>';
+                $("#tableSort").append(msg);
+                */
                 $('#AddModal').modal('hide');
+                swal({
+                    title: "新增資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Process/ProcessList/' + $('#ProductID').val();
+                });
             }
             else {
                 swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
@@ -156,6 +192,75 @@ function DoInsert() {
         error: function (xhr) {
             swal("發生異常錯誤!", xhr.statusText, "error");
             $('#BtnAdd').button('reset');
+        }
+    });
+}
+function DoUpdate(ProcessID) {
+    var ProductID = $('#ProductID').val();
+    var ProcessID = $('#ProcessID').val();
+    $("#EditProcessForm").ajaxForm({
+        url: url + '/Process/UpdateProcess/',
+        beforeSubmit: function () {
+            $('#BtnEdit').button('loading');
+        },
+        success: function (obj) {
+            if (obj.success) {
+                $('#EditModal').modal('hide');
+                swal({
+                    title: "更新資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Process/ProcessList/' + ProductID;
+                });
+            }
+            else {
+                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+                $('#BtnEdit').button('reset');
+            }
+        },
+        error: function (xhr) {
+            swal("發生異常錯誤!", xhr.statusText, "error");
+            $('#BtnEdit').button('reset');
+        }
+    });
+}
+function Complete($ProcessID)
+{
+    var ProductID = $('#ProductID').val();
+    $.ajax({
+        url: url + '/Process/ProcessComplete/' + $ProcessID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function(xhr) {
+            swal("更新資料失敗!", xhr.statusText, "error");
+        },
+        success: function(result) {
+            if(result.success)
+            {
+                swal({
+                    title: "更新資料成功!",
+                    text: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+            {
+                document.location.href = url + '/Process/ProcessList/' + ProductID;
+            });
+            }
+            else {
+                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+            }
         }
     });
 }

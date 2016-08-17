@@ -14,9 +14,8 @@ $(document).ready(function(){
 });
 function DoUpdate() {
     var ProjectID = $("#ProjectID").val();
-    var ProductID = $("#ProductID").val();
     $("#EditProductForm").ajaxForm({
-        url: '/Product/UpdateProduct/' + ProductID,
+        url: url + '/Product/UpdateProduct/',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             //$.blockUI({ message: '<div>送出資料中請稍候...</div>' });
@@ -24,8 +23,19 @@ function DoUpdate() {
         },
         success: function (obj) {
             if (obj.success) {
-                swal("更新資料成功!", obj.msg, "success");
-                document.location.href = '/Product/ProductList/' + ProjectID;
+                swal({
+                    title: "更新資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Product/ProductList/' + ProjectID;
+                });
             }
             else {
                 swal("更新資料失敗!", obj.msg.errorInfo[2], "error");

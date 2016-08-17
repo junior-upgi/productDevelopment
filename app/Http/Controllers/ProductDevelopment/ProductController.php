@@ -10,6 +10,7 @@ use App\Http\Controllers\Common;
 
 //use DB
 use DB;
+use App\Models;
 use App\Models\productDevelopment\project;
 use App\Models\productDevelopment\vProjectList;
 use App\Models\productDevelopment\projectContent;
@@ -106,9 +107,10 @@ class ProductController extends Controller
             ->with('PriorityLevelList', $priorityLevelList);
     }
 
-    public function UpdateProduct(Request $request, $ProductID)
+    public function UpdateProduct(Request $request)
     {
         $params = array();
+        $ProductID = $request->input('ProductID');
         $params['referenceNumber'] = $request->input('ProductNumber');
         $params['referenceName'] = $request->input('ProductName');
         $params['requiredQuantity'] = $request->input('RequiredQuantity');

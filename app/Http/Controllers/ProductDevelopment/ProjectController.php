@@ -10,6 +10,7 @@ use App\Http\Controllers\Common;
 
 //use DB
 use DB;
+use App\Models;
 use App\Models\productDevelopment\project;
 use App\Models\productDevelopment\vProjectList;
 use App\Models\productDevelopment\projectContent;
@@ -127,9 +128,10 @@ class ProjectController extends Controller
             ->with('StaffList', $StaffList);
     }
     
-    public function UpdateProject(Request $request,$ProjectID)
+    public function UpdateProject(Request $request)
     {
         $params = array();
+        $ProjectID = $request->input('ProjectID');
         $params['referenceNumber'] = $request->input('referenceNumber');
         $params['referenceName'] = $request->input('ProjectName');
         $params['clientID'] = $request->input('ClientID');

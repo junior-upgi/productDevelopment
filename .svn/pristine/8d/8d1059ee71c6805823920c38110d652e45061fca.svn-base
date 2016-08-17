@@ -1,0 +1,60 @@
+;
+
+<?php $__env->startSection('content'); ?>
+    <script src="/js/ProjectDevelopment/EditProject.js?x=1"></script>
+    <!--add project form-->
+    <form id="EditProjectForm" class="form" action method="POST">
+        <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>" />
+        <input type="hidden" id="ProjectID" name="ProjectID" value="<?php echo e($ProjectData->ID); ?>"/> 
+        <div class="form-group">
+            <label for="referenceNumber">開發案代號</label>
+            <input type="text" name="referenceNumber" value="<?php echo e($ProjectData->referenceNumber); ?>" required/>
+        </div>
+        <div class="form-group">
+            <label for="ProjectName">開發案名稱</label>
+            <input type="text" name="ProjectName" value="<?php echo e($ProjectData->referenceName); ?>" required/>
+        </div>
+        <div class="form-group">
+            <label for="ClientID">顧客名稱</label>
+            <select id="ClientID" name="ClientID" required>
+                <option value="">請選擇顧客</option>
+                <?php foreach($ClientList as $list): ?>
+                    <?php if($list->id == $ProjectData->clientID): ?>
+                        <option value="<?php echo e($list->id); ?>" selected="selected"><?php echo e($list->reference); ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo e($list->id); ?>"><?php echo e($list->reference); ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="NodeID">業務員</label>
+            <select id="NodeID" name="NodeID" onchange="GetSales()" required>
+                <option value="">請選擇單位</option>
+                <?php foreach($NodeList as $list): ?>
+                    <?php if($list->id == $ProjectData->nodeID): ?>
+                        <option value="<?php echo e($list->id); ?>" selected="selected"><?php echo e($list->reference); ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo e($list->id); ?>"><?php echo e($list->reference); ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+            <select id="SalesID" name="SalesID" required>
+                <option value="">請選擇姓名</option>
+                <?php foreach($StaffList as $list): ?>
+                    <?php if($list->id == $ProjectData->salesID): ?>
+                        <option value="<?php echo e($list->id); ?>" selected="selected"><?php echo e($list->name); ?></option>
+                    <?php else: ?>
+                        <option value="<?php echo e($list->id); ?>"><?php echo e($list->name); ?></option>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <input type="submit" class="btn btn-primary" id="btnSave" name="btnSave" value="儲存" onclick="DoUpdate()"/>
+        <a href="/PD/ProjectList" class="btn btn-default">取消</a>
+    </form>
+    <div>
+        
+    </div>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

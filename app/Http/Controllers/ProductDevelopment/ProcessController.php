@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
 
-//use DB
+use DB;
+use App\Models;
 use App\Models\productDevelopment\para;
 use App\Models\productDevelopment\project;
 use App\Models\productDevelopment\vProjectList;
@@ -21,8 +22,6 @@ use App\Models\companyStructure\staff;
 use App\Models\companyStructure\node;
 use App\Models\sales\client;
 //use App\Models;
-
-use DB;
 
 class ProcessController extends Controller
 {
@@ -96,30 +95,11 @@ class ProcessController extends Controller
             $ProcessTree = new processTree();
             $ProcessTree->insert($Params);
             
-            
             DB::commit();
-
-            $Phase = new para();
-            $PhaseName = $Phase
-                ->where('paracode', 'ProcessPhaseID')
-                ->where('paracodeno', $PhaseID)
-                ->first();
-            
-            $vStaff = new vStaff();
-            $StaffData = $vStaff
-                ->where('id', $StaffID)
-                ->first();
             
             $jo = array(
                 'success' => true,
-                'msg' => '新增開發產品成功!',
-                'ProcessID' => $ProcessID,
-                'PhaseName' => $PhaseName->paracodename,
-                'ProcessName' => $ProcessName,
-                'ProcessNumber' => $ProcessNumber,
-                'TimeCost' => $TimeCost,
-                'NodeName' => $StaffData->reference,
-                'StaffName' => $StaffData->name,
+                'msg' => '新增程序成功!',
             );
         } 
         catch (\PDOException $e)
@@ -202,8 +182,77 @@ class ProcessController extends Controller
         return $jo;
     }
 
-    public function UpdateProcess()
+    public function UpdateProcess(Request $request)
     {
+        $ProjectContentID = $request->input('ProductID');
+        $ProjectProcessID = $request->input('ProcessID');
+        $ProcessNumber = $request->input('ProcessNumber');
+        $ProcessName = $request->input('ProcessName');
+        $PhaseID = $request->input('PhaseID');
+        $TimeCost = $request->input('TimeCost');
+        $StaffID = $request->input('StaffID');
 
+        try {
+            DB::beginTransaction();
+            $Params = array(
+                'referenceName' => $ProcessName,
+                'referenceNumber' => $ProcessNumber,
+                'projectProcessPhaseID' => $PhaseID,
+                'timeCost' => $TimeCost,
+                'staffID' => $StaffID,
+            );
+            $ProjectProcess = new projectProcess();
+            $ProjectProcess = $ProjectProcess
+                ->where('ID', $ProjectProcessID);
+            $ProjectProcess->update($Params);
+
+            DB::commit();
+            
+            $jo = array(
+                'success' => true,
+                'msg' => '更新程序成功!',
+            );
+        } 
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
+    
+    public function ProcessComplete($ProcessID)
+    {
+        $jo = array();
+        try {
+            DB::beginTransaction();
+            $Process = new projectProcess();
+            $Process = $Process
+                ->where('ID', $ProcessID);
+            $Params = array(
+                'complete' => '1',
+                'completeTime' => Carbon::now(),
+            );
+            $Process->update($Params);
+
+            DB::commit();
+            
+            $jo = array(
+                'success' => true,
+                'msg' => '完成程序!',
+            );
+        }
+        catch (\PDOException $e)
+        {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
     }
 }

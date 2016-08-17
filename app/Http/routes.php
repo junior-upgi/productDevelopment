@@ -30,7 +30,7 @@ Route::group(['prefix' => 'Project'], function() {
     Route::post('InsertProject', 'ProductDevelopment\ProjectController@InsertProject');
 
     Route::get('EditProject/{ProjectID}', 'ProductDevelopment\ProjectController@EditProject');
-    Route::post('UpdateProject/{ProjectID}', 'ProductDevelopment\ProjectController@UpdateProject');
+    Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@UpdateProject');
 
     Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@GetStaffByNodeID');
 });
@@ -42,7 +42,7 @@ Route::group(['prefix' => 'Product'], function() {
     Route::post('InsertProduct', 'ProductDevelopment\ProductController@InsertProduct');
 
     Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@EditProduct');
-    Route::post('UpdateProduct/{ProductID}', 'ProductDevelopment\ProductController@UpdateProduct');
+    Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@UpdateProduct');
 });
 
 Route::group(['prefix' => 'Process'], function() {
@@ -52,5 +52,7 @@ Route::group(['prefix' => 'Process'], function() {
     
     Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@GetProcessData');
     Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@SaveProcessSort');
-    Route::post('UpdateProcess/{ProcessID}', 'ProductDevelopment\ProcessController@UpdateProcess');
+    Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@UpdateProcess');
+
+    Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@ProcessComplete');
 });

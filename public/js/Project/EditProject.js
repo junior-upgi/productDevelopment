@@ -1,7 +1,6 @@
 function DoUpdate() {
-    var ProjectID = $("#ProjectID").val();
     $("#EditProjectForm").ajaxForm({
-        url: '/Project/UpdateProject/' + ProjectID,
+        url: url + '/Project/UpdateProject/',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             //$.blockUI({ message: '<div>送出資料中請稍候...</div>' });
@@ -9,8 +8,19 @@ function DoUpdate() {
         },
         success: function (obj) {
             if (obj.success) {
-                swal("新增資料成功!", obj.msg, "success");
-                document.location.href = '/Project/ProjectList';
+                swal({
+                    title: "更新資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Project/ProjectList';
+                });
             }
             else {
                 swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
@@ -26,7 +36,7 @@ function DoUpdate() {
 function GetSales() {
     var NodeID = $("#NodeID").find(":selected").val();
     $.ajax({
-        url: '/Project/GetStaffByNodeID/' + NodeID,
+        url: url + '/Project/GetStaffByNodeID/' + NodeID,
         type: 'GET',
         dataType: 'JSON',
         error: function(xhr) {

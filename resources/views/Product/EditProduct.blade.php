@@ -1,11 +1,11 @@
 @extends('layouts.masterpage')
 
 @section('content')
-    <script src="/js/Product/EditProduct.js?x=1"></script>
+    <script src="{{url('/')}}/js/Product/EditProduct.js?x=1"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
-        <li><a href="/Project/ProjectList">開發案清單</a></li>
-        <li><a href="/Product/ProductList/{{$ProductData->projectID}}">開發產品清單</a></li>
+        <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
+        <li><a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}">開發產品清單</a></li>
         <li class="active">編輯開發產品</li>
     </ol>
     <!--add project form-->
@@ -65,7 +65,7 @@
             </div>
         </div>
         <div class="form-group text-right col-md-7">
-            <a href="/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">取消</a>
+            <a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">取消</a>
             <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
                 id="BtnSave" name="BtnSave" onclick="DoUpdate()">儲存</button>
         </div>

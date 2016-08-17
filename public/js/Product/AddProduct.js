@@ -15,7 +15,7 @@ $(document).ready(function(){
 function DoInsert() {
     var ProjectID = $("#ProjectID").val();
     $("#AddProductForm").ajaxForm({
-        url: '/Product/InsertProduct',
+        url: url + '/Product/InsertProduct',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             $('#BtnSave').button('loading');
@@ -23,8 +23,19 @@ function DoInsert() {
         },
         success: function (obj) {
             if (obj.success) {
-                swal("新增資料成功!", obj.msg, "success");
-                document.location.href = '/Product/ProductList/' + ProjectID;
+                swal({
+                    title: "新增資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Product/ProductList/' + ProjectID;
+                });
             }
             else {
                 swal("新增資料失敗!!", obj.msg.errorInfo[2], "error");

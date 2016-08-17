@@ -1,6 +1,6 @@
 function DoInsert() {
     $("#AddProjectForm").ajaxForm({
-        url: '/Project/InsertProject',
+        url: url + '/Project/InsertProject',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             $('#BtnSave').button('loading');
@@ -8,8 +8,19 @@ function DoInsert() {
         },
         success: function (obj) {
             if (obj.success) {
-                swal("新增資料成功!", obj.msg, "success");
-                document.location.href = '/Project/ProjectList';
+                swal({
+                    title: "新增資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function()
+                {
+                    document.location.href = url + '/Project/ProjectList';
+                });
             }
             else {
                 swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
