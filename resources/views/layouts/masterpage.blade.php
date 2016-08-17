@@ -6,26 +6,26 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>開發案管理系統</title>
-
+	
 	<!--<link href="/css/app.css" rel="stylesheet">-->
-	<link rel="stylesheet" href="/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
-	<link rel="stylesheet" href="/css/jquery-ui.min.css">
-	<link rel="stylesheet" href="/css/jquery-ui.css">
-    <link rel="stylesheet" href="/css/sweetalert.css">
+	<link rel="stylesheet" href="../../css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="../../css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="../../css/jquery-ui.min.css">
+	<link rel="stylesheet" href="../../css/jquery-ui.css">
+    <link rel="stylesheet" href="../../css/sweetalert.css">
 
 	<!-- Fonts -->
 	<!--<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>-->
 	
-	<script src="/script/jquery-3.1.0.min.js"></script>
-	<script src="/script/jquery-ui.js?x=1"></script>
-	<script src="/script/bootstrap.min.js"></script>
-	<script src="/script/jquery.blockUI.js"></script>
-	<script src="/script/jquery.form.min.js"></script>
-	<script src="/script/bootstrap-datetimepicker.min.js"></script>
-	<script src="/script/bootstrap-datetimepicker.zh-TW.js"></script>
-	<script src="/script/sweetalert.js"></script>
+	<script src="../../script/jquery-3.1.0.min.js"></script>
+	<script src="../../script/jquery-ui.js?x=1"></script>
+	<script src="../../script/bootstrap.min.js"></script>
+	<script src="../../script/jquery.blockUI.js"></script>
+	<script src="../../script/jquery.form.min.js"></script>
+	<script src="../../script/bootstrap-datetimepicker.min.js"></script>
+	<script src="../../script/bootstrap-datetimepicker.zh-TW.js"></script>
+	<script src="../../script/sweetalert.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
