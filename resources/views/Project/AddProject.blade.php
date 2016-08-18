@@ -1,7 +1,7 @@
 @extends('layouts.masterpage')
 
 @section('content')
-    <script src="{{url('/')}}/js/Project/AddProject.js?x=2"></script>
+    <script src="{{url('/')}}/js/Project/AddProject.js?x=3"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>

@@ -253,7 +253,9 @@ function Complete($ProcessID) {
 function Execute() {
     var ProductID = $('#ProductID').val();
     var Title = "執行產品開發？";
-    var Message = "此動作會開始發送推播訊息!\n請問您確定要開始執行產品開發嗎？";
+    var Message = "此動作無法再變更產品訊息!\n" 
+                + "並且會開始發送推播訊息!\n"
+                + "請問您確定要開始執行產品開發嗎？";
     swal({
         title: Title,
         text: Message,
