@@ -9,24 +9,24 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 
 //use DB
-use App\Models\productDevelopment\para;
+use App\Models\productDevelopment\Para;
 use App\Models\productDevelopment\Project;
-use App\Models\productDevelopment\vProjectList;
-use App\Models\productDevelopment\vProcessList;
+use App\Models\productDevelopment\VProjectList;
+use App\Models\productDevelopment\VProcessList;
 use App\Models\productDevelopment\ProjectContent;
 use App\Models\productDevelopment\ProjectProcess;
-use App\Models\companyStructure\vStaff;
+use App\Models\companyStructure\VStaff;
 use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
 use App\Models\sales\Client;
-use App\Models\upgiSystem\user;
-use App\Models\upgiSystem\userGroup;
-use App\Models\upgiSystem\userGroupMembership;
-use App\Models\mobileMessagingSystem\broadcastStatus;
-use App\Models\mobileMessagingSystem\message;
-use App\Models\mobileMessagingSystem\messageCategory;
-use App\Models\mobileMessagingSystem\systemCategory;
-use App\Models\mobileMessagingSystem\vBroadcastList;
+use App\Models\upgiSystem\User;
+use App\Models\upgiSystem\UserGroup;
+use App\Models\upgiSystem\UserGroupMembership;
+use App\Models\mobileMessagingSystem\BroadcastStatus;
+use App\Models\mobileMessagingSystem\Message;
+use App\Models\mobileMessagingSystem\MessageCategory;
+use App\Models\mobileMessagingSystem\SystemCategory;
+use App\Models\mobileMessagingSystem\VBroadcastList;
 use App\Models;
 
 use DB;
@@ -116,7 +116,7 @@ class WebServiceController extends Controller
     */
     public function messageTime($BroadcastID, $Action)
     {   
-        $MessageTime = new broadcastStatus();
+        $MessageTime = new BroadcastStatus();
         $jo = array();
         $Now = Carbon::now();
         $Params = array();

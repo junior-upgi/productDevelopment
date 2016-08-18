@@ -11,26 +11,26 @@ use App\Http\Controllers\Common;
 //use DB
 use DB;
 use App\Models;
-use App\Models\productDevelopment\project;
-use App\Models\productDevelopment\vProjectList;
-use App\Models\productDevelopment\projectContent;
-use App\Models\productDevelopment\para;
-use App\Models\companyStructure\vStaff;
-use App\Models\companyStructure\staff;
-use App\Models\companyStructure\node;
-use App\Models\sales\client;
+use App\Models\productDevelopment\Project;
+use App\Models\productDevelopment\VProjectList;
+use App\Models\productDevelopment\ProjectContent;
+use App\Models\productDevelopment\Para;
+use App\Models\companyStructure\VStaff;
+use App\Models\companyStructure\Staff;
+use App\Models\companyStructure\Node;
+use App\Models\sales\Client;
 
 class ProductController extends Controller
 {
     public function productList($ProjectID)
     {
-        $Project = new vProjectList();
+        $Project = new VProjectList();
         $ProjectData = $Project
             ->where('ID', $ProjectID)
             ->get()
             ->first();
 
-        $ProjectContent = new projectContent();
+        $ProjectContent = new ProjectContent();
         $ProductList = $ProjectContent
             ->where('projectID',$ProjectID)
             ->get();
@@ -42,7 +42,7 @@ class ProductController extends Controller
     
     public function addProduct($ProjectID)
     {
-        $para = new para();
+        $para = new Para();
         $priorityLevelList = $para
             ->where('paracode','priorityLevel')
             ->get();
@@ -69,7 +69,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            $oProjectContent = new projectContent();
+            $oProjectContent = new ProjectContent();
             $oProjectContent->insert($params);
             
             DB::commit();
@@ -90,7 +90,7 @@ class ProductController extends Controller
 
     public function editProduct($ProductID)
     {
-        $ProjectContent = new projectContent();
+        $ProjectContent = new ProjectContent();
         $ProductData = $ProjectContent
             ->where('ID', $ProductID)
             ->get()
@@ -121,7 +121,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
 
-            $ProjectContent = new projectContent();
+            $ProjectContent = new ProjectContent();
             $ProjectContent = $ProjectContent
                 ->where('ID',$ProductID);
             

@@ -10,41 +10,41 @@ use App\Http\Controllers\Common;
 
 use DB;
 use App\Models;
-use App\Models\productDevelopment\para;
-use App\Models\productDevelopment\project;
-use App\Models\productDevelopment\vProjectList;
-use App\Models\productDevelopment\vProcessList;
-use App\Models\productDevelopment\projectContent;
-use App\Models\productDevelopment\projectProcess;
-use App\Models\productDevelopment\processTree;
-use App\Models\companyStructure\vStaff;
-use App\Models\companyStructure\staff;
-use App\Models\companyStructure\node;
-use App\Models\sales\client;
+use App\Models\productDevelopment\Para;
+use App\Models\productDevelopment\Project;
+use App\Models\productDevelopment\VProjectList;
+use App\Models\productDevelopment\VProcessList;
+use App\Models\productDevelopment\ProjectContent;
+use App\Models\productDevelopment\ProjectProcess;
+use App\Models\productDevelopment\ProcessTree;
+use App\Models\companyStructure\VStaff;
+use App\Models\companyStructure\Staff;
+use App\Models\companyStructure\Node;
+use App\Models\sales\Client;
 //use App\Models;
 
 class ProcessController extends Controller
 {
     public function processList($ProductID)
     {
-        $ProjectContent = new projectContent();
+        $ProjectContent = new ProjectContent();
         $ProductData = $ProjectContent
             ->where('ID', $ProductID)
             ->get()
             ->first();
 
-        $Process = new vProcessList();
+        $Process = new VProcessList();
         $ProcessList = $Process
             ->where('projectContentID', $ProductID)
             ->orderBy('seq', 'asc')->orderBy('created')
             ->get();
 
-        $oNode = new node();
+        $oNode = new Node();
         $NodeList = $oNode
             ->orderBy('id')
             ->get();
 
-        $Phase = new para();
+        $Phase = new Para();
         $PhaseList = $Phase
             ->where('paracode', 'ProcessPhaseID')
             ->orderBy('paracodeno')
@@ -78,10 +78,10 @@ class ProcessController extends Controller
                 'timeCost' => $TimeCost,
                 'staffID' => $StaffID,
             );
-            $ProjectProcess = new projectProcess();
+            $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($Params);
 
-            $MaxIndex = new processTree();
+            $MaxIndex = new ProcessTree();
             $MaxIndex = ($MaxIndex
                 ->where('projectContentID', $ProjectContentID)
                 ->max('seq')) + 1;
@@ -92,7 +92,7 @@ class ProcessController extends Controller
                 'treeLevel' => 0,
                 'seq' => $MaxIndex,
             );
-            $ProcessTree = new processTree();
+            $ProcessTree = new ProcessTree();
             $ProcessTree->insert($Params);
             
             DB::commit();
@@ -114,11 +114,11 @@ class ProcessController extends Controller
 
     public function getProcessData($ProcessID)
     {
-        $Process = new vProcessList();
+        $Process = new VProcessList();
         $ProcessData = $Process
             ->where('ID', $ProcessID)
             ->first();
-        $StaffList = new staff();
+        $StaffList = new Staff();
         $StaffList = $StaffList
             ->where('nodeID', $ProcessData->nodeID)
             ->get();
@@ -154,7 +154,7 @@ class ProcessController extends Controller
             
             foreach($Data as $list)
             {
-                $ProcessTree = new processTree();
+                $ProcessTree = new ProcessTree();
                 $ProcessTree = $ProcessTree
                     ->where('projectProcessID', $list['pid']);
                 $Params = array(
@@ -198,7 +198,7 @@ class ProcessController extends Controller
                 'timeCost' => $TimeCost,
                 'staffID' => $StaffID,
             );
-            $ProjectProcess = new projectProcess();
+            $ProjectProcess = new ProjectProcess();
             $ProjectProcess = $ProjectProcess
                 ->where('ID', $ProjectProcessID);
             $ProjectProcess->update($Params);
@@ -225,7 +225,7 @@ class ProcessController extends Controller
         $jo = array();
         try {
             DB::beginTransaction();
-            $Process = new projectProcess();
+            $Process = new ProjectProcess();
             $Process = $Process
                 ->where('ID', $ProcessID);
             $Params = array(

@@ -25,7 +25,7 @@ class Common extends Controller
         $ERPID="";
         $Success = false;
 
-        $vStaff = new vStaff();
+        $vStaff = new VStaff();
 
 
     }

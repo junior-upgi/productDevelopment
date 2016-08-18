@@ -11,19 +11,19 @@ use App\Http\Controllers\Common;
 //use DB
 use DB;
 use App\Models;
-use App\Models\productDevelopment\project;
-use App\Models\productDevelopment\vProjectList;
-use App\Models\productDevelopment\projectContent;
-use App\Models\companyStructure\vStaff;
-use App\Models\companyStructure\staff;
-use App\Models\companyStructure\node;
-use App\Models\sales\client;
+use App\Models\productDevelopment\Project;
+use App\Models\productDevelopment\VProjectList;
+use App\Models\productDevelopment\ProjectContent;
+use App\Models\companyStructure\VStaff;
+use App\Models\companyStructure\Staff;
+use App\Models\companyStructure\Node;
+use App\Models\sales\Client;
 
 class ProjectController extends Controller
 {
     public function projectList()
     {
-        $oProject = new vProjectList();
+        $oProject = new VProjectList();
         $ProjectList = $oProject::all();
 
         return view('Project.ProjectList')
@@ -32,12 +32,12 @@ class ProjectController extends Controller
 
     public function addProject()
     {
-        $oClient = new client();
+        $oClient = new Client();
         $ClientList = $oClient
             ->orderBy('reference')
             ->get();
 
-        $oNode = new node();
+        $oNode = new Node();
         $NodeList = $oNode
             ->orderBy('id')
             ->get();
@@ -58,7 +58,7 @@ class ProjectController extends Controller
         try {
             DB::beginTransaction();
 
-            $oProject = new project();
+            $oProject = new Project();
             $oProject->ID = Common::getNewGUID();
             $oProject->referenceName = $ProjectName;
             $oProject->referenceNumber = $ProjectNumber;
@@ -85,7 +85,7 @@ class ProjectController extends Controller
 
     public function getStaffByNodeID($NodeID)
     {
-        $oStaff = new staff();
+        $oStaff = new Staff();
         $StaffData = $oStaff
             ->where('nodeID','=',$NodeID)
             ->get();
@@ -95,28 +95,28 @@ class ProjectController extends Controller
 
     public function editProject($ProjectID)
     {
-        $oProject = new vProjectList();
+        $oProject = new VProjectList();
         $ProjectData = $oProject
             ->where('id','=',$ProjectID)
             ->get()
             ->first();
         
-        $oProjectContent = new projectContent();
+        $oProjectContent = new ProjectContent();
         $ProjectContent = $oProjectContent
             ->where('projectID','=',$ProjectID)
             ->get();
 
-        $oClient = new client();
+        $oClient = new Client();
         $ClientList = $oClient
             ->orderBy('reference')
             ->get();
 
-        $oNode = new node();
+        $oNode = new Node();
         $NodeList = $oNode
             ->orderBy('id')
             ->get();
 
-        $oStaff = new staff();
+        $oStaff = new Staff();
         $StaffList = $oStaff
             ->where('nodeID','=',$ProjectData->nodeID)
             ->get();
@@ -141,7 +141,7 @@ class ProjectController extends Controller
         try {
             DB::beginTransaction();
 
-            $oProject = new project();
+            $oProject = new Project();
             $oProject = $oProject
                 ->where('ID',$ProjectID);
             
