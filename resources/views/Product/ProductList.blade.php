@@ -16,10 +16,12 @@
     <!--tool bar-->
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
-            <a href="{{url('/')}}/Project/ProjectList" class="btn btn-default">
-                <span class="glyphicon glyphicon-chevron-left"></span>
-            </a>
-            <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary">新增</a>
+            <form action="" class="navbar-form">
+                <a href="{{url('/')}}/Project/ProjectList" class="btn btn-default">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary">新增</a>
+            </form>
         </ul>
     </nav>
     <!--data table-->

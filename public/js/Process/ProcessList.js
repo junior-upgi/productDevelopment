@@ -252,8 +252,25 @@ function Complete($ProcessID) {
 }
 function Execute() {
     var ProductID = $('#ProductID').val();
+    var Title = "執行產品開發？";
+    var Message = "此動作會開始發送推播訊息!\n請問您確定要開始執行產品開發嗎？";
+    swal({
+        title: Title,
+        text: Message,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "取消",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "確定",
+        closeOnConfirm: false
+    },
+    function(){
+        ExcuteAjax(ProductID);
+    });
+}
+function ExcuteAjax(ProductID) {
     $.ajax({
-        url: url + '/Process/ProjectExecute/' + $ProductID,
+        url: url + '/Product/ProductExecute/' + ProductID,
         type: 'GET',
         dataType: 'JSON',
         error: function (xhr) {
@@ -262,8 +279,7 @@ function Execute() {
         success: function (result) {
             if (result.success) {
                 swal({
-                    title: "開始執行專案!",
-                    text: result.msg,
+                    title: result.msg,
                     type: "success",
                     showCancelButton: false,
                     confirmButtonClass: "btn-success",

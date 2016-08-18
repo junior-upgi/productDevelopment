@@ -28,7 +28,11 @@
                 </a>
                 <button type="button" class="btn btn-primary" onclick="AddShow()">新增</button>
                 <button type="button" class="btn btn-warning" onclick="SaveSort()">儲存排序</button>
-                <button type="button" class="btn btn-warning" onclick="Execute()">執行專案</button>
+                @if($ProductData->execute == "0")
+                    <button type="button" class="btn btn-warning" onclick="Execute()">執行開發</button>
+                @else
+                    <button type="button" class="btn btn-warning disabled" onclick="Execute()">開發執行中...</button>
+                @endif
             </form>
         </ul>
     </nav>

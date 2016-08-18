@@ -8,7 +8,9 @@
     <!--tool bar-->
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
-            <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary">新增</a>
+            <form action="" class="navbar-form">
+                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary">新增</a>
+            </form>
         </ul>
     </nav>
     <!--data table-->

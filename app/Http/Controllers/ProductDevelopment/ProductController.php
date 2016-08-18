@@ -150,4 +150,41 @@ class ProductController extends Controller
 
         return $jo;
     }
+
+    public function productExecute($ProductID)
+    {
+        
+        $Product = new ProjectContent();
+        $Product = $Product
+            ->where('ID', $ProductID);
+        $jo = array();
+
+        try {
+            if ($Product->count() > 0) {
+                DB::beginTransaction();
+                $Params = array(
+                    'execute' => '1',
+                );
+                $Product->update($Params);
+                DB::commit();
+                $jo = array(
+                    'success' => true,
+                    'msg' => '開始執行產品開發!',
+                );
+            } else {
+                $jo = array(
+                    'success' => false,
+                    'msg' => '找不到產品資料!',
+                );
+            }
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        
+        return $jo;
+    }
 }

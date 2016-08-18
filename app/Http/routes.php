@@ -43,6 +43,8 @@ Route::group(['prefix' => 'Product'], function() {
 
     Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@editProduct');
     Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@updateProduct');
+
+    Route::get('ProductExecute/{ProcessID}', 'ProductDevelopment\ProductController@productExecute');
 });
 
 Route::group(['prefix' => 'Process'], function() {
