@@ -21,6 +21,9 @@
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <form action="" class="navbar-form">
+                <a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
                 <button type="button" class="btn btn-primary" onclick="AddShow()">新增</button>
                 <button type="button" class="btn btn-warning" onclick="SaveSort()">儲存排序</button>
             </form>
@@ -108,11 +111,12 @@
                                 <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
                             @endif
                         @else
-                            @if($Now > $Deadline)
+                            {{--*/ $CompleteDate = strtotime($list->completeTime . '-1 day') /*--}}
+                            @if($CompleteDate > $Deadline)
                                 <span class="label label-danger">
                                     {{date('Y-m-d', strtotime($list->completeTime))}}
                                 </span>
-                            @elseif($Now > $EndDate)
+                            @elseif($CompleteDate > $EndDate)
                                 <span class="label label-warning">
                                     {{date('Y-m-d', strtotime($list->completeTime))}}
                                 </span>
