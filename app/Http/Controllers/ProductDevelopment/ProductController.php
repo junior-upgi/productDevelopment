@@ -22,7 +22,7 @@ use App\Models\sales\client;
 
 class ProductController extends Controller
 {
-    public function ProductList($ProjectID)
+    public function productList($ProjectID)
     {
         $Project = new vProjectList();
         $ProjectData = $Project
@@ -40,7 +40,7 @@ class ProductController extends Controller
             ->with('ProjectData', $ProjectData);
     }
     
-    public function AddProduct($ProjectID)
+    public function addProduct($ProjectID)
     {
         $para = new para();
         $priorityLevelList = $para
@@ -52,9 +52,9 @@ class ProductController extends Controller
             ->with('PriorityLevelList', $priorityLevelList);
     }
 
-    public function InsertProduct(Request $request)
+    public function insertProduct(Request $request)
     {
-        $NewID = Common::GetNewGUID();
+        $NewID = Common::getNewGUID();
         $params = array();
         $params['ID'] = $NewID;
         $params['projectID'] = $request->input('ProjectID');
@@ -77,19 +77,18 @@ class ProductController extends Controller
                 'success' => true,
                 'msg' => '新增開發產品成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+
         return $jo;
     }
 
-    public function EditProduct($ProductID)
+    public function editProduct($ProductID)
     {
         $ProjectContent = new projectContent();
         $ProductData = $ProjectContent
@@ -107,7 +106,7 @@ class ProductController extends Controller
             ->with('PriorityLevelList', $priorityLevelList);
     }
 
-    public function UpdateProduct(Request $request)
+    public function updateProduct(Request $request)
     {
         $params = array();
         $ProductID = $request->input('ProductID');
@@ -126,14 +125,14 @@ class ProductController extends Controller
             $ProjectContent = $ProjectContent
                 ->where('ID',$ProductID);
             
-            if($ProjectContent->count() < 1)
-            {
+            if ($ProjectContent->count() < 1) {
                 $jo = array(
                     'success' => false,
                     'msg' => '找不到該開發產品資訊!',
                 );
                 return $jo;
             }
+            
             $ProjectContent->update($params);
             
             DB::commit();
@@ -141,15 +140,14 @@ class ProductController extends Controller
                 'success' => true,
                 'msg' => '更新開發產品成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+
         return $jo;
     }
 }

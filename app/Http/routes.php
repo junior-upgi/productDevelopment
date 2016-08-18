@@ -16,43 +16,43 @@ Route::get('/', function () {
 });
 
 Route::group(['prefix' => 'Service'], function() {
-    Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@UserLogin');
-    Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@CheckDevice');
-    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@MessageTIme');
+    Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@pserLogin');
+    Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
+    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@messageTIme');
 });
 
 Route::group(['prefix' => 'Project'], function() {
     Route::get('phpinfo', 'ProductDevelopment\ProjectController@phpinfo');
 
-    Route::get('ProjectList', 'ProductDevelopment\ProjectController@ProjectList');
+    Route::get('ProjectList', 'ProductDevelopment\ProjectController@projectList');
 
-    Route::get('AddProject', 'ProductDevelopment\ProjectController@AddProject');
-    Route::post('InsertProject', 'ProductDevelopment\ProjectController@InsertProject');
+    Route::get('AddProject', 'ProductDevelopment\ProjectController@addProject');
+    Route::post('InsertProject', 'ProductDevelopment\ProjectController@insertProject');
 
-    Route::get('EditProject/{ProjectID}', 'ProductDevelopment\ProjectController@EditProject');
-    Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@UpdateProject');
+    Route::get('EditProject/{ProjectID}', 'ProductDevelopment\ProjectController@editProject');
+    Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@updateProject');
 
-    Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@GetStaffByNodeID');
+    Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
 });
 
 Route::group(['prefix' => 'Product'], function() {
-    Route::get('ProductList/{ProjectID}', 'ProductDevelopment\ProductController@ProductList');
+    Route::get('ProductList/{ProjectID}', 'ProductDevelopment\ProductController@productList');
 
-    Route::get('AddProduct/{ProjectID}', 'ProductDevelopment\ProductController@AddProduct');
-    Route::post('InsertProduct', 'ProductDevelopment\ProductController@InsertProduct');
+    Route::get('AddProduct/{ProjectID}', 'ProductDevelopment\ProductController@addProduct');
+    Route::post('InsertProduct', 'ProductDevelopment\ProductController@insertProduct');
 
-    Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@EditProduct');
-    Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@UpdateProduct');
+    Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@editProduct');
+    Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@updateProduct');
 });
 
 Route::group(['prefix' => 'Process'], function() {
-    Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@ProcessList');
+    Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@processList');
 
-    Route::post('InsertProcess', 'ProductDevelopment\ProcessController@InsertProcess');
+    Route::post('InsertProcess', 'ProductDevelopment\ProcessController@insertProcess');
     
-    Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@GetProcessData');
-    Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@SaveProcessSort');
-    Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@UpdateProcess');
+    Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@getProcessData');
+    Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@saveProcessSort');
+    Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
 
-    Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@ProcessComplete');
+    Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@processComplete');
 });

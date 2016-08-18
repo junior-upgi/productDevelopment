@@ -38,7 +38,7 @@ class WebServiceController extends Controller
     /*
     首次登入驗證使用者資訊
     */
-    public function UserLogin($Account, $Password, $DeviceOS, $DeviceID, $DeviceToken)
+    public function userLogin($Account, $Password, $DeviceOS, $DeviceID, $DeviceToken)
     {
         $user = new User();
         $jo = array();
@@ -46,11 +46,11 @@ class WebServiceController extends Controller
         //驗證使用者帳密
         $CheckUser = $user
             ->where('mobileSystemAccount', $Account)
-            ->where('password', $Password);     
-        if($CheckUser->first())
-        {
+            ->where('password', $Password);    
+         
+        if ($CheckUser->first()) {
             //通過驗證
-            try{
+            try {
                 //寫入使用者設備資訊 
                 DB::beginTransaction();
                 $Params = array(
@@ -64,30 +64,28 @@ class WebServiceController extends Controller
                     'success' => true,
                     'msg' => '驗證通過，設備訊息已寫入!',
                 );
-            }
-            catch (\PDOException $e)
-            {
+            } catch (\PDOException $e) {
                 DB::rollback();
                 $jo = array(
                     'success' => false,
                     'msg' => $e,
                 );
             }
-        }
-        else
-        {
+        } else {
             //使用者驗證失敗
             $jo = array(
                 'success' => false,
                 'msg' => '帳號密碼錯誤!'
             );
         }
+
         return $jo;
     }
+
     /*
     驗證設備資訊是否已寫入Server
     */
-    public function CheckDevice($DeviceOS, $DeviceID, $DeviceToken)
+    public function checkDevice($DeviceOS, $DeviceID, $DeviceToken)
     {
         $User = new User();
         $jo = array();
@@ -97,27 +95,26 @@ class WebServiceController extends Controller
             ->where('deviceOS', $DeviceOS)
             ->where('deviceID', $DeviceID)
             ->where('deviceToken', $DeviceToken);
-        if($CheckDevice->first())
-        {
+
+        if ($CheckDevice->first()) {
             $jo = array(
                 'success' => true,
                 'msg' => '通過驗證!'
             );
-        }
-        else
-        {
+        } else {
             $jo = array(
                 'success' => false,
                 'msg' => '設備資料不存在!'
             );
         }
+
         return $jo;
     }
     /*
     插入推播訊息動作時間
     test = 83e0b733-62a9-11e6-a882-1cb72cdefcf9
     */
-    public function MessageTime($BroadcastID, $Action)
+    public function messageTime($BroadcastID, $Action)
     {   
         $MessageTime = new broadcastStatus();
         $jo = array();
@@ -125,10 +122,8 @@ class WebServiceController extends Controller
         $Params = array();
         $MessageTime = $MessageTime->where('ID', $BroadcastID);
         //檢查訊息是否存在
-        if($MessageTime->first())
-        {
-            switch($Action)
-            {
+        if ($MessageTime->first()) {
+            switch ($Action) {
                 case 'sent':
                 case 'retracted':
                 case 'received':
@@ -138,9 +133,8 @@ class WebServiceController extends Controller
                     );
                     break;
             }
-            if($Params)
-            {
-                try{
+            if ($Params) {
+                try {
                     //寫入動作時間 
                     DB::beginTransaction();
                     $MessageTime->update($Params);
@@ -149,33 +143,28 @@ class WebServiceController extends Controller
                         'success' => true,
                         'msg' => $Action . ' Time:' . $Now,
                     );
-                }
-                catch (\PDOException $e)
-                {
+                } catch (\PDOException $e) {
                     DB::rollback();
                     $jo = array(
                         'success' => false,
                         'msg' => $e,
                     );
                 }
-            }
-            else
-            {
+            } else {
                 //Action 參數不正確
                 $jo = array(
                     'success' => false,
                     'msg' => 'Action參數不正確(Action=' . $Action .')',
                 );
             }
-        }
-        else
-        {
+        } else {
             //broadcastID不存在
             $jo = array(
                 'success' => false,
                 'msg' => 'broadcastID不存在!!'
             );
         }
+
         return $jo;
     }
 }

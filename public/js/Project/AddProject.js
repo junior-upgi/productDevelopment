@@ -17,12 +17,10 @@ function DoInsert() {
                     confirmButtonText: "OK",
                     closeOnConfirm: false
                 },
-                function()
-                {
+                function () {
                     document.location.href = url + '/Project/ProjectList';
                 });
-            }
-            else {
+            } else {
                 swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
                 $('#BtnSave').button('reset');
             }
@@ -32,4 +30,24 @@ function DoInsert() {
             $('#BtnSave').button('reset');
         }
     });
+}
+function GetSales() {
+    var NodeID = $("#NodeID").find(":selected").val();
+    $.ajax({
+        url: url + '/Project/GetStaffByNodeID/' + NodeID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function (xhr) {
+            swal("取得資料失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+            $("#SalesID option").remove();
+            if (result.length > 0) {
+                $("#SalesID").append($("<option></option>").attr("value", "").text("請選擇"));
+                for (i = 0; i < result.length; i++) {
+                    $("#SalesID").append($("<option></option>").attr("value", result[i].id).text(result[i].name));
+                } 
+            }
+        }
+    })
 }

@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(document).ready(function () {
     var timeInMs = new Date();
-    timInMs = timeInMs.getFullYear() + "-" + (timeInMs.getMonth()+1) + "-" + timeInMs.getDate();
+    timInMs = timeInMs.getFullYear() + "-" + (timeInMs.getMonth() + 1) + "-" + timeInMs.getDate();
     $(".date").datetimepicker({
         format: 'yyyy-mm-dd',
         //startDate: timInMs,
@@ -32,12 +32,10 @@ function DoInsert() {
                     confirmButtonText: "OK",
                     closeOnConfirm: false
                 },
-                function()
-                {
+                function () {
                     document.location.href = url + '/Product/ProductList/' + ProjectID;
                 });
-            }
-            else {
+            } else {
                 swal("新增資料失敗!!", obj.msg.errorInfo[2], "error");
                 $('#BtnSave').button('reset');
             }

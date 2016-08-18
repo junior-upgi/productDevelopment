@@ -4,7 +4,7 @@ namespace App\Models\companyStructure;
 
 use Illuminate\Database\Eloquent\Model;
 
-class node extends Model
+class Node extends Model
 {
     protected $connection = 'DB_companyStructure';
     protected $table = "node";

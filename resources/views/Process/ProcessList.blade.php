@@ -10,7 +10,9 @@
         <li class="active">產品開發流程</li>
     </ol>
     <!--product info panel-->
-    {{--*/ $Deadline = strtotime($ProductData->deadline) /*--}}
+    {{--*/ 
+        $Deadline = strtotime($ProductData->deadline) 
+    /*--}}
     <p class="bg-info">
         <span style="margin-right:20px;">產品代碼：{{$ProductData->referenceNumber}}</span>
         <span style="margin-right:20px;">產品名稱：{{$ProductData->referenceName}}</span>
@@ -46,15 +48,19 @@
             </tr>
         </thead>
         <tbody id="tableSort">
-            {{--*/ $CostCount = 0 /*--}}
-            {{--*/ $i = 1 /*--}}
-            {{--*/ use Carbon\Carbon /*--}}
-            {{--*/ $Now = strtotime(Carbon::now() . '-1 day') /*--}}
+            {{--*/ 
+                $CostCount = 0;
+                $i = 1;
+                use Carbon\Carbon;
+                $Now = strtotime(Carbon::now() . '-1 day');
+            /*--}}
             @foreach($ProcessList as $list)
-                {{--*/ $StartDays = $CostCount /*--}}
-                {{--*/ $EndDays = ($CostCount += $list->timeCost) - 1 /*--}}
-                {{--*/ $StartDate = strtotime($ProductData->startDate . '+' . $StartDays . ' day') /*--}}
-                {{--*/ $EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') /*--}}
+                {{--*/ 
+                    $StartDays = $CostCount;
+                    $EndDays = ($CostCount += $list->timeCost) - 1;
+                    $StartDate = strtotime($ProductData->startDate . '+' . $StartDays . ' day');
+                    $EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
+                /*--}}
                 @if($list->complete == "0")
                     <tr id="{{$list->ID}}">
                 @else
@@ -111,7 +117,9 @@
                                 <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
                             @endif
                         @else
-                            {{--*/ $CompleteDate = strtotime($list->completeTime . '-1 day') /*--}}
+                            {{--*/ 
+                                $CompleteDate = strtotime($list->completeTime . '-1 day') 
+                            /*--}}
                             @if($CompleteDate > $Deadline)
                                 <span class="label label-danger">
                                     {{date('Y-m-d', strtotime($list->completeTime))}}

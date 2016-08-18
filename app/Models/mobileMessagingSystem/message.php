@@ -4,7 +4,7 @@ namespace App\Models\mobileMessagingSystem;
 
 use Illuminate\Database\Eloquent\Model;
 
-class message extends Model
+class Message extends Model
 {
     protected $connection = 'DB_mobileMessagingSystem';
     protected $table = "message";

@@ -4,7 +4,7 @@ namespace App\Models\productDevelopment;
 
 use Illuminate\Database\Eloquent\Model;
 
-class vProjectList extends Model
+class VProjectList extends Model
 {
     protected $connection = 'DB_productDevelopment';
     protected $table = "vProjectList";

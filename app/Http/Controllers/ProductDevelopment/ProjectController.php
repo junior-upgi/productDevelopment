@@ -21,15 +21,16 @@ use App\Models\sales\client;
 
 class ProjectController extends Controller
 {
-    public function ProjectList()
+    public function projectList()
     {
         $oProject = new vProjectList();
         $ProjectList = $oProject::all();
+
         return view('Project.ProjectList')
             ->with('ProjectList', $ProjectList);
     }
 
-    public function AddProject()
+    public function addProject()
     {
         $oClient = new client();
         $ClientList = $oClient
@@ -46,7 +47,7 @@ class ProjectController extends Controller
             ->with('NodeList', $NodeList);
     }
 
-    public function InsertProject(Request $request)
+    public function insertProject(Request $request)
     {
         $ProjectNumber = $request->input('referenceNumber');
         $ProjectName = $request->input('ProjectName');
@@ -58,7 +59,7 @@ class ProjectController extends Controller
             DB::beginTransaction();
 
             $oProject = new project();
-            $oProject->ID = Common::GetNewGUID();
+            $oProject->ID = Common::getNewGUID();
             $oProject->referenceName = $ProjectName;
             $oProject->referenceNumber = $ProjectNumber;
             $oProject->clientID = $ClientID;
@@ -71,28 +72,28 @@ class ProjectController extends Controller
                 'success' => true,
                 'msg' => '新增開發案成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+
         return $jo;
     }
 
-    public function GetStaffByNodeID($NodeID)
+    public function getStaffByNodeID($NodeID)
     {
         $oStaff = new staff();
         $StaffData = $oStaff
             ->where('nodeID','=',$NodeID)
             ->get();
+
         return $StaffData;
     }
 
-    public function EditProject($ProjectID)
+    public function editProject($ProjectID)
     {
         $oProject = new vProjectList();
         $ProjectData = $oProject
@@ -128,7 +129,7 @@ class ProjectController extends Controller
             ->with('StaffList', $StaffList);
     }
     
-    public function UpdateProject(Request $request)
+    public function updateProject(Request $request)
     {
         $params = array();
         $ProjectID = $request->input('ProjectID');
@@ -159,15 +160,14 @@ class ProjectController extends Controller
                 'success' => true,
                 'msg' => '更新開發案成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+        
         return $jo;
     }
     

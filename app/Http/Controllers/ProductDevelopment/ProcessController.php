@@ -25,7 +25,7 @@ use App\Models\sales\client;
 
 class ProcessController extends Controller
 {
-    public function ProcessList($ProductID)
+    public function processList($ProductID)
     {
         $ProjectContent = new projectContent();
         $ProductData = $ProjectContent
@@ -57,7 +57,7 @@ class ProcessController extends Controller
             ->with('PhaseList', $PhaseList);
     }
 
-    public function InsertProcess(Request $request)
+    public function insertProcess(Request $request)
     { 
         $ProjectContentID = $request->input('ProductID');
         $ProcessNumber = $request->input('ProcessNumber');
@@ -68,7 +68,7 @@ class ProcessController extends Controller
 
         try {
             DB::beginTransaction();
-            $ProcessID = Common::GetNewGUID();
+            $ProcessID = Common::getNewGUID();
             $Params = array(
                 'ID' => $ProcessID,
                 'projectContentID' => $ProjectContentID,
@@ -101,19 +101,18 @@ class ProcessController extends Controller
                 'success' => true,
                 'msg' => '新增程序成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+
         return $jo;
     }
 
-    public function GetProcessData($ProcessID)
+    public function getProcessData($ProcessID)
     {
         $Process = new vProcessList();
         $ProcessData = $Process
@@ -124,8 +123,7 @@ class ProcessController extends Controller
             ->where('nodeID', $ProcessData->nodeID)
             ->get();
         $jo = array();
-        if($ProcessData && $StaffList)
-        {
+        if ($ProcessData && $StaffList) {
             $jo = array(
                 'success' => true,
                 'ID' => $ProcessData->ID,
@@ -137,18 +135,17 @@ class ProcessController extends Controller
                 'NodeID' => $ProcessData->nodeID,
                 'StaffList' => $StaffList,
             );
-        }
-        else
-        {
+        } else {
             $jo = array(
                 'success' => false,
                 'msg' => '找不到程序資訊!',
             );
         }
+
         return $jo;
     }
 
-    public function SaveProcessSort(Request $request)
+    public function saveProcessSort(Request $request)
     {
         $Data = $request->json()->all();
         try
@@ -182,7 +179,7 @@ class ProcessController extends Controller
         return $jo;
     }
 
-    public function UpdateProcess(Request $request)
+    public function updateProcess(Request $request)
     {
         $ProjectContentID = $request->input('ProductID');
         $ProjectProcessID = $request->input('ProcessID');
@@ -212,19 +209,18 @@ class ProcessController extends Controller
                 'success' => true,
                 'msg' => '更新程序成功!',
             );
-        } 
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+
         return $jo;
     }
     
-    public function ProcessComplete($ProcessID)
+    public function processComplete($ProcessID)
     {
         $jo = array();
         try {
@@ -244,15 +240,14 @@ class ProcessController extends Controller
                 'success' => true,
                 'msg' => '完成程序!',
             );
-        }
-        catch (\PDOException $e)
-        {
+        } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,
             );
         }
+        
         return $jo;
     }
 }
