@@ -28,6 +28,7 @@
                 </a>
                 <button type="button" class="btn btn-primary" onclick="AddShow()">新增</button>
                 <button type="button" class="btn btn-warning" onclick="SaveSort()">儲存排序</button>
+                <button type="button" class="btn btn-warning" onclick="Execute()">執行專案</button>
             </form>
         </ul>
     </nav>

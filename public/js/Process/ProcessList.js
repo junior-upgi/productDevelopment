@@ -250,3 +250,32 @@ function Complete($ProcessID) {
         }
     });
 }
+function Execute() {
+    var ProductID = $('#ProductID').val();
+    $.ajax({
+        url: url + '/Process/ProjectExecute/' + $ProductID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function (xhr) {
+            swal("操作失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+            if (result.success) {
+                swal({
+                    title: "開始執行專案!",
+                    text: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function () {
+                    document.location.href = url + '/Process/ProcessList/' + ProductID;
+                });
+            } else {
+                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+            }
+        }
+    });
+}
