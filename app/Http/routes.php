@@ -65,6 +65,7 @@ Route::group(['prefix' => 'Process'], function() {
 
 Route::group(['prefix' => 'SysOption'], function() {
     Route::any('StaffList', 'SystemManagement\StaffController@staffList');
+    Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
     Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
     Route::get('GetStaffList/{NodeID}', 'SystemManagement\StaffController@getStaffList');
 });

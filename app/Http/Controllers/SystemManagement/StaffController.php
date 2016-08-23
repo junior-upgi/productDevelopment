@@ -15,6 +15,7 @@ use App\Models;
 use App\Models\companyStructure\VStaff;
 use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
+use App\Models\companyStructure\TStaff;
 use App\Models\sales\Client;
 use App\Models\upgiSystem\User;
 use App\Models\upgiSystem\UserGroup;
@@ -23,7 +24,6 @@ use App\Models\UPGWeb\erpClient;
 use App\Models\UPGWeb\erpNode;
 use App\Models\UPGWeb\erpStaff;
 use App\Models\UPGWeb\ERPStaffNode;
-use App\Models\UPGWeb\Test;
 
 class StaffController extends Controller
 {
@@ -76,6 +76,51 @@ class StaffController extends Controller
             'PrList' => $PrimaryDelegateList,
             'SeList' => $SecondaryDelegateList,
         );
+        return $jo;
+    }
+
+    public function updateStaff(Request $request)
+    {
+        $StaffID = $request->input('ID');
+        $SuperivisorID = $request->input('SuperivisorID');
+        $PrimaryDelegateID = $request->input('PrimaryDelegateID');
+        $SecondaryDelegateID = $request->input('SecondaryDelegateID');
+        $jo =  array();
+        try {
+            $Staff = new TStaff();
+            $Params = array(
+                'StaffID' => $StaffID,
+                'SuperivisorID' => $SuperivisorID,
+                'PrimaryDelegateID' => $PrimaryDelegateID,
+                'SecondaryDelegateID' => $SecondaryDelegateID,
+            );
+            DB::beginTransaction();
+            /*
+            $Staff = $Staff->firstOrCreate(array('staffID' => $StaffID));
+            $Staff->staffID = $StaffID;
+            $Staff->superivisorID = $SuperivisorID;
+            $Staff->primaryDelegateID = $PrimaryDelegateID;
+            $Staff->secondaryDelegateID = $SecondaryDelegateID;
+            $Staff->save();
+            */
+            if ($Staff->where('staffID', $StaffID)->count() > 0) {
+                $Staff->where('staffID', $StaffID)->update($Params);
+            } else {
+                $Staff->insert($Params);
+            }
+
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '員工資料更新成功',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
         return $jo;
     }
 

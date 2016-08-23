@@ -101,13 +101,45 @@ function GetStaff(type) {
             swal("取得資料失敗!", xhr.statusText, "error");
         },
         success: function (result) {
-            $(FormID + " #StaffID option").remove();
+            $(FormID + " #" + StaffID + " option").remove();
             if (result.length > 0) {
                 $(FormID + " #" + StaffID).append($("<option></option>").attr("value", "").text("請選擇"));
                 for (i = 0; i < result.length; i++) {
-                    $(FormID + " #" + StaffID).append($("<option></option>").attr("value", result[i].id).text(result[i].name));
+                    $(FormID + " #" + StaffID).append($("<option></option>").attr("value", result[i].ID).text(result[i].name));
                 }
             }
+        }
+    });
+}
+//更新員工資料
+function DoUpdate() {
+    $("#EditStaffForm").ajaxForm({
+        url: url + '/SysOption/UpdateStaff',
+        beforeSubmit: function () {
+            $('#BtnEdit').button('loading');
+        },
+        success: function (obj) {
+            if (obj.success) {
+                $('#EditModal').modal('hide');
+                swal({
+                    title: "更新資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },function () {
+                    document.location.href = url + '/SysOption/StaffList';
+                });
+            } else {
+                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+                $('#BtnEdit').button('reset');
+            }
+        },
+        error: function (xhr) {
+            swal("發生異常錯誤!", xhr.statusText, "error");
+            $('#BtnEdit').button('reset');
         }
     });
 }

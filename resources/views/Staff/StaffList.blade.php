@@ -1,7 +1,7 @@
 @extends('layouts.masterpage')
 
 @section('content')
-    <script src="{{url('/')}}/js/Staff/StaffList.js?x=1"></script>
+    <script src="{{url('/')}}/js/Staff/StaffList.js?x=3"></script>
     <ol class="breadcrumb">
         <li class="active">員工資料維護</li>
     </ol>
