@@ -1,6 +1,7 @@
 @extends('layouts.masterpage')
 
 @section('content')
+    <script src="{{url('/')}}/js/Staff/StaffList.js?x=1"></script>
     <ol class="breadcrumb">
         <li class="active">員工資料維護</li>
     </ol>
@@ -13,7 +14,7 @@
             </form>
             -->
         </ul>
-        <ul class="nav navbar-nav navbar-right" style="margin-left:15px">
+        <ul class="nav navbar-nav navbar-right" style="margin-right:0px">
             <form action="{{url('/')}}/SysOption/StaffList" class="navbar-form" method="POST">
                 <div class="form-group">
                     <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
@@ -40,7 +41,7 @@
             @foreach($StaffList as $list)
                 <tr>
                     <td class="text-center">
-                        <a href="{{url('/')}}" class="btn btn-sm btn-default">編輯</a>
+                        <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list['ID']}}')">編輯</button>
                     </td>
                     <td>{{$list['nodeName']}}</td>
                     <td>{{$list['name']}}</td>
@@ -55,4 +56,5 @@
     <div class="text-center">
         {{$StaffList->links()}}
     </div>
+    @include('Staff.EditStaff')
 @endsection

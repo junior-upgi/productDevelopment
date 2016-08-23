@@ -27,10 +27,10 @@ use App\Models\UPGWeb\Test;
 
 class StaffController extends Controller
 {
-    public function StaffList(Request $request)
+    public function staffList(Request $request)
     {
         $Search = $request->input('Search');
-        $StaffList = ServerData::getStaff();
+        $StaffList = ServerData::getStaffDetail();
         $s = new ERPStaffNode();
         $Search = iconv("UTF-8", "BIG-5", $Search);
         
@@ -45,9 +45,50 @@ class StaffController extends Controller
         return view('Staff.StaffList')->with('StaffList', $StaffList->paginate(15));
     }
 
-    public function ImportStaff()
+    public function getStaffData($StaffID)
     {
+        $StaffData = ServerData::getStaffDetail($StaffID)->first();
+        $Node = new ERPNode();
+        $NodeList = $Node->orderBy('nodeID')->get();
+        $SuperivisorList = array();
+        $PrimaryDelegateList = array();
+        $SecondaryDelegateList = array();
+        if ($StaffData->mapping['superivisor'] != null) {
+            $SuperivisorList = ServerData::getStaffList($StaffData->mapping->superivisor->nodeID)->get();
+        }
+        if ($StaffData->mapping['primaryDelegate'] != null) {
+            $PrimaryDelegateList = ServerData::getStaffList($StaffData->mapping->primaryDelegate->nodeID)->get();
+        }
+        if ($StaffData->mapping['secondaryDelegate'] != null) {
+            $SecondaryDelegateList = ServerData::getStaffList($StaffData->mapping->secondaryDelegate->nodeID)->get();
+        }
+        $jo = array(
+            'success' => true,
+            'ID' => $StaffData->ID,
+            'nodeName' => $StaffData->nodeName,
+            'name' => $StaffData->name,
+            'position' => $StaffData->position,
+            'NodeList' => $NodeList,
+            'SuperivisorID' => $StaffData->mapping['superivisor']['ID'],
+            'PrimaryDelegateID' => $StaffData->mapping['primaryDelegate']['ID'],
+            'SecondaryDelegateID' => $StaffData->mapping['secondaryDelegate']['ID'],
+            'SuList' => $SuperivisorList,
+            'PrList' => $PrimaryDelegateList,
+            'SeList' => $SecondaryDelegateList,
+        );
+        return $jo;
+    }
 
+    public function getStaffList($NodeID)
+    {
+        $List = ServerData::getStaffList($NodeID)->get();
+        return $List;
+    }
+
+
+    public function importStaff()
+    {
+        return '尚未完工';
     }
 }
 

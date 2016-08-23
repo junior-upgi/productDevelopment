@@ -82,17 +82,7 @@ class ProjectController extends Controller
 
         return $jo;
     }
-
-    public function getStaffByNodeID($NodeID)
-    {
-        $oStaff = new Staff();
-        $StaffData = $oStaff
-            ->where('nodeID','=',$NodeID)
-            ->get();
-
-        return $StaffData;
-    }
-
+    
     public function editProject($ProjectID)
     {
         $oProject = new VProjectList();

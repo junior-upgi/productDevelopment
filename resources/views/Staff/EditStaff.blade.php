@@ -10,49 +10,43 @@
                 <div class="modal-body">
                     <div class="modal-body">
                         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
-                        <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
-                        <input type="hidden" id="ProcessID" name="ProcessID" value="">
+                        <input type="hidden" id="ID" name="ID" value="">
                         <div class="form-group">
-                            <label for="ProcessNumber" class="col-md-4 control-label">開發程序代號</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control" id="ProcessNumber" name="ProcessNumber" value="" required>
+                            <label for="" class="col-md-4 control-label">單位/姓名</label>
+                            <div class="col-md-6">
+                                <p><span ID="StaffName"></span></p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="ProcessName" class="col-md-4 control-label">開發程序名稱</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control" id="ProcessName" name="ProcessName" value="" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="PhaseID" class="col-md-4 control-label">程序類別</label>
+                            <label for="SuNodeID" class="col-md-4 control-label">主管</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="PhaseID" name="PhaseID" required>
-                                    <option value="">請選擇類別</option>
-                                    @foreach($PhaseList as $list)
-                                        <option value="{{$list->paracodeno}}">{{$list->paracodename}}</option>
-                                    @endforeach
+                                <select class="form-control node" id="SuNodeID" name="SuNodeID" onchange="GetStaff('Su')" required>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="SuperivisorID" name="SuperivisorID" required>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="TimeCost" class="col-md-4 control-label">開發工時(日)</label>
-                            <div class="col-md-5">
-                                <input type="text" class="form-control" id="TimeCost" name="TimeCost" value="" required>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="NodeID" class="col-md-4 control-label">負責人</label>
+                            <label for="PrNodeID" class="col-md-4 control-label">代理人1</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
-                                    <option value="">請選擇單位</option>
-                                    @foreach($NodeList as $list)
-                                        <option value="{{$list->id}}">{{$list->reference}}</option>
-                                    @endforeach
+                                <select class="form-control node" id="PrNodeID" name="PrNodeID" onchange="GetStaff('Pr')" required>
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" id="StaffID" name="StaffID" required>
+                                <select class="form-control" id="PrimaryDelegateID" name="PrimaryDelegateID" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="SeNodeID" class="col-md-4 control-label">代理人2</label>
+                            <div class="col-md-3">
+                                <select class="form-control node" id="SeNodeID" name="SeNodeID" onchange="GetStaff('Se')" required>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="SecondaryDelegateID" name="SecondaryDelegateID" required>
                                 </select>
                             </div>
                         </div>

@@ -13,12 +13,9 @@ use App\Models\UPGWeb\ERPStaffNode;
 
 class ServerData extends Controller
 {
-    public static function getStaff($ERPStaffID = "")
+    public static function getStaffDetail($ERPStaffID = "")
     {
-        //$Staff = new TStaff();
         $Staff = new ERPStaffNode();
-        //$List = $s->with(['mapping.superivisor', 'mapping.primaryDelegate', 'mapping.secondaryDelegate'])->get();
-        //$List = $s->with('superivisor')->get();
         
         if ($ERPStaffID === "") {
             $List = $Staff
@@ -34,6 +31,18 @@ class ServerData extends Controller
                 //->get();
         }
         
+        return $List;
+    }
+    public static function getStaffList($NodeID = "")
+    {
+        $StaffList = new ERPStaffNode();
+        if ($NodeID === "") {
+            $List = $StaffList->orderBy('ID');
+        } else {
+            $List = $StaffList
+                ->where('nodeID', $NodeID)
+                ->orderBy('ID');
+        }
         return $List;
     }
 }
