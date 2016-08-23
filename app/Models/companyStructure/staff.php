@@ -3,6 +3,7 @@
 namespace App\Models\companyStructure;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\UPGWeb\ERPStaff;
 
 class Staff extends Model
 {

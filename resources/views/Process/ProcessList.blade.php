@@ -85,8 +85,7 @@
                         <span>{{$list->referenceName}}</span>
                     </td>
                     <td>
-                        <span>{{$list->NodeName}}</span>
-                        <span>{{$list->name}}</span>
+                        <span>{{$list->nodeName}}_{{$list->name}}</span>
                     </td>
                     <td>
                         <span>{{$list->timeCost}}</span>

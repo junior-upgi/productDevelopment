@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="NodeID" class="col-md-2 control-label">業務員</label>
+            <label for="NodeID" class="col-md-2 control-label">負責人</label>
             <div class="col-md-3">
                 <select class="form-control" id="NodeID" name="NodeID" onchange="GetSales()" required>
                     <option value="">請選擇單位</option>

@@ -19,14 +19,5 @@ class Common extends Controller
         
         return $uuid;
     }
-    public static function getERPIDBYStaffID($StaffID)
-    {
-        
-        $ERPID="";
-        $Success = false;
-
-        $vStaff = new VStaff();
-
-
-    }
+    
 }

@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/phpinfo', function () {
+    phpinfo();
+});
+
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@pserLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
@@ -57,4 +61,8 @@ Route::group(['prefix' => 'Process'], function() {
     Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
 
     Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@processComplete');
+});
+
+Route::group(['prefix' => 'SysOption'], function() {
+    Route::any('StaffList', 'SystemManagement\StaffController@StaffList');
 });

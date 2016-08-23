@@ -22,7 +22,7 @@
                 <td>開發案號</td>
                 <td>開發案名稱</td>
                 <td>客戶名稱</td>
-                <td>業務員</td>
+                <td>負責人</td>
                 <td>開始時間</td>
                 <td>完成時間</td>
                 <td class="col-md-1">狀態</td>
@@ -37,7 +37,7 @@
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
                     <td>{{$list->ClientName}}</td>
-                    <td>{{$list->NodeName . '_' . $list->StaffName}}</td>
+                    <td>{{$list->nodeName . '_' . $list->StaffName}}</td>
                     <td></td>
                     <td></td>
                     <td class="text-center"></td>

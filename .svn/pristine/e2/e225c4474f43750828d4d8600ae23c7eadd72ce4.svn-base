@@ -1,0 +1,59 @@
+<?php $__env->startSection('content'); ?>
+    <!--breadcrumb-->
+    <ol class="breadcrumb">
+        <li><a href="<?php echo e(url('/')); ?>/Project/ProjectList">開發案清單</a></li>
+        <li class="active">開發產品清單</li>
+    </ol>
+    <!--project info panel-->
+    <p class="bg-info">
+        <span style="margin-right:20px;">專案代碼：<?php echo e($ProjectData->referenceNumber); ?></span>
+        <span style="margin-right:20px;">專案名稱：<?php echo e($ProjectData->referenceName); ?></span>
+        <span style="margin-right:20px;">客戶名稱：<?php echo e($ProjectData->ClientName); ?></span>
+        <span style="margin-right:20px;">業務員：<?php echo e($ProjectData->StaffName); ?></span>   
+    </p>
+    <!--tool bar-->
+    <nav class="navbar navbar-default" role="navigation">
+        <ul class="nav navbar-nav">
+            <form action="" class="navbar-form">
+                <a href="<?php echo e(url('/')); ?>/Project/ProjectList" class="btn btn-default">
+                    <span class="glyphicon glyphicon-chevron-left"></span>
+                </a>
+                <a href="<?php echo e(url('/')); ?>/Product/AddProduct/<?php echo e($ProjectData->ID); ?>" class="btn btn-primary">新增</a>
+            </form>
+        </ul>
+    </nav>
+    <!--data table-->
+    <table class="table table-bordered" style="margin-top:20px;">
+        <thead>
+            <tr>
+                <td width=60></td>
+                <td width=60></td>
+                <td>產品代號</td>
+                <td>產品名稱</td>
+                <td>需求數量</td>
+                <td>交貨數量</td>
+                <td>開始時間</td>
+                <td>交貨時限</td>
+                <td width=50>狀態</td>
+                <td width=60></td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($ProductList as $list): ?>
+                <tr>
+                    <td><a href="<?php echo e(url('/')); ?>/Product/EditProduct/<?php echo e($list->ID); ?>" class="btn btn-sm btn-default">編輯</a></td>
+                    <td><a href="<?php echo e(url('/')); ?>/Process/ProcessList/<?php echo e($list->ID); ?>" class="btn btn-sm btn-info">時程</a></td>
+                    <td><?php echo e($list->referenceNumber); ?></td>
+                    <td><?php echo e($list->referenceName); ?></td>
+                    <td><?php echo e($list->requiredQuantity); ?></td>
+                    <td><?php echo e($list->deliveredQuantity); ?></td>
+                    <td><?php echo e(date('Y-m-d', strtotime($list->startDate))); ?></td>
+                    <td><?php echo e(date('Y-m-d', strtotime($list->deadline))); ?></td>
+                    <td></td>
+                    <td><input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete()"></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

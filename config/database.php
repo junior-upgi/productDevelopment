@@ -121,6 +121,7 @@ return [
             'strict' => false,
             'engine' => null,
         ],
+
         'DB_mobileMessagingSystem' => [
             'driver' => 'mysql',
             'host' => '192.168.168.86',
@@ -128,6 +129,20 @@ return [
             'database' => 'mobileMessagingSystem',
             'username' => 'spark',
             'password' => 'pa676579',
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+
+        'DB_UPGWeb' => [
+            'driver' => 'sqlsrv',
+            'host' => '192.168.168.1',
+            'port' => '1433',
+            'database' => 'UPGWeb',
+            'username' => 'sunlikev9reader',
+            'password' => 'sunlikev9reader',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
