@@ -8,5 +8,4 @@ class ERPClient extends Model
 {
     protected $connection = 'DB_UPGWeb';
     protected $table = "vCustomer";
-    public $timestamps = false;
 }

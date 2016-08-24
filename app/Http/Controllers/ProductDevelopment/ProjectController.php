@@ -158,6 +158,30 @@ class ProjectController extends Controller
         return $StaffList;
     }
 
+    public function deleteProject($ProjectID)
+    {
+        $Project = new Project();
+        try {
+            DB::beginTransaction();
+
+            $Project->where('ID', $ProjectID)->delete();
+            
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '刪除開發案成功!',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        
+        return $jo;
+    }
+
     public function phpinfo()
     {
         phpinfo();

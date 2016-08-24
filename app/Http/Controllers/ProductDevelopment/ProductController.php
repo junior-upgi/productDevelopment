@@ -63,6 +63,7 @@ class ProductController extends Controller
         $params['deadline'] = $request->input('Deadline');
         $params['startDate'] = $request->input('StartDate');
         $params['priorityLevel'] = $request->input('PriorityLevel');
+        $Parmas['created_at'] = Carbon::now();
 
         try {
             DB::beginTransaction();
@@ -171,6 +172,30 @@ class ProductController extends Controller
                     'msg' => '找不到產品資料!',
                 );
             }
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        
+        return $jo;
+    }
+
+    public function deleteProduct($ProductID)
+    {
+        $Product = new ProjectContent();
+        try {
+            DB::beginTransaction();
+
+            $Product->where('ID', $ProductID)->delete();
+            
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '刪除開發案成功!',
+            );
         } catch (\PDOException $e) {
             DB::rollback();
             $jo = array(

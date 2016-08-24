@@ -8,5 +8,4 @@ class VProcessList extends Model
 {
     protected $connection = 'DB_productDevelopment';
     protected $table = "vProcessList";
-    public $timestamps = false;
 }

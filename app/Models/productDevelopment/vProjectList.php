@@ -8,5 +8,4 @@ class VProjectList extends Model
 {
     protected $connection = 'DB_productDevelopment';
     protected $table = "vProjectList";
-    public $timestamps = false;
 }

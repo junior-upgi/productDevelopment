@@ -8,5 +8,4 @@ class ERPNode extends Model
 {
     protected $connection = 'DB_UPGWeb';
     protected $table = "vNode";
-    public $timestamps = false;
 }

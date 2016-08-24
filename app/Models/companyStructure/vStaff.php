@@ -8,5 +8,4 @@ class VStaff extends Model
 {
     protected $connection = "DB_companyStructure";
     protected $table = "vStaff";
-    public $timestamps = false;
 }

@@ -10,5 +10,4 @@ class ERPStaff extends Model
 {
     protected $connection = 'DB_UPGWeb';
     protected $table = "vStaff";
-    public $timestamps = false;
 }

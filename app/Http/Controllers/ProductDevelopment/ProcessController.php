@@ -70,6 +70,7 @@ class ProcessController extends Controller
                 'projectProcessPhaseID' => $PhaseID,
                 'timeCost' => $TimeCost,
                 'staffID' => $StaffID,
+                'created_at' => Carbon::now(),
             );
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($Params);
@@ -232,6 +233,50 @@ class ProcessController extends Controller
             $jo = array(
                 'success' => true,
                 'msg' => '完成程序!',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        
+        return $jo;
+    }
+
+    public function deleteProcess($ProcessID)
+    {
+        $Process = new ProjectProcess();
+        try {
+            DB::beginTransaction();
+            $Process = $Process->where('ID', $ProcessID);
+            $ProductID = $Process->first()->projectContentID;
+            $Process->delete();
+            $ProcessTree = new ProcessTree();
+            $DelTree = $ProcessTree->where('projectProcessID', $ProcessID);
+            $DelTree->delete();
+
+            $sort = $ProcessTree
+                ->where('projectContentID', $ProductID)
+                ->where('projectProcessID', '<>', $ProcessID)
+                ->orderBy('seq')
+                ->get();
+            //reset sort
+            for ($i = 0; $i < $sort->count(); $i++) {
+                $ProcessTree = new ProcessTree();
+                $ProcessTree = $ProcessTree
+                    ->where('projectProcessID', $sort[$i]->projectProcessID);
+                $Params = array(
+                    'seq' => $i+1,
+                );
+                $ProcessTree->update($Params);
+            }
+
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '刪除開發案成功!',
             );
         } catch (\PDOException $e) {
             DB::rollback();

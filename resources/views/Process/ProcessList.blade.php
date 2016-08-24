@@ -37,6 +37,8 @@
         </ul>
     </nav>
     <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
+    <input type="hidden" id="Deadline" name="Deadline" value="{{date('Y-m-d', $Deadline)}}">
+    <input type="hidden" id="StartDate" name="StartDate" value="{{$ProductData->startDate}}">
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -67,9 +69,9 @@
                     $EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
                 /*--}}
                 @if($list->complete == "0")
-                    <tr id="{{$list->ID}}">
+                    <tr id="{{$list->ID}}" class="sTD">
                 @else
-                    <tr id="{{$list->ID}}" class="ui-state-disabled">
+                    <tr id="{{$list->ID}}" class="ui-state-disabled sTD">
                 @endif
                     <td>
                         <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>
@@ -88,25 +90,25 @@
                         <span>{{$list->nodeName}}_{{$list->name}}</span>
                     </td>
                     <td>
-                        <span>{{$list->timeCost}}</span>
+                        <span class="sCost">{{$list->timeCost}}</span>
                     </td>
                     <td>
                         @if($StartDate > $Deadline)
-                            <span class="label label-danger">
+                            <span class="label label-danger sStart">
                                 {{date('Y-m-d', $StartDate)}}
                             </span>
                         @else
-                            <span>
+                            <span class="sStart">
                                 {{date('Y-m-d', $StartDate)}}
                             </span>
                         @endif
                         <span>~</span>
                         @if($EndDate > $Deadline)
-                            <span class="label label-danger">
+                            <span class="label label-danger  sEnd">
                                 {{date('Y-m-d', $EndDate)}}
                             <span>
                         @else
-                            <span>
+                            <span class="sEnd">
                                 {{date('Y-m-d', $EndDate)}}
                             <span>
                         @endif 
@@ -115,11 +117,11 @@
                         @if ($ProductData->execute != "0")
                             @if ($list->complete == "0")
                                 @if($Now > $Deadline)
-                                    <button type="button" class="btn btn-sm btn-danger" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-danger bCom" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @elseif($Now > $EndDate)
-                                    <button type="button" class="btn btn-sm btn-warning" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-warning bCom" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @else
-                                    <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-default bCom" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @endif
                             @else
                                 {{--*/ 
@@ -127,15 +129,15 @@
                                 /*--}}
                                 
                                 @if($CompleteDate > $Deadline)
-                                    <span class="label label-danger">
+                                    <span class="label label-danger sCom">
                                         {{date('Y-m-d', strtotime($list->completeTime))}}
                                     </span>
                                 @elseif($CompleteDate > $EndDate)
-                                    <span class="label label-warning">
+                                    <span class="label label-warning sCom">
                                         {{date('Y-m-d', strtotime($list->completeTime))}}
                                     </span>
                                 @else
-                                    <span class="label label-success">
+                                    <span class="label label-success sCom">
                                         {{date('Y-m-d', strtotime($list->completeTime))}}
                                     </span>
                                 @endif
@@ -143,7 +145,7 @@
                         @endif
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger">刪除</button>
+                        <button type="button" class="btn btn-sm btn-danger" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')">刪除</button>
                     </td>
                 </tr>
             @endforeach

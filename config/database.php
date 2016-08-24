@@ -138,11 +138,11 @@ return [
 
         'DB_UPGWeb' => [
             'driver' => 'sqlsrv',
-            'host' => '192.168.168.1',
+            'host' => '192.168.168.2',
             'port' => '1433',
             'database' => 'UPGWeb',
-            'username' => 'sunlikev9reader',
-            'password' => 'sunlikev9reader',
+            'username' => 'sa',
+            'password' => 'attn@3100',
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',

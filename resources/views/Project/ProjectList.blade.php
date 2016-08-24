@@ -1,6 +1,7 @@
 @extends('layouts.masterpage')
 
 @section('content')
+    <script src="{{url('/')}}/js/Project/ProjectList.js?x=3"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li class="active">開發案清單</li>
@@ -41,7 +42,9 @@
                     <td></td>
                     <td></td>
                     <td class="text-center"></td>
-                    <td class="text-center"><input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete()"></td>
+                    <td class="text-center">
+                        <input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete('{{$list->ID}}')">
+                    </td>
                 </tr>
             @endforeach
         </tbody>

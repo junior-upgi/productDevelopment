@@ -3,6 +3,7 @@
 namespace App\Models\companyStructure;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\UPGWeb\ERPNode;
 use App\Models\UPGWeb\ERPStaff;
@@ -10,9 +11,11 @@ use App\Models\UPGWeb\ERPStaffNode;
 
 class Relationship extends Model
 {
+    use SoftDeletes;
+
     protected $connection = "DB_companyStructure";
     protected $table = "relationship";
-    public $timestamps = false;
+    protected $softDelete = true;
 
     public function staff()
     {

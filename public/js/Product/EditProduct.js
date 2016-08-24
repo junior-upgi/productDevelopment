@@ -40,7 +40,7 @@ function DoUpdate() {
                 $('#BtnSave').button('reset');
             }
         },
-        error: function (obj) {
+        error: function (xhr) {
             swal("發生異常錯誤!", xhr.statusText, "error");
             $('#BtnSave').button('reset');
         }

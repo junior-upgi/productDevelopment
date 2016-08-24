@@ -37,6 +37,8 @@ Route::group(['prefix' => 'Project'], function() {
     Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@updateProject');
 
     Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
+
+    Route::get('Delete/{ProjectID}', 'ProductDevelopment\ProjectController@deleteProject');
 });
 
 Route::group(['prefix' => 'Product'], function() {
@@ -49,6 +51,8 @@ Route::group(['prefix' => 'Product'], function() {
     Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@updateProduct');
 
     Route::get('ProductExecute/{ProcessID}', 'ProductDevelopment\ProductController@productExecute');
+
+    Route::get('Delete/{ProductID}', 'ProductDevelopment\ProductController@deleteProduct');
 });
 
 Route::group(['prefix' => 'Process'], function() {
@@ -61,6 +65,8 @@ Route::group(['prefix' => 'Process'], function() {
     Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
 
     Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@processComplete');
+
+    Route::get('Delete/{ProcessID}', 'ProductDevelopment\ProcessController@deleteProcess');
 });
 
 Route::group(['prefix' => 'SysOption'], function() {

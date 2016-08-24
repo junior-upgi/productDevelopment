@@ -8,5 +8,4 @@ class VStaffMoblie extends Model
 {
     protected $connection = "DB_companyStructure";
     protected $table = "vStaffMobile";
-    public $timestamps = false;
 }

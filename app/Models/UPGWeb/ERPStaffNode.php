@@ -10,7 +10,6 @@ class ERPStaffNode extends Model
 {
     protected $connection = 'DB_UPGWeb';
     protected $table = "vStaffNode";
-    public $timestamps = false;
 
     public function mapping()
     {

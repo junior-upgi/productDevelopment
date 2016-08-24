@@ -1,7 +1,35 @@
 $(function () {
     //表格托拽設定
     $("#tableSort").sortable({
-        helper: fixWidthHelper
+        helper: fixWidthHelper,
+        update: function(event, ui) {
+            //排序後，更新時間
+            var Deadline = new Date($('#Deadline').val().replace(/-/g,'/'));
+            var sDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
+            var CostCount=0;
+            var i = 1;
+            var Now = new Date();
+            Now = Now.setDate(Now.getDate - 1);
+            $("#tableSort .sTD").each(function (index, element) {
+                var Cost = parseInt($(this).children(6).children('.sCost').html());
+                var StartDays = CostCount;
+                var EndDays = (CostCount += Cost) - 1;
+                var StartDate = new Date(sDate.setDate(sDate.getDate() + StartDays));
+                var EndDate = new Date(sDate.setDate(sDate.getDate() + EndDays));
+                $(this).children(7).children('.sStart').html($.datepicker.formatDate('yy-mm-dd', StartDate));
+                $(this).children(7).children('.sEnd').html($.datepicker.formatDate('yy-mm-dd', EndDate));
+                if (StartDate > Deadline) {
+                    $(this).children(7).children('.sStart').removeClass().addClass('label').addClass('label-danger').addClass('sStart');
+                } else {
+                    $(this).children(7).children('.sStart').removeClass().addClass('sStart');
+                }
+                if (EndDate > Deadline) {
+                    $(this).children(7).children('.sEnd').removeClass().addClass('label').addClass('label-danger').addClass('sEnd');
+                } else {
+                    $(this).children(7).children('.sEnd').removeClass().addClass('sEnd');
+                }
+            });
+        }
     }).disableSelection();
     //防止表格托拽後縮小修正程序
     function fixWidthHelper(e, ui) {
@@ -297,4 +325,49 @@ function ExcuteAjax(ProductID) {
             }
         }
     });
+}
+function DoDelete(ProductID, ProcessID) {
+    swal({
+            title: "刪除資料?",
+            text: "此動作將會刪除資料!",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonClass: "btn-danger",
+            confirmButtonText: "刪除",
+            closeOnConfirm: false
+        },
+        function(){
+            Delete(ProductID, ProcessID);
+        });
+}
+
+function Delete(ProductID, ProcessID) {
+    $.ajax({
+        url: url + '/Process/Delete/' + ProcessID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function (xhr) {
+            swal("刪除資料失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+          if (result.success) {
+                swal({
+                    title: "刪資料成功!",
+                    text: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function () {
+                    document.location.href = url + '/Process/ProcessList/' + ProductID;
+                });
+            } else {
+                swal("刪除資料失敗!", obj.msg.errorInfo[2], "error");
+                $('#BtnSave').button('reset');
+            }
+        }
+    })
 }
