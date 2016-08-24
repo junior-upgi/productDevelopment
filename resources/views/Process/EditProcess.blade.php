@@ -44,10 +44,10 @@
                         <div class="form-group">
                             <label for="NodeID" class="col-md-4 control-label">負責人</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
+                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Edit')" required>
                                     <option value="">請選擇單位</option>
                                     @foreach($NodeList as $list)
-                                        <option value="{{$list->id}}">{{$list->reference}}</option>
+                                        <option value="{{$list->ID}}">{{$list->name}}</option>
                                     @endforeach
                                 </select>
                             </div>

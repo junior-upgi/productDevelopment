@@ -28,7 +28,7 @@
                 <select class="form-control" id="ClientID" name="ClientID" required>
                     <option value="">請選擇顧客</option>
                     @foreach($ClientList as $list)
-                        <option value="{{$list->id}}">{{$list->reference}}</option>
+                        <option value="{{$list->ID}}">{{$list->name}}</option>
                     @endforeach
                 </select>
             </div>
@@ -39,7 +39,7 @@
                 <select class="form-control" id="NodeID" name="NodeID" onchange="GetSales()" required>
                     <option value="">請選擇單位</option>
                     @foreach($NodeList as $list)
-                        <option value="{{$list->id}}">{{$list->reference}}</option>
+                        <option value="{{$list->ID}}">{{$list->name}}</option>
                     @endforeach
                 </select>
             </div>

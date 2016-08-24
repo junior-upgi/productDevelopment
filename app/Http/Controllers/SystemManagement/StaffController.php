@@ -15,7 +15,7 @@ use App\Models;
 use App\Models\companyStructure\VStaff;
 use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
-use App\Models\companyStructure\TStaff;
+use App\Models\companyStructure\Relationship;
 use App\Models\sales\Client;
 use App\Models\upgiSystem\User;
 use App\Models\upgiSystem\UserGroup;
@@ -87,7 +87,7 @@ class StaffController extends Controller
         $SecondaryDelegateID = $request->input('SecondaryDelegateID');
         $jo =  array();
         try {
-            $Staff = new TStaff();
+            $Staff = new Relationship();
             $Params = array(
                 'StaffID' => $StaffID,
                 'SuperivisorID' => $SuperivisorID,
@@ -128,6 +128,68 @@ class StaffController extends Controller
     {
         $List = ServerData::getStaffList($NodeID)->get();
         return $List;
+    }
+
+    public function moveData()
+    {
+        $ERPStaff = new ERPStaff();
+        $ERPStaff = $ERPStaff->all();
+        $ERPNode = new ERPNode();
+        $ERPNode = $ERPNode->all();
+        $ERPClient = new ERPClient;
+        $ERPClient = $ERPClient->all();
+        $Staff = new Staff();
+        $Staff = $Staff->where('ID', '<>', '');
+        $Node = new Node();
+        $Node = $Node->where('ID', '<>', '');
+        $Client = new Client();
+        $Client = $Client->where('ID', '<>', '');
+        
+        try{
+            DB::beginTransaction();
+            $Staff->delete();
+            $Node->delete();
+            $Client->delete();
+            foreach($ERPStaff as $list) {
+                $Params = array(
+                    'ID' => $list->ID,
+                    'nodeID' => $list->nodeID,
+                    'name' => $list->name,
+                    'position' => $list->position
+                );
+                $Staff->insert($Params);
+            }
+            foreach($ERPNode as $list) {
+                $Params = array(
+                    'ID' => $list->nodeID,
+                    'parentNodeID' => $list->parentNodeID,
+                    'nodeName' => $list->nodeName,
+                );
+                $Node->insert($Params);
+            }
+            foreach($ERPClient as $list) {
+                $Params = array(
+                    'ID' => $list->ID,
+                    'area' => $list->area,
+                    'parentID' => $list->parentID,
+                    'name' => $list->name,
+                    'sname' => $list->sname,
+                );
+                $Client->insert($Params);
+            }
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '資料遷移成功',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
     }
 
 

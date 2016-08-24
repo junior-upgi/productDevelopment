@@ -3,7 +3,7 @@
 namespace App\Models\UPGWeb;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\companyStructure\TStaff;
+use App\Models\companyStructure\Relationship;
 use App\Models\companyStructure\Staff;
 
 class ERPStaffNode extends Model
@@ -14,12 +14,12 @@ class ERPStaffNode extends Model
 
     public function mapping()
     {
-        return $this->hasOne(TStaff::class, 'staffID', 'ID');
+        return $this->hasOne(Relationship::class, 'staffID', 'ID');
     }
 
     public function superivisor()
     {
-        return $this->hasOne(TStaff::class, 'staffID', 'ID');
+        return $this->hasOne(Relationship::class, 'staffID', 'ID');
     }
     public function primaryDelegate()
     {

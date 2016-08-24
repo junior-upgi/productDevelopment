@@ -95,9 +95,10 @@ function EditShow(ID) {
                 $('#EditProcessForm #TimeCost').val(result.TimeCost);
                 $("#EditProcessForm #NodeID option[value=" + result.NodeID + "]").attr('selected', true);
                 if (StaffList.length > 0) {
+                    $("#EditProcessForm #StaffID").empty();
                     $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", "").text("請選擇"));
                     for (i = 0; i < StaffList.length; i++) {
-                        $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", StaffList[i].id).text(StaffList[i].name));
+                        $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", StaffList[i].ID).text(StaffList[i].name));
                     }
                     $("#EditProcessForm #StaffID option[value=" + result.StaffID + "]").attr('selected', true);
                 }
@@ -124,7 +125,7 @@ function GetStaff(type) {
             if (result.length > 0) {
                 $(FormID + " #StaffID").append($("<option></option>").attr("value", "").text("請選擇"));
                 for (i = 0; i < result.length; i++) {
-                    $(FormID + " #StaffID").append($("<option></option>").attr("value", result[i].id).text(result[i].name));
+                    $(FormID + " #StaffID").append($("<option></option>").attr("value", result[i].ID).text(result[i].name));
                 }
             }
         }

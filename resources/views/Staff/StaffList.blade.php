@@ -35,6 +35,7 @@
                 <td width="200">主管</td>
                 <td>代理人1</td>
                 <td>代理人2</td>
+                <td>推播</td>
             </tr>
         </thead>
         <tbody>
@@ -49,6 +50,7 @@
                     <td>{{$list->mapping['superivisor']['nodeName'] . '_' . $list->mapping['superivisor']['name']}}</td>
                     <td>{{$list->mapping['primaryDelegate']['nodeName'] . '_' . $list->mapping['primaryDelegate']['name']}}</td>
                     <td>{{$list->mapping['secondaryDelegate']['nodeName'] . '_' . $list->mapping['secondaryDelegate']['name']}}</td>
+                    <td></td>
                 </tr>
             @endforeach
         </tbody>

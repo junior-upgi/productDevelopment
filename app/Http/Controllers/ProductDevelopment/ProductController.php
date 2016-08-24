@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
+use App\Http\Controllers\ServerData;
 
 //use DB
 use DB;
@@ -27,13 +28,13 @@ class ProductController extends Controller
         $Project = new VProjectList();
         $ProjectData = $Project
             ->where('ID', $ProjectID)
-            ->get()
             ->first();
 
         $ProjectContent = new ProjectContent();
         $ProductList = $ProjectContent
             ->where('projectID',$ProjectID)
-            ->get();
+            ->orderBy('priorityLevel')->orderBy('startDate','desc')
+            ->paginate(15);
 
         return view('Product.ProductList')
             ->with('ProductList', $ProductList)
@@ -42,10 +43,7 @@ class ProductController extends Controller
     
     public function addProduct($ProjectID)
     {
-        $para = new Para();
-        $priorityLevelList = $para
-            ->where('paracode','priorityLevel')
-            ->get();
+        $priorityLevelList = ServerData::getPriorityLevel();
 
         return view('Product.AddProduct')
             ->with('ProjectID', $ProjectID)
@@ -93,13 +91,9 @@ class ProductController extends Controller
         $ProjectContent = new ProjectContent();
         $ProductData = $ProjectContent
             ->where('ID', $ProductID)
-            ->get()
             ->first();
 
-        $para = new para();
-        $priorityLevelList = $para
-            ->where('paracode','priorityLevel')
-            ->get();
+        $priorityLevelList = ServerData::getPriorityLevel();
 
         return view('Product.EditProduct')
             ->with('ProductData', $ProductData)

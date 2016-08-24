@@ -19,5 +19,4 @@ class Common extends Controller
         
         return $uuid;
     }
-    
 }

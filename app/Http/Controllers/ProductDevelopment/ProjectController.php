@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
+use App\Http\Controllers\ServerData;
 
 //use DB
 use DB;
@@ -24,7 +25,9 @@ class ProjectController extends Controller
     public function projectList()
     {
         $oProject = new VProjectList();
-        $ProjectList = $oProject::all();
+        $ProjectList = $oProject
+            ->orderBy('created', 'desc')
+            ->paginate(15);
 
         return view('Project.ProjectList')
             ->with('ProjectList', $ProjectList);
@@ -32,15 +35,9 @@ class ProjectController extends Controller
 
     public function addProject()
     {
-        $oClient = new Client();
-        $ClientList = $oClient
-            ->orderBy('reference')
-            ->get();
+        $ClientList = ServerData::getClientAll();
 
-        $oNode = new Node();
-        $NodeList = $oNode
-            ->orderBy('id')
-            ->get();
+        $NodeList = ServerData::getNodeAll();
 
         return view('Project.AddProject')
             ->with('ClientList', $ClientList)
@@ -87,24 +84,17 @@ class ProjectController extends Controller
     {
         $oProject = new VProjectList();
         $ProjectData = $oProject
-            ->where('id','=',$ProjectID)
-            ->get()
+            ->where('ID','=',$ProjectID)
             ->first();
         
         $oProjectContent = new ProjectContent();
         $ProjectContent = $oProjectContent
             ->where('projectID','=',$ProjectID)
             ->get();
+        
+        $ClientList = ServerData::getClientAll();
 
-        $oClient = new Client();
-        $ClientList = $oClient
-            ->orderBy('reference')
-            ->get();
-
-        $oNode = new Node();
-        $NodeList = $oNode
-            ->orderBy('id')
-            ->get();
+        $NodeList = ServerData::getNodeAll();
 
         $oStaff = new Staff();
         $StaffList = $oStaff
@@ -161,6 +151,13 @@ class ProjectController extends Controller
         return $jo;
     }
     
+    public function getStaffByNodeID($NodeID)
+    {
+        $Staff = new Staff();
+        $StaffList = $Staff->where('nodeID', $NodeID)->get();
+        return $StaffList;
+    }
+
     public function phpinfo()
     {
         phpinfo();

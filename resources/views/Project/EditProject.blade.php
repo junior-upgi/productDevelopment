@@ -29,10 +29,10 @@
                 <select class="form-control" id="ClientID" name="ClientID" required>
                     <option value="">請選擇顧客</option>
                     @foreach($ClientList as $list)
-                        @if($list->id == $ProjectData->clientID)
-                            <option value="{{$list->id}}" selected="selected">{{$list->reference}}</option>
+                        @if($list->ID == $ProjectData->clientID)
+                            <option value="{{$list->ID}}" selected="selected">{{$list->name}}</option>
                         @else
-                            <option value="{{$list->id}}">{{$list->reference}}</option>
+                            <option value="{{$list->ID}}">{{$list->name}}</option>
                         @endif
                     @endforeach
                 </select>
@@ -44,10 +44,10 @@
                 <select class="form-control" id="NodeID" name="NodeID" onchange="GetSales()" required>
                     <option value="">請選擇單位</option>
                     @foreach($NodeList as $list)
-                        @if($list->id == $ProjectData->nodeID)
-                            <option value="{{$list->id}}" selected="selected">{{$list->reference}}</option>
+                        @if($list->ID == $ProjectData->nodeID)
+                            <option value="{{$list->ID}}" selected="selected">{{$list->name}}</option>
                         @else
-                            <option value="{{$list->id}}">{{$list->reference}}</option>
+                            <option value="{{$list->ID}}">{{$list->name}}</option>
                         @endif
                     @endforeach
                 </select>
@@ -56,10 +56,10 @@
                 <select class="form-control" id="SalesID" name="SalesID" required>
                     <option value="">請選擇姓名</option>
                     @foreach($StaffList as $list)
-                        @if($list->id == $ProjectData->salesID)
-                            <option value="{{$list->id}}" selected="selected">{{$list->name}}</option>
+                        @if($list->ID == $ProjectData->salesID)
+                            <option value="{{$list->ID}}" selected="selected">{{$list->name}}</option>
                         @else
-                            <option value="{{$list->id}}">{{$list->name}}</option>
+                            <option value="{{$list->ID}}">{{$list->name}}</option>
                         @endif
                     @endforeach
                 </select>

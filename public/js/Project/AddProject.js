@@ -45,7 +45,7 @@ function GetSales() {
             if (result.length > 0) {
                 $("#SalesID").append($("<option></option>").attr("value", "").text("請選擇"));
                 for (i = 0; i < result.length; i++) {
-                    $("#SalesID").append($("<option></option>").attr("value", result[i].id).text(result[i].name));
+                    $("#SalesID").append($("<option></option>").attr("value", result[i].ID).text(result[i].name));
                 } 
             }
         }

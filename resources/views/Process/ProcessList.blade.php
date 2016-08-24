@@ -112,30 +112,33 @@
                         @endif 
                     </td>
                     <td class="text-center">
-                        @if($list->complete == "0")
-                            @if($Now > $Deadline)
-                                <button type="button" class="btn btn-sm btn-danger" onclick="Complete('{{$list->ID}}')">完成</button>
-                            @elseif($Now > $EndDate)
-                                <button type="button" class="btn btn-sm btn-warning" onclick="Complete('{{$list->ID}}')">完成</button>
+                        @if ($ProductData->execute != "0")
+                            @if ($list->complete == "0")
+                                @if($Now > $Deadline)
+                                    <button type="button" class="btn btn-sm btn-danger" onclick="Complete('{{$list->ID}}')">完成</button>
+                                @elseif($Now > $EndDate)
+                                    <button type="button" class="btn btn-sm btn-warning" onclick="Complete('{{$list->ID}}')">完成</button>
+                                @else
+                                    <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
+                                @endif
                             @else
-                                <button type="button" class="btn btn-sm btn-default" onclick="Complete('{{$list->ID}}')">完成</button>
-                            @endif
-                        @else
-                            {{--*/ 
-                                $CompleteDate = strtotime($list->completeTime . '-1 day') 
-                            /*--}}
-                            @if($CompleteDate > $Deadline)
-                                <span class="label label-danger">
-                                    {{date('Y-m-d', strtotime($list->completeTime))}}
-                                </span>
-                            @elseif($CompleteDate > $EndDate)
-                                <span class="label label-warning">
-                                    {{date('Y-m-d', strtotime($list->completeTime))}}
-                                </span>
-                            @else
-                                <span class="label label-success">
-                                    {{date('Y-m-d', strtotime($list->completeTime))}}
-                                </span>
+                                {{--*/ 
+                                    $CompleteDate = strtotime($list->completeTime . '-1 day') 
+                                /*--}}
+                                
+                                @if($CompleteDate > $Deadline)
+                                    <span class="label label-danger">
+                                        {{date('Y-m-d', strtotime($list->completeTime))}}
+                                    </span>
+                                @elseif($CompleteDate > $EndDate)
+                                    <span class="label label-warning">
+                                        {{date('Y-m-d', strtotime($list->completeTime))}}
+                                    </span>
+                                @else
+                                    <span class="label label-success">
+                                        {{date('Y-m-d', strtotime($list->completeTime))}}
+                                    </span>
+                                @endif
                             @endif
                         @endif
                     </td>
@@ -146,7 +149,9 @@
             @endforeach
         </tbody>
     </table>
-   
+    <div class="text-center">
+        {{$ProcessList->links()}}
+    </div>
     @include('Process.AddProcess')
     @include('Process.EditProcess')
 @endsection

@@ -101,7 +101,7 @@ function GetStaff(type) {
             swal("取得資料失敗!", xhr.statusText, "error");
         },
         success: function (result) {
-            $(FormID + " #" + StaffID + " option").remove();
+            $(FormID + " #" + StaffID).remove();
             if (result.length > 0) {
                 $(FormID + " #" + StaffID).append($("<option></option>").attr("value", "").text("請選擇"));
                 for (i = 0; i < result.length; i++) {

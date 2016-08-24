@@ -8,10 +8,10 @@ use App\Models\UPGWeb\ERPNode;
 use App\Models\UPGWeb\ERPStaff;
 use App\Models\UPGWeb\ERPStaffNode;
 
-class TStaff extends Model
+class Relationship extends Model
 {
     protected $connection = "DB_companyStructure";
-    protected $table = "tStaff";
+    protected $table = "relationship";
     public $timestamps = false;
 
     public function staff()

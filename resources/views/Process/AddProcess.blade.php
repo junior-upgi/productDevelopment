@@ -45,7 +45,7 @@
                             <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
                                 <option value="">請選擇單位</option>
                                 @foreach($NodeList as $list)
-                                    <option value="{{$list->id}}">{{$list->reference}}</option>
+                                    <option value="{{$list->ID}}">{{$list->name}}</option>
                                 @endforeach
                             </select>
                         </div>

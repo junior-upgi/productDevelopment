@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
+use App\Http\Controllers\ServerData;
 
 use DB;
 use App\Models;
@@ -30,25 +31,17 @@ class ProcessController extends Controller
         $ProjectContent = new ProjectContent();
         $ProductData = $ProjectContent
             ->where('ID', $ProductID)
-            ->get()
             ->first();
 
         $Process = new VProcessList();
         $ProcessList = $Process
             ->where('projectContentID', $ProductID)
             ->orderBy('seq', 'asc')->orderBy('created')
-            ->get();
+            ->paginate(15);
 
-        $oNode = new Node();
-        $NodeList = $oNode
-            ->orderBy('id')
-            ->get();
+        $NodeList = ServerData::getNodeAll();
 
-        $Phase = new Para();
-        $PhaseList = $Phase
-            ->where('paracode', 'ProcessPhaseID')
-            ->orderBy('paracodeno')
-            ->get();
+        $PhaseList = ServerData::getPhase();
 
         return view('Process.ProcessList')
             ->with('ProductData', $ProductData)
