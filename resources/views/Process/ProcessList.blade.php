@@ -42,16 +42,16 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <td width="60"></td>
-                <td>#</td>
-                <td class="text-center">類別</td>
-                <td>代號</td>
+                <td width=60></td>
+                <td width=40>#</td>
+                <td width=60 class="text-center">類別</td>
+                <td width=140>代號</td>
                 <td>名稱</td>
-                <td>負責人</td>
-                <td class="col-md-1">工時</td>
-                <td width="200">工期</td>
-                <td width="100" class="text-center">完成時間</td>
-                <td width="60"></td>
+                <td width=120>負責人</td>
+                <td width=50 class="text-center">工時</td>
+                <td width=110 class="text-center">工期</td>
+                <td width=100 class="text-center">完成時間</td>
+                <td width=60></td>
             </tr>
         </thead>
         <tbody id="tableSort">
@@ -63,10 +63,12 @@
             /*--}}
             @foreach($ProcessList as $list)
                 {{--*/ 
-                    $StartDays = $CostCount;
-                    $EndDays = ($CostCount += $list->timeCost) - 1;
-                    $StartDate = strtotime($ProductData->startDate . '+' . $StartDays . ' day');
-                    $EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
+                    //$StartDays = $CostCount;
+                    //$EndDays = ($CostCount += $list->timeCost) - 1;
+                    //$StartDate = strtotime($ProductData->startDate . '+' . $StartDays . ' day');
+                    //$EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
+                    $StartDate = strtotime($list->processStartDate);
+                    $EndDate = strtotime($list->processStartDate . '+' . ((int)$list->timeCost - 1)  . ' day');
                 /*--}}
                 @if($list->complete == "0")
                     <tr id="{{$list->ID}}" class="sTD">
@@ -74,7 +76,20 @@
                     <tr id="{{$list->ID}}" class="ui-state-disabled sTD">
                 @endif
                     <td>
-                        <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>
+                        <!--<button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>-->
+                        <div class="dropdown">
+                            <button type="button" id="SetBtn" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
+                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
+                                <li role="presentation">
+                                    <a role="menuitem" class="" onclick="EditShow('{{$list->ID}}')" href="#" >編輯</a>
+                                </li>
+                                <li role="presentation" onclick="">
+                                    <a role="menuitem">前置工序</a>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                     <td>{{$i++}}</td>
                     <td class="text-center">
@@ -89,7 +104,7 @@
                     <td>
                         <span>{{$list->nodeName}}_{{$list->name}}</span>
                     </td>
-                    <td>
+                    <td class="text-center">
                         <span class="sCost">{{$list->timeCost}}</span>
                     </td>
                     <td>

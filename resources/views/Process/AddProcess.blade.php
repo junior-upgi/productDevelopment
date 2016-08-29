@@ -34,7 +34,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="TimeCost" class="col-md-4 control-label">開發工時(日)</label>
+                        <label for="ProcessStartDate" class="col-md-4 control-label date">開始時間</label>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control date form_datetime" readonly id="ProcessStartDate" name="ProcessStartDate" value="" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="TimeCost" class="col-md-4 control-label">工時(日)</label>
                         <div class="col-md-5">
                             <input type="text" class="form-control" id="TimeCost" name="TimeCost" value="" required>
                         </div>

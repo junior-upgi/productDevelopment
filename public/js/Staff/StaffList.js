@@ -143,3 +143,56 @@ function DoUpdate() {
         }
     });
 }
+function DataSyn()
+{
+    var Title = "資料同步？";
+    var Message = "此動作會遠端更新資料到本系統!\n" 
+                + "請在非作業時段進行同步!\n"
+                + "請問您確定要開始進行資料同步嗎？";
+    swal({
+        title: Title,
+        text: Message,
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: "取消",
+        confirmButtonClass: "btn-warning",
+        confirmButtonText: "確定",
+        closeOnConfirm: true
+    },
+    function() {
+        Syn();
+    });
+}
+function Syn() {
+    $.ajax({
+        url: url + '/SysOption/MoveData',
+        type: 'GET',
+        dataType: 'JSON',
+        beforeSend: function () {
+            goLoading('更新資料中，請稍候...');
+        },
+        error: function (xhr) {
+            swal("操作失敗!", xhr.statusText, "error");
+            $.unblockUI();
+        },
+        success: function (result) {
+            $.unblockUI();
+            if (result.success) {
+                swal({
+                    title: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                },
+                function () {
+
+                });
+            } else {
+                swal("更新資料失敗!", result.msg.errorInfo[2], "error");
+                $.unblockUI();
+            }
+        }
+    });
+}

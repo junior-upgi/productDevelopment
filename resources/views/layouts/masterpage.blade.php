@@ -27,7 +27,7 @@
 	<script src="{{url('/')}}/script/jquery.form.min.js"></script>
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.min.js"></script>
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.zh-TW.js"></script>
-	
+	<script src="{{url('/')}}/script/master.js"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default">

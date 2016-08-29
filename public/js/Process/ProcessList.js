@@ -1,21 +1,36 @@
 $(function () {
+    //設定時間
+    var timeInMs = new Date();
+    timInMs = timeInMs.getFullYear() + "-" + (timeInMs.getMonth() + 1) + "-" + timeInMs.getDate();
+    $(".date").datetimepicker({
+        format: 'yyyy-mm-dd',
+        //startDate: timInMs,
+        minView: 2,
+        maxView: 4,
+        autoclose: true,
+        todayBtn: true,
+        todayHighlight: true,
+        language: 'zh-TW'
+    });
     //表格托拽設定
     $("#tableSort").sortable({
         helper: fixWidthHelper,
         update: function(event, ui) {
+            /*
             //排序後，更新時間
-            var Deadline = new Date($('#Deadline').val().replace(/-/g,'/'));
-            var sDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
             var CostCount=0;
             var i = 1;
             var Now = new Date();
             Now = Now.setDate(Now.getDate - 1);
             $("#tableSort .sTD").each(function (index, element) {
+                var Deadline = new Date($('#Deadline').val().replace(/-/g,'/'));
+                var sDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
+                var eDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
                 var Cost = parseInt($(this).children(6).children('.sCost').html());
                 var StartDays = CostCount;
                 var EndDays = (CostCount += Cost) - 1;
                 var StartDate = new Date(sDate.setDate(sDate.getDate() + StartDays));
-                var EndDate = new Date(sDate.setDate(sDate.getDate() + EndDays));
+                var EndDate = new Date(eDate.setDate(eDate.getDate() + EndDays));
                 $(this).children(7).children('.sStart').html($.datepicker.formatDate('yy-mm-dd', StartDate));
                 $(this).children(7).children('.sEnd').html($.datepicker.formatDate('yy-mm-dd', EndDate));
                 if (StartDate > Deadline) {
@@ -29,6 +44,7 @@ $(function () {
                     $(this).children(7).children('.sEnd').removeClass().addClass('sEnd');
                 }
             });
+            */
         }
     }).disableSelection();
     //防止表格托拽後縮小修正程序
@@ -120,6 +136,7 @@ function EditShow(ID) {
                 $('#EditProcessForm #ProcessNumber').val(result.ProcessNumber);
                 $('#EditProcessForm #ProcessName').val(result.ProcessName);
                 $("#EditProcessForm #PhaseID option[value=" + result.PhaseID + "]").attr('selected', true);
+                $('#EditProcessForm #ProcessStartDate').val(result.ProcessStartDate)
                 $('#EditProcessForm #TimeCost').val(result.TimeCost);
                 $("#EditProcessForm #NodeID option[value=" + result.NodeID + "]").attr('selected', true);
                 if (StaffList.length > 0) {

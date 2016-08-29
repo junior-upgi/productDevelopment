@@ -24,10 +24,9 @@
                 <td>開發案名稱</td>
                 <td>客戶名稱</td>
                 <td>負責人</td>
-                <td width="120">開始時間</td>
-                <td width="120">完成時間</td>
-                <td class="col-md-1">狀態</td>
-                <td class="col-md-1"></td>
+                <td width="100" class="text-center">工期</td>
+                <td width="100" class="text-center">完成時間</td>
+                <td class="80"></td>
             </tr>
         </thead>
         <tbody>
@@ -39,9 +38,38 @@
                     <td>{{$list->referenceName}}</td>
                     <td>{{$list->clientName}}</td>
                     <td>{{$list->salesNodeName . '_' . $list->salesName}}</td>
-                    <td></td>
-                    <td></td>
-                    <td class="text-center"></td>
+                    <td class="text-center">
+                        @if(isset($list->startDate))
+                            {{date('Y-m-d', strtotime($list->startDate))}}
+                            
+                            @if(isset($list->endDate))
+                                ~{{date('Y-m-d', strtotime($list->endDate))}}
+                            @endif
+                        @endif
+                    </td>
+                    <td class="text-center">
+                        @if(isset($list->maxCompleteTime))
+                            {{date('Y-m-d', strtotime($list->maxCompleteTime))}}
+                        @else
+                            @if($list->completeStatus === '0')
+                                @if($list->projectStatus === 2)
+                                    <span class="label label-danger">進行中</span>
+                                @elseif($list->projectStatus === 1)
+                                    <span class="label label-warning">進行中</span>
+                                @else
+                                    <span>進行中</span>
+                                @endif
+                            @elseif($list->completeStatus === '1')
+                                @if($list->projectStatus === 2)
+                                    <span class="label label-danger">尚未開始</span>
+                                @elseif($list->projectStatus === 1)
+                                    <span class="label label-warning">尚未開始</span>
+                                @else
+                                    <span>尚未開始</span>
+                                @endif
+                            @endif
+                        @endif
+                    </td>
                     <td class="text-center">
                         <input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete('{{$list->ID}}')">
                     </td>

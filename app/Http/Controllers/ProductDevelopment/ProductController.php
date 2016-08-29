@@ -14,6 +14,7 @@ use DB;
 use App\Models;
 use App\Models\productDevelopment\Project;
 use App\Models\productDevelopment\VProjectList;
+use App\Models\productDevelopment\VProductList;
 use App\Models\productDevelopment\ProjectContent;
 use App\Models\productDevelopment\Para;
 use App\Models\companyStructure\VStaff;
@@ -30,10 +31,12 @@ class ProductController extends Controller
             ->where('ID', $ProjectID)
             ->first();
 
-        $ProjectContent = new ProjectContent();
+        $ProjectContent = new VProductList();
         $ProductList = $ProjectContent
             ->where('projectID',$ProjectID)
-            ->orderBy('priorityLevel')->orderBy('startDate','desc')
+            ->orderBy('productStatus')
+            ->orderBy('priorityLevel')
+            ->orderBy('startDate','desc')
             ->paginate(15);
 
         return view('Product.ProductList')
@@ -61,7 +64,7 @@ class ProductController extends Controller
         $params['requiredQuantity'] = $request->input('RequiredQuantity');
         $params['deliveredQuantity'] = $request->input('DeliveredQuantity');
         $params['deadline'] = $request->input('Deadline');
-        $params['startDate'] = $request->input('StartDate');
+        //$params['startDate'] = $request->input('StartDate');
         $params['priorityLevel'] = $request->input('PriorityLevel');
         $Parmas['created_at'] = Carbon::now();
 
@@ -110,7 +113,7 @@ class ProductController extends Controller
         $params['requiredQuantity'] = $request->input('RequiredQuantity');
         $params['deliveredQuantity'] = $request->input('DeliveredQuantity');
         $params['deadline'] = $request->input('Deadline');
-        $params['startDate'] = $request->input('StartDate');
+        //$params['startDate'] = $request->input('StartDate');
         $params['priorityLevel'] = $request->input('PriorityLevel');
 
         try {

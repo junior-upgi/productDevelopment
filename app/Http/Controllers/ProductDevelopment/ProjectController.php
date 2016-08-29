@@ -26,6 +26,8 @@ class ProjectController extends Controller
     {
         $oProject = new VProjectList();
         $ProjectList = $oProject
+            ->where('completeStatus', '<>', '2')
+            ->orderBy('completeStatus')
             ->orderBy('created', 'desc')
             ->paginate(15);
 

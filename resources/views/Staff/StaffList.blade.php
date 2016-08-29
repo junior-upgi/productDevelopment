@@ -8,11 +8,9 @@
     <!--tool bar-->
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
-            <!--
             <form action="" class="navbar-form">
-                <a href="{{url('/')}}" class="btn btn-primary">新增</a>
+                <button type="button" class="btn btn-warning" onclick="DataSyn()">資料同步</button>
             </form>
-            -->
         </ul>
         <ul class="nav navbar-nav navbar-right" style="margin-right:0px">
             <form action="{{url('/')}}/SysOption/StaffList" class="navbar-form" method="POST">

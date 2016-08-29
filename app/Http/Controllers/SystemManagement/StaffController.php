@@ -147,9 +147,9 @@ class StaffController extends Controller
         
         try{
             DB::beginTransaction();
-            $Staff->delete();
-            $Node->delete();
-            $Client->delete();
+            $Staff->forceDelete();
+            $Node->forceDelete();
+            $Client->forceDelete();
             foreach($ERPStaff as $list) {
                 $Params = array(
                     'ID' => $list->ID,
@@ -162,8 +162,8 @@ class StaffController extends Controller
             foreach($ERPNode as $list) {
                 $Params = array(
                     'ID' => $list->nodeID,
-                    'parentNodeID' => $list->parentNodeID,
-                    'nodeName' => $list->nodeName,
+                    'parentID' => $list->parentNodeID,
+                    'Name' => $list->nodeName,
                 );
                 $Node->insert($Params);
             }
@@ -180,7 +180,7 @@ class StaffController extends Controller
             DB::commit();
             $jo = array(
                 'success' => true,
-                'msg' => '資料遷移成功',
+                'msg' => '資料同步成功!',
             );
         } catch (\PDOException $e) {
             DB::rollback();

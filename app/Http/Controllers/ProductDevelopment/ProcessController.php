@@ -36,7 +36,7 @@ class ProcessController extends Controller
         $Process = new VProcessList();
         $ProcessList = $Process
             ->where('projectContentID', $ProductID)
-            ->orderBy('seq', 'asc')->orderBy('created')
+            ->orderBy('sequentialIndex', 'asc')
             ->paginate(15);
 
         $NodeList = ServerData::getNodeAll();
@@ -58,10 +58,17 @@ class ProcessController extends Controller
         $PhaseID = $request->input('PhaseID');
         $TimeCost = $request->input('TimeCost');
         $StaffID = $request->input('StaffID');
+        $StartDate = $request->input('ProcessStartDate');
 
         try {
             DB::beginTransaction();
             $ProcessID = Common::getNewGUID();
+
+            $MaxIndex = new ProjectProcess();
+            $MaxIndex = ($MaxIndex
+                ->where('projectContentID', $ProjectContentID)
+                ->max('sequentialIndex')) + 1;
+
             $Params = array(
                 'ID' => $ProcessID,
                 'projectContentID' => $ProjectContentID,
@@ -69,23 +76,23 @@ class ProcessController extends Controller
                 'referenceNumber' => $ProcessNumber,
                 'projectProcessPhaseID' => $PhaseID,
                 'timeCost' => $TimeCost,
-                'staffID' => $StaffID,
-                'created_at' => Carbon::now(),
+                'staffID' => iconv("UTF-8", "BIG-5", $StaffID),
+                'sequentialIndex' => $MaxIndex,
+                'processStartDate' => $StartDate,
+                //'created_at' => Carbon::now(),
             );
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($Params);
 
-            $MaxIndex = new ProcessTree();
-            $MaxIndex = ($MaxIndex
-                ->where('projectContentID', $ProjectContentID)
-                ->max('seq')) + 1;
+            
             
             $Params = array(
                 'projectContentID' => $ProjectContentID,
                 'projectProcessID' => $ProcessID,
                 'treeLevel' => 0,
-                'seq' => $MaxIndex,
+                //'seq' => $MaxIndex,
             );
+            
             $ProcessTree = new ProcessTree();
             $ProcessTree->insert($Params);
             
@@ -128,6 +135,7 @@ class ProcessController extends Controller
                 'StaffID' => $ProcessData->staffID,
                 'NodeID' => $ProcessData->nodeID,
                 'StaffList' => $StaffList,
+                'ProcessStartDate' => date('Y-m-d', strtotime($ProcessData->processStartDate)),
             );
         } else {
             $jo = array(
@@ -148,13 +156,13 @@ class ProcessController extends Controller
             
             foreach($Data as $list)
             {
-                $ProcessTree = new ProcessTree();
-                $ProcessTree = $ProcessTree
-                    ->where('projectProcessID', $list['pid']);
+                $Process = new ProjectProcess();
+                $Process = $Process
+                    ->where('ID', $list['pid']);
                 $Params = array(
-                    'seq' => $list['index'],
+                    'sequentialIndex' => $list['index'],
                 );
-                $ProcessTree->update($Params);
+                $Process->update($Params);
             }
             DB::commit();
             $jo = array(
@@ -181,6 +189,7 @@ class ProcessController extends Controller
         $ProcessName = $request->input('ProcessName');
         $PhaseID = $request->input('PhaseID');
         $TimeCost = $request->input('TimeCost');
+        $StartDate = $request->input('ProcessStartDate');
         $StaffID = $request->input('StaffID');
 
         try {
@@ -191,6 +200,7 @@ class ProcessController extends Controller
                 'projectProcessPhaseID' => $PhaseID,
                 'timeCost' => $TimeCost,
                 'staffID' => $StaffID,
+                'processStartDate' => $StartDate,
             );
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess = $ProjectProcess

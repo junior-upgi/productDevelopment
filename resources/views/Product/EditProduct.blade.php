@@ -43,12 +43,14 @@
                 <input type="text" class="form-control date form_datetime" readonly id="Deadline" name="Deadline" value="{{date('Y-m-d', strtotime($ProductData->deadline))}}" required>
             </div>
         </div>
+        <!--
          <div class="form-group">
             <label for="StartDate" class="col-md-2 control-label date">開發啟始時間</label>
             <div class="col-md-2">
                 <input type="text" class="form-control date form_datetime" readonly id="StartDate" name="StartDate" value="{{date('Y-m-d', strtotime($ProductData->startDate))}}" required>
             </div>
         </div>
+        -->
         <div class="form-group">
             <label for="PriorityLevel" class="col-md-2 control-label">優先等級</label>
             <div class="col-md-2">
