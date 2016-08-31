@@ -15,6 +15,7 @@ use App\Models\productDevelopment\Para;
 use App\Models\productDevelopment\Project;
 use App\Models\productDevelopment\VProjectList;
 use App\Models\productDevelopment\VProcessList;
+use App\Models\productDevelopment\VPreparation;
 use App\Models\productDevelopment\ProjectContent;
 use App\Models\productDevelopment\ProjectProcess;
 use App\Models\productDevelopment\ProcessTree;
@@ -38,7 +39,7 @@ class ProcessController extends Controller
             ->where('projectContentID', $ProductID)
             ->orderBy('sequentialIndex', 'asc')
             ->paginate(15);
-
+        
         $NodeList = ServerData::getNodeAll();
 
         $PhaseList = ServerData::getPhase();
@@ -84,7 +85,6 @@ class ProcessController extends Controller
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($Params);
 
-            
             
             $Params = array(
                 'projectContentID' => $ProjectContentID,
@@ -207,6 +207,8 @@ class ProcessController extends Controller
                 ->where('ID', $ProjectProcessID);
             $ProjectProcess->update($Params);
 
+            $this->UpdateChildsDate($ProjectProcessID);
+
             DB::commit();
             
             $jo = array(
@@ -297,5 +299,117 @@ class ProcessController extends Controller
         }
         
         return $jo;
+    }
+    public function getPreparationList($ProductID,$ProcessID)
+    {
+        try {
+            $PreparationList = new VProcessList();
+            $PreparationList = $PreparationList
+                ->where('projectContentID', $ProductID)
+                ->where('ID', '<>', $ProcessID)
+                ->orderBy('sequentialIndex')
+                ->get();
+            $SelectList = new processTree();
+            $SelectList = $SelectList
+                ->where('projectProcessID', $ProcessID)
+                ->select('parentProcessID')
+                ->get(); 
+            $s = array();
+            foreach ($SelectList as $list) {
+                $cc = (string)$list->parentProcessID;
+                array_push($s, $cc);
+            };
+            $jo =  array(
+                'success' => true,
+                'PreparationList' => $PreparationList,
+                'SelectList' => $s,
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
+    public function setPreparation($ProductID, $ProcessID, $ChSelect)
+    {
+        try {
+            $Data = json_decode($ChSelect);
+            DB::beginTransaction();
+            $ProcessTree = new ProcessTree();
+            $ProcessTree = $ProcessTree
+                ->where('projectContentID', $ProductID)
+                ->where('projectProcessID', $ProcessID);
+            $ProcessTree->forceDelete();
+            if (count($Data) == 0) {
+                array_push($Data, '00000000-0000-0000-0000-000000000000');
+            }
+
+            foreach($Data as $list) {
+                $InsProcessTree = new ProcessTree();
+                $Params = array(
+                    'projectContentID' => $ProductID,
+                    'projectProcessID' => $ProcessID,
+                    'parentProcessID' => $list,
+                );
+                $InsProcessTree->insert($Params);
+            }
+            //調整流程開始時間
+            $this->UpdateStartDate($ProcessID);
+
+            DB::commit();
+            
+
+            $jo = array(
+                'success' => true,
+                'msg' => '設定前置流程成功!',
+            );
+         } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
+    public function UpdateStartDate($ProcessID)
+    {
+        $MainProcess = new ProjectProcess();
+        $ProcessTree = new ProcessTree();
+        $Loop = $ProcessTree
+            ->where('projectProcessID', $ProcessID)
+            ->where('parentProcessID', '<>', '00000000-0000-0000-0000-000000000000')
+            ->get();
+        if (count($Loop) > 0) {
+            $MaxDate = array();
+            foreach($Loop as $list) {
+                $Search = new ProjectProcess();
+                $Search = $Search->where('ID', $list->parentProcessID)->first();
+                array_push($MaxDate, strtotime($Search->processStartDate . '+' . ($Search->timeCost) . ' day')); 
+            }
+            $Update = $MainProcess->where('ID', $ProcessID);
+            $MaxDate = max($MaxDate);
+            if (strtotime($Update->first()->processStartDate) < $MaxDate) {
+                $Params = array(
+                    'processStartDate' => date('Y-m-d H:i:s', $MaxDate),
+                );
+                $Update->update($Params);
+            }
+            $CallTree = $ProcessTree->where('parentProcessID', $Update->first()->ID)->get();
+            foreach ($CallTree as $list) {
+                $this->UpdateStartDate($list->projectProcessID);
+            }
+        }
+    }
+    public function UpdateChildsDate($ProcessID)
+    {
+        $Parent = new ProcessTree();
+        $Parent = $Parent->where('parentProcessID', $ProcessID)->get();
+        foreach ($Parent as $list) {
+            $this->UpdateStartDate($list->projectProcessID);
+        }
     }
 }

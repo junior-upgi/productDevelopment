@@ -19,4 +19,8 @@ class Common extends Controller
         
         return $uuid;
     }
+    public static function getUUIDInit()
+    {
+        
+    }
 }

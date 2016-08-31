@@ -2,7 +2,7 @@
 
 @section('content')
     <link rel="stylesheet" type="" href="{{url('/')}}/css/Process/ProcessList.css">
-    <script src="{{url('/')}}/js/Process/ProcessList.js?x=1"></script>
+    <script src="{{url('/')}}/js/Process/ProcessList.js?x=2"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
@@ -85,13 +85,13 @@
                                 <li role="presentation">
                                     <a role="menuitem" class="" onclick="EditShow('{{$list->ID}}')" href="#" >編輯</a>
                                 </li>
-                                <li role="presentation" onclick="">
-                                    <a role="menuitem">前置工序</a>
+                                <li role="presentation">
+                                    <a role="menuitem" onclick="SetPreparationShow('{{$ProductData->ID}}', '{{$list->ID}}')" href="#">前置流程</a>
                                 </li>
                             </ul>
                         </div>
                     </td>
-                    <td>{{$i++}}</td>
+                    <td>{{$list->sequentialIndex}}</td>
                     <td class="text-center">
                         <span>{{$list->PhaseName}}</span>
                     </td>
@@ -171,4 +171,5 @@
     </div>
     @include('Process.AddProcess')
     @include('Process.EditProcess')
+    @include('Process.SetPreparation')
 @endsection

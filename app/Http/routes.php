@@ -20,7 +20,7 @@ Route::get('/phpinfo', function () {
 });
 
 Route::group(['prefix' => 'Service'], function() {
-    Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@pserLogin');
+    Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
     Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@messageTIme');
 });
@@ -61,6 +61,8 @@ Route::group(['prefix' => 'Process'], function() {
     Route::post('InsertProcess', 'ProductDevelopment\ProcessController@insertProcess');
     
     Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@getProcessData');
+    Route::get('GetPreparationList/{ProductID}/{ProcessID}', 'ProductDevelopment\ProcessController@getPreparationList');
+    Route::any('SetPreparation/{ProductID}/{ProcessID}/{ChSelect}', 'ProductDevelopment\ProcessController@setPreparation');
     Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@saveProcessSort');
     Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
 

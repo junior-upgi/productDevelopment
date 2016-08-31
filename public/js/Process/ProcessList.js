@@ -1,3 +1,4 @@
+var ChSelect = [];
 $(function () {
     //設定時間
     var timeInMs = new Date();
@@ -101,7 +102,7 @@ function SaveSort() {
                         document.location.href = url + '/Process/ProcessList/' + ProductID;
                     });
                 } else {
-                    swal("資料儲存錯誤!", result.msg, "error");
+                    swal("資料儲存錯誤!", result.msg.errorInfo[2], "error");
                 }
             }
         })
@@ -136,7 +137,7 @@ function EditShow(ID) {
                 $('#EditProcessForm #ProcessNumber').val(result.ProcessNumber);
                 $('#EditProcessForm #ProcessName').val(result.ProcessName);
                 $("#EditProcessForm #PhaseID option[value=" + result.PhaseID + "]").attr('selected', true);
-                $('#EditProcessForm #ProcessStartDate').val(result.ProcessStartDate)
+                $('#EditProcessForm #ProcessStartDate').val(result.ProcessStartDate);
                 $('#EditProcessForm #TimeCost').val(result.TimeCost);
                 $("#EditProcessForm #NodeID option[value=" + result.NodeID + "]").attr('selected', true);
                 if (StaffList.length > 0) {
@@ -150,11 +151,98 @@ function EditShow(ID) {
                 $('#BtnEdit').button('reset');
                 $('#EditModal').modal('show');
             } else {
-                swal("取得資料錯誤!", result.msg, "error");
+                swal("取得資料錯誤!", result.msg.errorInfo[2], "error");
             }
         }
     })
 }
+//呼叫設定前置流程
+function SetPreparationShow(ProductID,ProcessID) {
+    $.ajax({
+        url: url + '/Process/GetPreparationList/' + ProductID + '/' + ProcessID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function (xhr) {
+            swal("取得資料失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+            if (result.success) {
+                var List = result.PreparationList;
+                var ReSelect = result.SelectList;
+                $("#PreparationList").empty();
+                $("#SetPreparationForm #ProductID").val(ProductID);
+                $("#SetPreparationForm #ProcessID").val(ProcessID);
+                for (i=0; i < List.length; i++) {
+                    var chd = "";
+                    var s = List[i].ID;
+                    if(!(ReSelect.indexOf(List[i].ID) === -1)){
+                        chd = "checked='checked'";
+                        ChSelect.push(List[i].ID);
+                    } 
+                    $("#PreparationList").append(
+                    "<tr>"+
+                        "<td>" + "<input type='checkbox' class='ch' " + chd + " id='" + List[i].ID + "'>" + "</td>" +
+                        "<td>" + List[i].sequentialIndex + "</td>" +
+                        "<td>" + List[i].PhaseName + "</td>" +
+                        "<td>" + List[i].referenceNumber + "</td>" +
+                        "<td>" + List[i].referenceName + "</td>" +
+                        "<td>" + List[i].nodeName + "_" + List[i].name + "</td>" +
+                        "<td>" + List[i].timeCost + "</td>" +
+                        "<td><span>" + $.datepicker.formatDate('yy-mm-dd', new Date(List[i].processStartDate)) + 
+                        "~</span><br/>" + $.datepicker.formatDate('yy-mm-dd', new Date(List[i].processEndDate)) + "</td>" +
+                    "</tr>");
+                }
+                $(".ch").click(function () {
+                    if (ChSelect.indexOf(this.id) === -1)
+                    {
+                        ChSelect.push(this.id);
+                    } else {
+                        ChSelect.pop(this.id);
+                    }
+                });
+                $('#PreparationModal').modal('show');
+            } else {
+                swal("取得資料錯誤!", result.msg.errorInfo[2], "error");
+            }
+        }
+    })
+}
+function DoSetPreparation() {
+    var ProductID = $("#SetPreparationForm #ProductID").val();
+    var ProcessID = $("#SetPreparationForm #ProcessID").val();
+    $.ajax({
+        url: url + '/Process/SetPreparation/' + ProductID + '/' + ProcessID + '/' + JSON.stringify(ChSelect),
+        type: 'GET',
+        /*
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        data: JSON.stringify(sort),
+        dataType: 'JSON',
+        */
+        error: function (xhr) {
+            swal("資料儲存失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+            if (result.success) {
+                swal({
+                    title: "資料儲存成功!",
+                    text: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: true
+                },
+                function () {
+                    $('#PreparationModal').modal('hide');
+                    document.location.href = url + '/Process/ProcessList/' + ProductID;
+                });
+            } else {
+                swal("資料儲存錯誤!", result.msg.errorInfo[2], "error");
+            }
+        }
+    })
+}
+
 function GetStaff(type) {
     var FormID = "#" + type + "ProcessForm";
     var NodeID = $(FormID + " #NodeID").find(":selected").val();
