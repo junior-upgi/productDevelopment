@@ -15,6 +15,9 @@ use App\Models;
 use App\Models\productDevelopment\Project;
 use App\Models\productDevelopment\VProjectList;
 use App\Models\productDevelopment\ProjectContent;
+use App\Models\productDevelopment\VShowProject;
+use App\Models\productDevelopment\VShowProduct;
+use App\Models\productDevelopment\VShowProcess;
 use App\Models\companyStructure\VStaff;
 use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
@@ -184,8 +187,78 @@ class ProjectController extends Controller
         return $jo;
     }
 
-    public function phpinfo()
+    public function showProject()
     {
-        phpinfo();
+        $Project = new VShowProject();
+        $Project = $Project
+            ->where('completeStatus', 0)
+            ->orderBy('completeStatus')
+            ->orderBy('startDate')
+            ->get();
+        $Product = new VShowProduct();
+        $Process = new VShowProcess();
+        return view('Project.ShowProject')
+            ->with('Project', $Project)
+            ->with('Product', $Product)
+            ->with('Process', $Process);
+    }
+
+    public function ldap()
+    {
+        $domain = 'upgiad.onmircosoft.com'; //設定網域名稱
+        $dn="dc=upgiad,dc=onmicrosoft,dc=com";
+
+        $user = 'test'; //設定欲認證的帳號名稱
+        $password = 'Upgi@1234'; //設定欲認證的帳號密碼
+
+        // 使用 ldap bind 
+        $ldaprdn = $user . '@' . $domain; 
+        // ldap rdn or dn 
+        $ldappass = $password; // 設定密碼
+
+        // 連接至網域控制站
+        $ldapconn = ldap_connect($domain) or die("無法連接至 $domain");
+
+        // 如果要特別指定某一部網域主控站(DC)來作認證則上面改寫為
+        //$ldapconn = ldap_connect('dc.domain.com) or die("無法連接至 dc.domain.com"); 
+        // 或 
+        // $ldapconn = ldap_connect('dc2.domain.com)or die("無法連接至 dc2.domain.com"); 
+
+        //以下兩行務必加上，否則 Windows AD 無法在不指定 OU 下，作搜尋的動作
+        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        ldap_set_option($ldapconn, LDAP_OPT_REFERRALS, 0);
+
+        if ($ldapconn) { 
+            // binding to ldap server
+            echo("連結$domain".$ldaprdn.",".$ldappass."");
+            $ldapbind = ldap_bind($ldapconn, $user, $password);     
+            //$ldapbind = ldap_bind($ldapconn, $ldaprdn, $ldappass);     
+            //$ldapbind = ldap_bind($ldapconn);     
+            // verify binding     
+            if ($ldapbind) {         
+                $filter = "(sAMAccountName=$user)";        
+                $result = @ldap_search($ldapconn, $dn, $filter);        
+                if($result==false) {
+                    echo "認證失敗(找不到 $user)";        
+                } else {            
+                    echo "認證成功...";             
+                    //取出帳號的所有資訊             
+                    $entries = ldap_get_entries($ldapconn, $result);
+                    $data = ldap_get_entries( $ldapconn, $result );
+                    
+                    echo $data ["count"] . " entries returned\n";
+                    
+                    for($i = 0; $i <= $data ["count"]; $i ++) {
+                        for($j = 0; $j <= $data [$i] ["count"]; $j ++) {
+                            echo "[$i:$j]=".$data [$i] [$j] . ": " . $data [$i] [$data [$i] [$j]] [0] . "\n";
+                        }
+                    }        
+                }    
+            } else {         
+                echo "認證失敗...";     
+            } 
+        }
+        //關閉LDAP連結
+        ldap_close($ldapconn);
     }
 }

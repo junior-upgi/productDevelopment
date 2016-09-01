@@ -11,8 +11,10 @@
 	</script>
 
 	<!--<link href="/css/app.css" rel="stylesheet">-->
-	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap.min.css">
-	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap.css">
+	<!--<link rel="stylesheet" href="{{url('/')}}/css/bootstrap-theme.css">-->
+	
 	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap-datetimepicker.min.css">
 	<link rel="stylesheet" href="{{url('/')}}/css/jquery-ui.css">
 	<link rel="stylesheet" href="{{url('/')}}/css/sweetalert.css">
@@ -22,7 +24,7 @@
 	<script src="{{url('/')}}/script/jquery-3.1.0.min.js"></script>
 	<script src="{{url('/')}}/script/jquery-ui.js?x=1"></script>
 	<script src="{{url('/')}}/script/sweetalert.js"></script>
-	<script src="{{url('/')}}/script/bootstrap.min.js"></script>
+	<script src="{{url('/')}}/script/bootstrap.js"></script>
 	<script src="{{url('/')}}/script/jquery.blockUI.js"></script>
 	<script src="{{url('/')}}/script/jquery.form.min.js"></script>
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.min.js"></script>
@@ -40,7 +42,30 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="/">統義玻璃 開發案管理系統</a>
+					<a class="navbar-brand" href="/" style="padding:5px;">
+						<img alt="UPGI" src="{{url('/')}}/img/upgi.png" style="height:40px;"/>
+					</a>
+					<a class="navbar-brand" href="/">
+						統義玻璃 開發案管理系統
+					</a>
+				</div>
+				<div class="collapse navbar-collapse navbar-left">
+					<div class="nav navbar-nav">
+						<li>
+							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
+						</li>
+						<li>
+							<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+								報表<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="{{url('/')}}/Report/ProjectExecuteRate">專案進度表</a></li>
+							</ul>
+						</li>
+					</div>
 				</div>
 			</div>
 		</div>

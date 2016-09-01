@@ -11,9 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'ProductDevelopment\ProjectController@showProject');
+
+Route::get('/ldap', 'ProductDevelopment\projectController@ldap');
 
 Route::get('/phpinfo', function () {
     phpinfo();
@@ -26,8 +26,6 @@ Route::group(['prefix' => 'Service'], function() {
 });
 
 Route::group(['prefix' => 'Project'], function() {
-    Route::get('phpinfo', 'ProductDevelopment\ProjectController@phpinfo');
-
     Route::get('ProjectList', 'ProductDevelopment\ProjectController@projectList');
 
     Route::get('AddProject', 'ProductDevelopment\ProjectController@addProject');
@@ -39,6 +37,10 @@ Route::group(['prefix' => 'Project'], function() {
     Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
 
     Route::get('Delete/{ProjectID}', 'ProductDevelopment\ProjectController@deleteProject');
+
+    Route::get('ShowProject/', 'ProductDevelopment\ProjectController@showProject');
+    Route::get('ShowProduct/{Project}', 'ProductDevelopment\ProjectController@showProduct');
+    Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
 });
 
 Route::group(['prefix' => 'Product'], function() {
@@ -78,4 +80,8 @@ Route::group(['prefix' => 'SysOption'], function() {
     Route::get('GetStaffList/{NodeID}', 'SystemManagement\StaffController@getStaffList');
 
     Route::get('MoveData/', 'SystemManagement\StaffController@moveData');
+});
+
+Route::group(['prefix' => 'Report'], function() {
+    Route::any('ProjectExecuteRate', 'ProductDevelopment\ReportController@projectExecuteRate');
 });

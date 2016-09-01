@@ -83,10 +83,10 @@
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
                                 <li role="presentation">
-                                    <a role="menuitem" class="" onclick="EditShow('{{$list->ID}}')" href="#" >編輯</a>
+                                    <a role="menuitem" onclick="EditShow('{{$list->ID}}')" href="#{{$list->ID}}">編輯</a>
                                 </li>
                                 <li role="presentation">
-                                    <a role="menuitem" onclick="SetPreparationShow('{{$ProductData->ID}}', '{{$list->ID}}')" href="#">前置流程</a>
+                                    <a role="menuitem" onclick="SetPreparationShow('{{$ProductData->ID}}', '{{$list->ID}}')" href="#{{$list->ID}}">前置流程</a>
                                 </li>
                             </ul>
                         </div>
