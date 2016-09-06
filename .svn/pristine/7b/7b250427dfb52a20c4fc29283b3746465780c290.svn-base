@@ -1,0 +1,61 @@
+<?php $__env->startSection('sysoption', 'active'); ?>
+<?php $__env->startSection('content'); ?>
+    <script src="<?php echo e(url('/')); ?>/js/Staff/StaffList.js?x=3"></script>
+    <ol class="breadcrumb">
+        <li class="active">員工資料維護</li>
+    </ol>
+    <!--tool bar-->
+    <nav class="navbar navbar-default" role="navigation">
+        <ul class="nav navbar-nav">
+            <form action="" class="navbar-form">
+                <button type="button" class="btn btn-warning" onclick="DataSyn()">資料同步</button>
+            </form>
+        </ul>
+        <ul class="nav navbar-nav navbar-right" style="margin-right:0px">
+            <form action="<?php echo e(url('/')); ?>/SysOption/StaffList" class="navbar-form" method="POST">
+                <div class="form-group">
+                    <input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>">
+                    <input type="text" name="Search" class="form-control" placeholder="編號/姓名/單位/職稱">
+                </div>
+                <button type="submit" class="btn btn-default">搜尋</button>
+            </form>
+        </ul>
+    </nav>
+    <!--data table-->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td width="60"></td>
+                <td width="120">單位</td>
+                <td width="80">姓名</td>
+                <td width="140">職稱</td>
+                <td width="200">主管</td>
+                <td>代理人1</td>
+                <td>代理人2</td>
+                <td>推播</td>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach($StaffList as $list): ?>
+                <tr>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-sm btn-default" onclick="EditShow('<?php echo e($list['ID']); ?>')">編輯</button>
+                    </td>
+                    <td><?php echo e(mb_convert_encoding($list['nodeName'], 'big-5')); ?></td>
+                    <td><?php echo e($list['name']); ?></td>
+                    <td><?php echo e($list['position']); ?></td>
+                    <td><?php echo e($list->mapping['superivisor']['nodeName'] . '_' . $list->mapping['superivisor']['name']); ?></td>
+                    <td><?php echo e($list->mapping['primaryDelegate']['nodeName'] . '_' . $list->mapping['primaryDelegate']['name']); ?></td>
+                    <td><?php echo e($list->mapping['secondaryDelegate']['nodeName'] . '_' . $list->mapping['secondaryDelegate']['name']); ?></td>
+                    <td></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <?php echo e($StaffList->links()); ?>
+
+    </div>
+    <?php echo $__env->make('Staff.EditStaff', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
