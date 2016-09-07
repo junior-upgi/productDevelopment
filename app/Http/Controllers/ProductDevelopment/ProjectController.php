@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
+use Auth;
 
 //use DB
 use DB;
@@ -33,7 +34,7 @@ class ProjectController extends Controller
             ->orderBy('completeStatus')
             ->orderBy('created', 'desc')
             ->paginate(15);
-
+        $c = Auth::check();
         return view('Project.ProjectList')
             ->with('ProjectList', $ProjectList);
     }

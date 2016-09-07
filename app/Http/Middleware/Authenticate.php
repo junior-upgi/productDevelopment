@@ -17,12 +17,31 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        /*
+        $attempt = Auth::attempt([
+            'mobileSystemAccount' => 'test',
+            'password' => 'test',
+        ], true);
+        if ($attempt) {
+            //return Redirect::intended('/Project/ProjectList');
+            if (Auth::check()) {
+                $a = Auth::guard('web');
+                $b = $a->guest();
+                //return Redirect::intended('/Project/ProjectList');
+            } else {
+                return false;
+            }
+        }
+        */
+        $a = Auth::check();
+        $b = Auth::guest();
+        
         if (Auth::guard($guard)->guest()) {
             if ($request->ajax() || $request->wantsJson()) {
                 return response('Unauthorized.', 401);
             }
 
-            return redirect()->guest('login');
+            return redirect()->guest('/login');
         }
 
         return $next($request);

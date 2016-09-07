@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
+use Illuminate\Support\Facades\Hash;
 
 use DB;
 use App\Models;
@@ -26,11 +27,30 @@ use App\Models\companyStructure\VStaff;
 use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
 use App\Models\sales\Client;
+use App\Models\upgiSystem\User;
 //use App\Models;
 
 
 class LoginController extends Controller 
 {
+    public function hashPassword()
+    {
+        $user  =  new user();
+        $user = $user->all();
+        foreach ($user as $list) {
+            $id = $list->ID;
+            $p = Hash::make($list->mobileSystemAccount);
+            $us = new user();
+            $us = $us->where('ID', $id);
+            $pa = array(
+                'password' => $p,
+            );
+            $us->update($pa);
+            //$list->save();
+        }
+        return 'yes';
+    }
+
     public function show()
     {
         return view('Login.login');
@@ -47,18 +67,22 @@ class LoginController extends Controller
         $validator = Validator::make($input, $rules);
 
         if ($validator->passes()) {
-            /*
-            $attempt = Auth::attempt([
+            $attempt = Auth::guard('user')->attempt([
                 'mobileSystemAccount' => $input['account'],
-                'password' => $input['password']
-            ]);
-            */
-            $attempt = Auth::attempt([
-                'mobileSystemAccount' => '00010001',
-                'password' => '00010001'
-            ], false, false);
+                'password' => $input['password'],
+            ], true);
             if ($attempt) {
-                return Redirect::intended('post');
+                //return Redirect::intended('/Project/ProjectList');
+
+                if (Auth::guard('user')->check()) {
+                    $a = Auth::guard('user');
+                    //$c = $a['user'];
+                    $b = $a->guest();
+                    //Auth::login($a->user);
+                    return Redirect::intended('/Project/ProjectList');
+                } else {
+                    return 'no';
+                }
             }
             return Redirect::to('login')
                     ->withErrors(['fail'=>'帳號或密碼錯誤!']);

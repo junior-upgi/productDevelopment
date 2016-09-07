@@ -1,5 +1,6 @@
 <?php
-
+//$MySqlHost = '192.168.168.86';
+$MySqlHost = '192.168.1.252';
 return [
 
     /*
@@ -54,7 +55,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost,
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -68,7 +69,7 @@ return [
 
         'DB_productDevelopment' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost,
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -82,7 +83,7 @@ return [
 
         'DB_companyStructure' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost,
             'port' => '3306',
             'database' => 'companyStructure',
             'username' => 'spark',
@@ -96,7 +97,7 @@ return [
 
         'DB_sales' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost, 
             'port' => '3306',
             'database' => 'sales',
             'username' => 'spark',
@@ -110,7 +111,7 @@ return [
 
         'DB_upgiSystem' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost,
             'port' => '3306',
             'database' => 'upgiSystem',
             'username' => 'spark',
@@ -124,7 +125,7 @@ return [
 
         'DB_mobileMessagingSystem' => [
             'driver' => 'mysql',
-            'host' => '192.168.168.86',
+            'host' => $MySqlHost,
             'port' => '3306',
             'database' => 'mobileMessagingSystem',
             'username' => 'spark',

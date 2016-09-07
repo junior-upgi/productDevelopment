@@ -16,9 +16,29 @@ class User extends Model implements AuthenticatableContract
     protected $connection = 'DB_upgiSystem';
     protected $table = "user";
     protected $softDelete = true;
-    /*
+
+    protected $primaryKey = 'ID';
+    
     protected $fillable = [
-        'mobileSystemAccount', 'password',
+        'ID', 
+        'mobileSystemAccount', 
+        'password', 
     ];
+    protected $hidden = array('password', 'remember_token');
+    /*
+    public function getRememberToken()
+    {
+        return $this->remember_token;
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->remember_token = $value;
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'remember_token';
+    }
     */
 }

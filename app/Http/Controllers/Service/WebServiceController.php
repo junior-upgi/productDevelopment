@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
+use Illuminate\Support\Facades\Hash;
 
 //use DB
 use App\Models\productDevelopment\Para;
@@ -42,13 +43,14 @@ class WebServiceController extends Controller
     {
         $user = new User();
         $jo = array();
-
+        //$Password = Hash::make($Password);
         //驗證使用者帳密
         $CheckUser = $user
-            ->where('mobileSystemAccount', $Account)
-            ->where('password', $Password);    
-         
-        if ($CheckUser->first()) {
+            ->where('mobileSystemAccount', $Account);
+            //->where('password', $Password);
+        $u = $CheckUser->first();    
+        $CheckPassword = Hash::check($Password, $u->password);
+        if ($CheckPassword) {
             //通過驗證
             try {
                 //寫入使用者設備資訊 
