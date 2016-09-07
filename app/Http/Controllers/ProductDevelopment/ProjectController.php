@@ -26,6 +26,12 @@ use App\Models\sales\Client;
 
 class ProjectController extends Controller
 {
+    /*
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+    */
     public function projectList()
     {
         $oProject = new VProjectList();

@@ -1,10 +1,17 @@
-@extends('layouts.masterpage')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
-    <div class="content">
-        <div>歡迎使用統義玻義開發案管理系統</div>
-        <a href="{{url('/')}}/Project/ProjectList">進入專案管理</a>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-heading">Welcome</div>
+
+                <div class="panel-body">
+                    Your Application's Landing Page.
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection

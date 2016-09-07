@@ -169,4 +169,56 @@ class WebServiceController extends Controller
 
         return $jo;
     }
+    public function testMessage($Account, $Title, $Content, $Url, $AudioFile)
+    {
+        $BroadcastID = Common::getNewGUID();
+        $MessageID = Common::getNewGUID();
+        $MessageCategoryID = 999;
+        $User = new User();
+        $User = $User->where('mobileSystemAccount', $Account)->first();
+        $Message = new Message();
+        $BroadcastStatus = new BroadcastStatus();
+        if (!$User) {
+            $jo = array(
+                'success' => false,
+                'msg' => '找不到帳號資訊!',
+            );
+            return $jo;
+        }
+        try {
+            //寫入測䛫訊息
+            DB::beginTransaction();
+            $Params = array(
+                'ID' => $MessageID,
+                'messageCategoryID' => 999,
+                'systemCategoryID' => 0,
+                'manualTopic' => $Title,
+                'content' => $Content,
+            );
+            $Message->insert($Params);
+
+            $Params = array(
+                'ID' => $BroadcastID,
+                'messageID' => $MessageID,
+                'recipientID' => $User->ID,
+                'primaryRecipient' => 0,
+                'url' => $Url,
+                'audioFile' => $AudioFile,
+            );
+            $BroadcastStatus->insert($Params);
+
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '推播訊息已寫入!',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
 }

@@ -27,10 +27,11 @@ Route::get('hashPassword', 'Auth\LoginController@hashPassword');
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
-    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@messageTIme');
+    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@messageTime');
+    Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
+Route::group(['prefix' => 'Project'], function() {
     Route::get('ProjectList', 'ProductDevelopment\ProjectController@projectList');
 
     Route::get('AddProject', 'ProductDevelopment\ProjectController@addProject');
@@ -48,7 +49,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
     Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
 });
 
-Route::group(['middleware' => ['web'], 'prefix' => 'Product'], function() {
+Route::group(['middleware' => 'web', 'prefix' => 'Product'], function() {
+    
     Route::get('ProductList/{ProjectID}', 'ProductDevelopment\ProductController@productList');
 
     Route::get('AddProduct/{ProjectID}', 'ProductDevelopment\ProductController@addProduct');
@@ -62,7 +64,7 @@ Route::group(['middleware' => ['web'], 'prefix' => 'Product'], function() {
     Route::get('Delete/{ProductID}', 'ProductDevelopment\ProductController@deleteProduct');
 });
 
-Route::group(['middleware' => ['web'], 'prefix' => 'Process'], function() {
+Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
     Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@processList');
 
     Route::post('InsertProcess', 'ProductDevelopment\ProcessController@insertProcess');
@@ -78,7 +80,7 @@ Route::group(['middleware' => ['web'], 'prefix' => 'Process'], function() {
     Route::get('Delete/{ProcessID}', 'ProductDevelopment\ProcessController@deleteProcess');
 });
 
-Route::group(['middleware' => ['web'], 'prefix' => 'SysOption'], function() {
+Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::any('StaffList', 'SystemManagement\StaffController@staffList');
     Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
     Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
@@ -93,3 +95,5 @@ Route::group(['prefix' => 'Report'], function() {
 });
 
 //'middleware' => 'auth',
+
+//Route::auth();

@@ -67,15 +67,15 @@ class LoginController extends Controller
         $validator = Validator::make($input, $rules);
 
         if ($validator->passes()) {
-            $attempt = Auth::guard('user')->attempt([
+            $attempt = Auth::attempt([
                 'mobileSystemAccount' => $input['account'],
                 'password' => $input['password'],
             ], true);
             if ($attempt) {
                 //return Redirect::intended('/Project/ProjectList');
 
-                if (Auth::guard('user')->check()) {
-                    $a = Auth::guard('user');
+                if (Auth::check()) {
+                    $a = Auth::guard();
                     //$c = $a['user'];
                     $b = $a->guest();
                     //Auth::login($a->user);
