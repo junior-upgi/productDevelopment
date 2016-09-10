@@ -33,6 +33,7 @@ class StaffController extends Controller
         $StaffList = ServerData::getStaffDetail()
             ->where('serving', '1');
         $s = new ERPStaffNode();
+        $s = $Search;
         $Search = iconv("UTF-8", "BIG-5", $Search);
         
         if ($Search != "") {
@@ -48,7 +49,8 @@ class StaffController extends Controller
         }
         //$a = $StaffList->toSql();
         return view('Staff.StaffList')
-            ->with('StaffList', $StaffList->paginate(15));
+            ->with('StaffList', $StaffList->paginate(15))
+            ->with('Search', $s);
     }
 
     public function getStaffData($StaffID)

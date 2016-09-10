@@ -1,5 +1,6 @@
 function goLoading(msg) {
     $.blockUI({ 
+        baseZ: 30000,
         css: { 
             border: 'none', 
             padding: '15px', 
@@ -7,7 +8,9 @@ function goLoading(msg) {
             '-webkit-border-radius': '10px', 
             '-moz-border-radius': '10px', 
             opacity: .5, 
-            color: '#fff'
+            color: '#fff',
+            theme: true,
+            
         },
         message: msg,
     }); 

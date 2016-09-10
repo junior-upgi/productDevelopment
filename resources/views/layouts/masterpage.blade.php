@@ -29,7 +29,7 @@
 	<script src="{{url('/')}}/script/jquery.form.min.js"></script>
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.min.js"></script>
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.zh-TW.js"></script>
-	<script src="{{url('/')}}/script/master.js"></script>
+	<script src="{{url('/')}}/script/master.js?x=1"></script>
 </head>
 <body>
 	<nav class="navbar navbar-default">
@@ -49,14 +49,23 @@
 						統義玻璃 開發案管理系統
 					</a>
 				</div>
+				@php
+					if (Auth::check()) {
+						Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole = '';
+					}
+				@endphp
 				<div class="collapse navbar-collapse navbar-left">
 					<div class="nav navbar-nav">
 						<li class="@yield('project')">
 							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
 						</li>
-						<li class="@yield('sysoption')">
-							<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>
-						</li>
+						@if (Auth::check())
+							@if (Auth::user()->authorization === '99')
+								<li class="@yield('sysoption')">
+									<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>
+								</li>
+							@endif
+						@endif
 						<li class="dropdown @yield('report')">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
 								報表<span class="caret"></span>
@@ -70,10 +79,18 @@
 				</div>
 				<div class="collapse navbar-collapse navbar-right">
 					<div class="nav navbar-nav">
-						<li class="">
+						<li class="dropdown">
 							@if(Auth::check())
-								{{ Auth::user()->username}} 已登入}}
-								<a href="{{url('/')}}/logout">登出</a>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+									<span class="glyphicon glyphicon-user"></span>
+								</a>
+								<ul class="dropdown-menu" role+"menu">
+									<span style="margin-left:20px;">{{ Auth::user()->mobileSystemAccount}}您好</span>
+									<li class="divider"></li>
+									<li><a href="{{url('/')}}/logout">登出</a></li>
+								</ul>
+							@else
+								<a href="{{url('/')}}/login">登入</a>
 							@endif
 						</li>
 					</div>

@@ -63,6 +63,7 @@ class LoginController extends Controller
             'account'=>'required',
             'password'=>'required'
         );
+        isset($input['remember']) ? $remember = true : $remember = false;
         //驗證表單
         $validator = Validator::make($input, $rules);
 
@@ -70,15 +71,9 @@ class LoginController extends Controller
             $attempt = Auth::attempt([
                 'mobileSystemAccount' => $input['account'],
                 'password' => $input['password'],
-            ], true);
+            ], $remember);
             if ($attempt) {
-                //return Redirect::intended('/Project/ProjectList');
-
                 if (Auth::check()) {
-                    $a = Auth::guard();
-                    //$c = $a['user'];
-                    $b = $a->guest();
-                    //Auth::login($a->user);
                     return Redirect::intended('/Project/ProjectList');
                 } else {
                     return 'no';

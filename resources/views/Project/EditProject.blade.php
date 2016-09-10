@@ -68,7 +68,7 @@
         <div class="form-group">
             <label for="ProjectDeadline" class="col-md-2 control-label date">交貨期限</label>
             <div class="col-md-3">
-                <input type="text" class="form-control date form_datetime" readonly id="ProjectDeadline" name="ProjectDeadline" value="{{$list->projectDeadline}}" required>
+                <input type="text" class="form-control date form_datetime" readonly id="ProjectDeadline" name="ProjectDeadline" value="{{date('Y-m-d', strtotime($ProjectData->projectDeadline))}}" required>
             </div>
         </div>
         <div class="form-group col-md-7 text-right">

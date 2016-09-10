@@ -18,9 +18,9 @@
                 <td width="100">交貨期限</td>
             </tr>
         </thead>
-        {{--*/ 
+        @php 
             $Non = "--";
-        /*--}}
+        @endphp
         <tbody>
             @foreach($Project as $d)
                 <tr style="vertical-align:middle;">

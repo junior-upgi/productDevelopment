@@ -13,10 +13,10 @@
             </form>
         </ul>
         <ul class="nav navbar-nav navbar-right" style="margin-right:0px">
-            <form action="{{url('/')}}/SysOption/StaffList" class="navbar-form" method="POST">
+            <form action="{{url('/')}}/SysOption/StaffList" class="navbar-form" method="GET">
                 <div class="form-group">
                     <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
-                    <input type="text" name="Search" class="form-control" placeholder="編號/姓名/單位/職稱">
+                    <input type="text" name="Search" class="form-control" value="{{$Search}}" placeholder="編號/姓名/單位/職稱">
                 </div>
                 <button type="submit" class="btn btn-default">搜尋</button>
             </form>

@@ -4,12 +4,11 @@
 @section('content')
     <table class="table table-bordered" style="">
         @foreach($Project as $list)
-            {{--*/ 
+            @php 
                 $DetailList = $Detail
-                    ->where('ID', $list->ID)
                     ->get();
                 $Non = "--";
-            /*--}}
+            @endphp
             @if($DetailList->count() > 0)
                 <tr style="font-weight:bolder;">
                     <td colspan="10">
@@ -30,19 +29,21 @@
                     <td>完工期限</td>
                 </tr>
                 @foreach($DetailList as $d)
-                    <tr style="vertical-align:middle;">
-                        <td style="vertical-align:middle;">{{$d->productNumber}}</td>
-                        <td style="vertical-align:middle;">{{$d->productName}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase0) ? number_format($d->phase0,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase1) ? number_format($d->phase1,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase2) ? number_format($d->phase2,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase3) ? number_format($d->phase3,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase9) ? number_format($d->phase9,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase10) ? number_format($d->phase10,1).'%' : $Non}}</td>
-                        <td style="vertical-align:middle;" width="110">{{date('Y-m-d', strtotime($d->startDate))}}~
-                            <br/>{{date('Y-m-d', strtotime($d->endDate))}}</td>
-                        <td style="vertical-align:middle;" width="100">{{date('Y-m-d', strtotime($d->deadline))}}</td>
-                    </tr>
+                    @if($d->ID === $list->ID)
+                        <tr style="vertical-align:middle;">
+                            <td style="vertical-align:middle;">{{$d->productNumber}}</td>
+                            <td style="vertical-align:middle;">{{$d->productName}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase0) ? number_format($d->phase0,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase1) ? number_format($d->phase1,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase2) ? number_format($d->phase2,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase3) ? number_format($d->phase3,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase9) ? number_format($d->phase9,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase10) ? number_format($d->phase10,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" width="110">{{date('Y-m-d', strtotime($d->startDate))}}~
+                                <br/>{{date('Y-m-d', strtotime($d->endDate))}}</td>
+                            <td style="vertical-align:middle;" width="100">{{date('Y-m-d', strtotime($d->deadline))}}</td>
+                        </tr>
+                    @endif
                 @endforeach
             @endif
             <tr style="height:3px;"></tr>

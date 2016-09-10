@@ -23,10 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //laravel debugbar
-        if ($this->app->environment() == 'local')
-        {
-            $this->app->register('Barryvdh\Debugbar\ServiceProvider');
-        }
+        //
     }
 }

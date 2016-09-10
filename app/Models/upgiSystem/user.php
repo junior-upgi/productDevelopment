@@ -18,11 +18,14 @@ class User extends Model implements AuthenticatableContract
     protected $softDelete = true;
 
     protected $primaryKey = 'ID';
+    public $incrementing = false;
     
     protected $fillable = [
         'ID', 
         'mobileSystemAccount', 
         'password', 
+        'authorization',
+        'erpID',
     ];
     protected $hidden = array('password', 'remember_token');
     /*

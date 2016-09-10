@@ -1,6 +1,7 @@
 <?php
 //$MySqlHost = '192.168.168.86';
 $MySqlHost = '192.168.1.252';
+//MySqlHost = 'upgi.ddns.net';
 return [
 
     /*
@@ -14,7 +15,7 @@ return [
     |
     */
 
-    'fetch' => PDO::FETCH_CLASS,
+    'fetch' => PDO::FETCH_OBJ,
 
     /*
     |--------------------------------------------------------------------------
@@ -161,6 +162,7 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
+            'sslmode' => 'prefer',
         ],
 
     ],

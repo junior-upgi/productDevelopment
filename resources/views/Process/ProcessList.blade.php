@@ -10,9 +10,10 @@
         <li class="active">產品開發流程</li>
     </ol>
     <!--product info panel-->
-    {{--*/ 
-        $Deadline = strtotime($ProductData->deadline) 
-    /*--}}
+    @php 
+        $Deadline = strtotime($ProductData->deadline);
+        Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole='';
+    @endphp
     <p class="bg-info">
         <span style="margin-right:20px;">產品代碼：{{$ProductData->referenceNumber}}</span>
         <span style="margin-right:20px;">產品名稱：{{$ProductData->referenceName}}</span>
@@ -26,10 +27,10 @@
                 <a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
-                <button type="button" class="btn btn-primary" onclick="AddShow()">新增</button>
-                <button type="button" class="btn btn-warning" onclick="SaveSort()">儲存排序</button>
+                <button type="button" class="btn btn-primary {{$UserRole}}" onclick="AddShow()">新增</button>
+                <button type="button" class="btn btn-warning {{$UserRole}}" onclick="SaveSort()">儲存排序</button>
                 @if($ProductData->execute == "0")
-                    <button type="button" class="btn btn-warning" onclick="Execute()">執行開發</button>
+                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute()">執行開發</button>
                 @else
                     <button type="button" class="btn btn-warning disabled" onclick="Execute()">開發執行中...</button>
                 @endif
@@ -55,21 +56,25 @@
             </tr>
         </thead>
         <tbody id="tableSort">
-            {{--*/ 
+            @php 
                 $CostCount = 0;
                 $i = 1;
                 use Carbon\Carbon;
                 $Now = strtotime(Carbon::now() . '-1 day');
-            /*--}}
+            @endphp
             @foreach($ProcessList as $list)
-                {{--*/ 
+                @php 
                     //$StartDays = $CostCount;
                     //$EndDays = ($CostCount += $list->timeCost) - 1;
                     //$StartDate = strtotime($ProductData->startDate . '+' . $StartDays . ' day');
                     //$EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
                     $StartDate = strtotime($list->processStartDate);
                     $EndDate = strtotime($list->processStartDate . '+' . ((int)$list->timeCost - 1)  . ' day');
-                /*--}}
+                    $EditType = ' disabled';
+                    if (!Auth::user()->authorization === '99' && Auth::user()->erpID === $list->ID) {
+                        $EditType = '';
+                    }
+                @endphp
                 @if($list->complete == "0")
                     <tr id="{{$list->ID}}" class="sTD">
                 @else
@@ -77,8 +82,8 @@
                 @endif
                     <td>
                         <!--<button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>-->
-                        <div class="dropdown">
-                            <button type="button" id="SetBtn" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
+                        <div class="dropdown ">
+                            <button type="button" id="SetBtn" class="btn btn-defaul {{$EditType}}" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
@@ -102,7 +107,7 @@
                         <span>{{$list->referenceName}}</span>
                     </td>
                     <td>
-                        <span>{{$list->nodeName}}_{{$list->name}}</span>
+                        <span>{{$list->name}}</span>
                     </td>
                     <td class="text-center">
                         <span class="sCost">{{$list->timeCost}}</span>
@@ -132,16 +137,16 @@
                         @if ($ProductData->execute != "0")
                             @if ($list->complete == "0")
                                 @if($Now > $Deadline)
-                                    <button type="button" class="btn btn-sm btn-danger bCom" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-danger bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @elseif($Now > $EndDate)
-                                    <button type="button" class="btn btn-sm btn-warning bCom" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-warning bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @else
-                                    <button type="button" class="btn btn-sm btn-default bCom" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-default bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
                                 @endif
                             @else
-                                {{--*/ 
+                                @php 
                                     $CompleteDate = strtotime($list->completeTime . '-1 day') 
-                                /*--}}
+                                @endphp
                                 
                                 @if($CompleteDate > $Deadline)
                                     <span class="label label-danger sCom">
@@ -160,15 +165,12 @@
                         @endif
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')">刪除</button>
+                        <button type="button" class="btn btn-sm btn-danger {{$EditType}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')">刪除</button>
                     </td>
                 </tr>
             @endforeach
         </tbody>
     </table>
-    <div class="text-center">
-        {{$ProcessList->links()}}
-    </div>
     @include('Process.AddProcess')
     @include('Process.EditProcess')
     @include('Process.SetPreparation')

@@ -41,7 +41,7 @@
 			<input type="password" id="password" name="password" class="form-control" placeholder="密碼" required="">
             <div class="checkbox">
 				<label>
-				<input type="checkbox" value="remember-me">記住我</label>
+				<input type="checkbox" id="remember" name="remember" value="remember">記住我</label>
 			</div>
 			@if ($errors->has('fail'))
 				<div class="fail">{{ $errors->first('fail') }}</div>

@@ -7,10 +7,13 @@
         <li class="active">開發案清單</li>
     </ol>
     <!--tool bar-->
+    @php
+        Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole='';
+    @endphp
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <form action="" class="navbar-form">
-                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary">新增</a>
+                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary {{$UserRole}}">新增</a>
             </form>
         </ul>
     </nav>
@@ -23,7 +26,7 @@
                 <td>開發案號</td>
                 <td>開發案名稱</td>
                 <td>客戶名稱</td>
-                <td>負責人</td>
+                <td width="80">負責人</td>
                 <td width="100" class="text-center">工期</td>
                 <td width="100" class="text-center">交貨期限</td>
                 <!--<td width="100" class="text-center">完成時間</td>-->
@@ -33,12 +36,12 @@
         <tbody>
             @foreach($ProjectList as $list)
                 <tr>
-                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default">編輯</a></td>
+                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}">編輯</a></td>
                     <td class="text-center"><a href="{{url('/')}}/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
                     <td>{{$list->clientName}}</td>
-                    <td>{{$list->salesNodeName . '_' . $list->salesName}}</td>
+                    <td>{{$list->salesName}}</td>
                     <td class="text-center">
                         @if(isset($list->startDate))
                             {{date('Y-m-d', strtotime($list->startDate))}}
@@ -77,7 +80,7 @@
                     </td>
                     -->
                     <td class="text-center">
-                        <input type="button" class="btn btn-sm btn-danger" value="刪除" onclick="DoDelete('{{$list->ID}}')">
+                        <input type="button" class="btn btn-sm btn-danger {{$UserRole}}" value="刪除" onclick="DoDelete('{{$list->ID}}')">
                     </td>
                 </tr>
             @endforeach

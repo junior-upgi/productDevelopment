@@ -38,7 +38,7 @@ class ProcessController extends Controller
         $ProcessList = $Process
             ->where('projectContentID', $ProductID)
             ->orderBy('sequentialIndex', 'asc')
-            ->paginate(15);
+            ->get();
         
         $NodeList = ServerData::getNodeAll();
 

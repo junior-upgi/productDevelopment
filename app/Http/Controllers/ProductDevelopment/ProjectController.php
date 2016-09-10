@@ -6,9 +6,13 @@ namespace App\Http\Controllers\ProductDevelopment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Auth;
+use Redirect;
+
+//use Custom Class
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
-use Auth;
+use App\Http\Controllers\Role;
 
 //use DB
 use DB;
@@ -32,6 +36,7 @@ class ProjectController extends Controller
         $this->middleware('auth');
     }
     */
+
     public function projectList()
     {
         $oProject = new VProjectList();
@@ -47,6 +52,12 @@ class ProjectController extends Controller
 
     public function addProject()
     {
+        /*
+        if (!Role::allowRole('99')) {
+           return Redirect::route('errorRoute');
+        } 
+        */
+        Role::allowRoleToRedirect('99');
         $ClientList = ServerData::getClientAll();
 
         $NodeList = ServerData::getNodeAll();
@@ -96,6 +107,9 @@ class ProjectController extends Controller
     
     public function editProject($ProjectID)
     {
+        if (!Role::allowRole('99')) {
+           return Redirect::route('errorRoute');
+        } 
         $oProject = new VProjectList();
         $ProjectData = $oProject
             ->where('ID','=',$ProjectID)
@@ -175,6 +189,12 @@ class ProjectController extends Controller
 
     public function deleteProject($ProjectID)
     {
+        if (!Role::allowRole('1|99')) {
+           return array(
+               'success' => false,
+               'msg' => '您沒有權限使用此功能',
+           );
+        } 
         $Project = new Project();
         try {
             DB::beginTransaction();

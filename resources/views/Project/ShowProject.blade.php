@@ -22,14 +22,14 @@
             </div>
             <div class="panel-collapse collapse" role="tabpanel" id="{{$list->projectID}}">
                 <div class="panel-body">
-                    {{--*/ 
+                    @php
                         $ProductList = $Product
                             ->where('ProjectID', $list->projectID)
                             ->orderBy('productStatus')
                             ->orderBy('priorityLevel')
                             ->orderBy('startDate','desc')
                             ->get();  
-                    /*--}}
+                    @endphp
                     @foreach($ProductList as $c)
                         <div class="panel panel-default">
                             <div class="panel-heading" role="tab">
@@ -49,12 +49,12 @@
                             </div>
                             <div class="panel-collapse collapse" role="tabpanel" id="{{$c->productID}}">
                                 <div class="panel-body">
-                                    {{--*/ 
+                                    @php
                                         $ProcessList = $Process
                                             ->where('ProductID', $c->productID)
                                             ->orderBy('PhaseID')
                                             ->get();  
-                                    /*--}}
+                                    @endphp
                                     @foreach($ProcessList as $p)
                                         <div class="panel panel-default">
                                             <div class="panel-heading" role="tab">
