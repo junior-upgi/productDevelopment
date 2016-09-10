@@ -28,163 +28,97 @@ use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
 use App\Models\sales\Client;
 
+//use Repositories
+use App\Repositories\ProductDevelopment\ProjectRepositories;
+
 class ProjectController extends Controller
 {
-    /*
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    */
+    protected $common;
+    protected $serverData;
+    protected $projectRepositories;
 
+    public function __construct(
+        Common $common,
+        ServerData $serverData,
+        ProjectRepositories $projectRepositories
+    ) {
+        $this->common = $common;
+        $this->serverData = $serverData;
+        $this->projectRepositories = $projectRepositories;
+    }
+    
+    //
     public function projectList()
     {
-        $oProject = new VProjectList();
-        $ProjectList = $oProject
-            ->where('completeStatus', '<>', '2')
-            ->orderBy('completeStatus')
-            ->orderBy('created', 'desc')
-            ->paginate(15);
-        $c = Auth::check();
+        $ProjectList = $this->projectRepositories
+            ->getNonCompleteProject(15);
+
         return view('Project.ProjectList')
             ->with('ProjectList', $ProjectList);
     }
 
+    //
     public function addProject()
     {
-        /*
-        if (!Role::allowRole('99')) {
-           return Redirect::route('errorRoute');
-        } 
-        */
-        Role::allowRoleToRedirect('99');
-        $ClientList = ServerData::getClientAll();
-
-        $NodeList = ServerData::getNodeAll();
+        if (!Role::allowRole('99')) return Redirect::route('errorRoute'); 
 
         return view('Project.AddProject')
-            ->with('ClientList', $ClientList)
-            ->with('NodeList', $NodeList);
+            ->with('ClientList', $this->serverData->getAllClient())
+            ->with('NodeList', $this->serverData->getAllNode());
     }
-
+    //
     public function insertProject(Request $request)
     {
-        $ProjectNumber = $request->input('referenceNumber');
-        $ProjectName = $request->input('ProjectName');
-        $ClientID = $request->input('ClientID');
-        $SalesID = $request->input('SalesID');
-        $ProjectDeadline = $request->input('ProjectDeadline');
-
-        //$aa = new UPGICommon();
-        try {
-            DB::beginTransaction();
-
-            $oProject = new Project();
-            $oProject->ID = Common::getNewGUID();
-            $oProject->referenceName = $ProjectName;
-            $oProject->referenceNumber = $ProjectNumber;
-            $oProject->clientID = $ClientID;
-            $oProject->salesID = $SalesID;
-            $oProject->projectDeadline = $ProjectDeadline;
-            //$oProject->created = Carbon::now();
-            $oProject->save();
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '新增開發案成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-
-        return $jo;
+        $params = array(
+            'referenceName' => $request->input('referenceNumber'),
+            'referenceNumber' => $request->input('ProjectName'),
+            'clientID' => $request->input('ClientID'),
+            'salesID' => $request->input('SalesID'),
+            'projectDeadline' => $request->input('ProjectDeadline'),
+        );
+        return $this->projectRepositories
+            ->insertData('project', $params);
     }
-    
-    public function editProject($ProjectID)
+    //
+    public function editProject($projectID)
     {
         if (!Role::allowRole('99')) {
            return Redirect::route('errorRoute');
         } 
-        $oProject = new VProjectList();
-        $ProjectData = $oProject
-            ->where('ID','=',$ProjectID)
-            ->first();
         
-        $oProjectContent = new ProjectContent();
-        $ProjectContent = $oProjectContent
-            ->where('projectID','=',$ProjectID)
-            ->get();
-        
-        $ClientList = ServerData::getClientAll();
-
-        $NodeList = ServerData::getNodeAll();
-
-        $oStaff = new Staff();
-        $StaffList = $oStaff
-            ->where('nodeID','=',$ProjectData->nodeID)
-            ->get();
+        $project = $this->projectRepositories->getProjectByID($projectID);
+        $projectContent = $this->projectRepositories->getProjectContent($projectID);
+        $client = $this->serverData->getAllClient();
+        $node = $this->serverData->getAllNode();
+        $nodeID = $project->nodeID;
+        $staff = $this->serverData->getStaffByNodeID($nodeID);
 
         return view('Project.EditProject')
-            ->with('ProjectData', $ProjectData)
-            ->with('ProjectContent', $ProjectContent)
-            ->with('ClientList', $ClientList)
-            ->with('NodeList', $NodeList)
-            ->with('StaffList', $StaffList);
+            ->with('ProjectData', $project)
+            ->with('ProjectContent', $projectContent)
+            ->with('ClientList', $client)
+            ->with('NodeList', $node)
+            ->with('StaffList', $staff);
     }
-    
+    //
     public function updateProject(Request $request)
     {
-        $params = array();
-        $ProjectID = $request->input('ProjectID');
-        $params['referenceNumber'] = $request->input('referenceNumber');
-        $params['referenceName'] = $request->input('ProjectName');
-        $params['clientID'] = $request->input('ClientID');
-        $params['salesID'] = $request->input('SalesID');
-        $params['projectDeadline'] = $request->input('ProjectDeadline');
+        $projectID = $request->input('ProjectID');
+        $params = array(
+            'referenceName' => $request->input('referenceNumber'),
+            'referenceNumber' => $request->input('ProjectName'),
+            'clientID' => $request->input('ClientID'),
+            'salesID' => $request->input('SalesID'),
+            'projectDeadline' => $request->input('ProjectDeadline'),
+        );
 
-        try {
-            DB::beginTransaction();
-
-            $oProject = new Project();
-            $oProject = $oProject
-                ->where('ID',$ProjectID);
-            
-            if($oProject->count() < 1)
-            {
-                $jo = array(
-                    'success' => false,
-                    'msg' => '找不到該開發案資訊!',
-                );
-                return $jo;
-            }
-            $oProject->update($params);
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '更新開發案成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-        
-        return $jo;
+        return $this->projectRepositories
+            ->updateData('project', $params, $projectID);
     }
-    
-    public function getStaffByNodeID($NodeID)
+    //
+    public function getStaffByNodeID($nodeID)
     {
-        $Staff = new Staff();
-        $StaffList = $Staff->where('nodeID', $NodeID)->get();
-        return $StaffList;
+        return $this->serverData->getStaffByNodeID($nodeID);
     }
 
     public function deleteProject($ProjectID)
@@ -216,21 +150,15 @@ class ProjectController extends Controller
         
         return $jo;
     }
-
+    //
     public function showProject()
     {
-        $Project = new VShowProject();
-        $Project = $Project
-            ->where('productExecute', '>', 0)
-            ->orderBy('completeStatus')
-            ->orderBy('startDate')
-            ->get();
         $Product = new VShowProduct();
         $Process = new VShowProcess();
         return view('Project.ShowProject')
-            ->with('Project', $Project)
-            ->with('Product', $Product)
-            ->with('Process', $Process);
+            ->with('Project', $this->projectRepositories->showProjectExecute())
+            ->with('Product', $this->projectRepositories->vShowProduct)
+            ->with('Process', $this->projectRepositories->vShowProcess);
     }
 
     public function ldap()

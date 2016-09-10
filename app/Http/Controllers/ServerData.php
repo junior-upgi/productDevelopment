@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Repositories\sales\ClientRepositories;
+use App\Repositories\companyStructure\StaffRepositories;
 
 use DB;
 use App\Models\companyStructure\Relationship;
@@ -17,10 +18,20 @@ use App\Models\productDevelopment\Project;
 use App\Models\productDevelopment\VProjectList;
 use App\Models\productDevelopment\ProjectContent;
 use App\Models\productDevelopment\Para;
-use App\Models\sales\Client;
 
-class ServerData extends Controller
+class ServerData
 {
+    protected $clientRepositories;
+    protected $staffRepositories;
+
+    public function __construct(
+        ClientRepositories $clientRepositories,
+        StaffRepositories $staffRepositories
+    ) {
+        $this->clientRepositories = $clientRepositories;
+        $this->staffRepositories = $staffRepositories;
+    }
+
     public static function getStaffDetail($ERPStaffID = "")
     {
         $Staff = new ERPStaffNode();
@@ -53,17 +64,17 @@ class ServerData extends Controller
         }
         return $List;
     }
-    public static function getNodeAll()
+    public function getAllNode()
     {
-        $Node = new Node();
-        $List = $Node->orderBy('ID')->get();
-        return $List;
+        return $this->staffRepositories->getAllNode();
     }
-    public static function getClientAll()
+    public function getAllClient()
     {   
-        $Client = new Client();
-        $List = $Client->orderBy('name')->get();
-        return $List;
+        return $this->clientRepositories->getAllClient();
+    }
+    public function getStaffByNodeID($nodeID)
+    {
+        return $this->staffRepositories->getStaffByNodeID($nodeID);
     }
     public static function getPriorityLevel()
     {

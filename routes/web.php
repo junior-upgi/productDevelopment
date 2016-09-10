@@ -41,10 +41,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
     Route::get('AddProject', 'ProductDevelopment\ProjectController@addProject');
     Route::post('InsertProject', 'ProductDevelopment\ProjectController@insertProject');
 
-    Route::get('EditProject/{ProjectID}', 'ProductDevelopment\ProjectController@editProject');
+    Route::get('EditProject/{projectID}', 'ProductDevelopment\ProjectController@editProject');
     Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@updateProject');
 
-    Route::get('GetStaffByNodeID/{NodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
+    Route::get('GetStaffByNodeID/{nodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
 
     Route::get('Delete/{ProjectID}', 'ProductDevelopment\ProjectController@deleteProject');
 

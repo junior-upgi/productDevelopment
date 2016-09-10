@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
-class Common extends Controller
+class Common
 {
-    public static function getNewGUID()
+    public function getNewGUID()
     {
         $charid = strtoupper(md5(uniqid(mt_rand(), true)));
         $hyphen = chr(45);// "-"
@@ -18,9 +18,5 @@ class Common extends Controller
         .substr($charid,20,12);
         
         return $uuid;
-    }
-    public static function getUUIDInit()
-    {
-        
     }
 }
