@@ -14,20 +14,6 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use App\Http\Controllers\Role;
 
-//use DB
-use DB;
-use App\Models;
-use App\Models\productDevelopment\Project;
-use App\Models\productDevelopment\VProjectList;
-use App\Models\productDevelopment\ProjectContent;
-use App\Models\productDevelopment\VShowProject;
-use App\Models\productDevelopment\VShowProduct;
-use App\Models\productDevelopment\VShowProcess;
-use App\Models\companyStructure\VStaff;
-use App\Models\companyStructure\Staff;
-use App\Models\companyStructure\Node;
-use App\Models\sales\Client;
-
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
 
@@ -120,8 +106,8 @@ class ProjectController extends Controller
     {
         return $this->serverData->getStaffByNodeID($nodeID);
     }
-
-    public function deleteProject($ProjectID)
+    //
+    public function deleteProject($projectID)
     {
         if (!Role::allowRole('1|99')) {
            return array(
@@ -129,32 +115,11 @@ class ProjectController extends Controller
                'msg' => '您沒有權限使用此功能',
            );
         } 
-        $Project = new Project();
-        try {
-            DB::beginTransaction();
-
-            $Project->where('ID', $ProjectID)->delete();
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '刪除開發案成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-        
-        return $jo;
+        return $this->projectRepositories->deleteData('project', $projectID);
     }
     //
     public function showProject()
     {
-        $Product = new VShowProduct();
-        $Process = new VShowProcess();
         return view('Project.ShowProject')
             ->with('Project', $this->projectRepositories->showProjectExecute())
             ->with('Product', $this->projectRepositories->vShowProduct)

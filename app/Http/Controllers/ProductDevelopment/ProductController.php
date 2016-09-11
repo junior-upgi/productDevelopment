@@ -22,193 +22,78 @@ use App\Models\companyStructure\Staff;
 use App\Models\companyStructure\Node;
 use App\Models\sales\Client;
 
+//use Repositories
+use App\Repositories\ProductDevelopment\ProjectRepositories;
+
 class ProductController extends Controller
 {
-    public function productList($ProjectID)
-    {
-        $Project = new VProjectList();
-        $ProjectData = $Project
-            ->where('ID', $ProjectID)
-            ->first();
+    protected $projectRepositories;
 
-        $ProjectContent = new VProductList();
-        $ProductList = $ProjectContent
-            ->where('projectID',$ProjectID)
-            //->orderBy('productStatus')
-            //->orderBy('priorityLevel')
-            ->orderBy('execute', 'desc')
-            ->orderBy('deadline')
-            ->orderBy('referenceNumber')
-            ->paginate(15);
-
-        return view('Product.ProductList')
-            ->with('ProductList', $ProductList)
-            ->with('ProjectData', $ProjectData);
+    public function __construct(
+        ProjectRepositories $projectRepositories
+    ) {
+        $this->projectRepositories = $projectReopsitories;
     }
-    
-    public function addProduct($ProjectID)
+    //
+    public function productList($projectID)
     {
-        $priorityLevelList = ServerData::getPriorityLevel();
-
+        return view('Product.ProductList')
+            ->with('ProductList', $this->projectRepositories->getProductList($projectID, 15))
+            ->with('ProjectData', $this->projectRepositories->getProjectByID($projectID));
+    }
+    //
+    public function addProduct($projectID)
+    {
         return view('Product.AddProduct')
             ->with('ProjectID', $ProjectID)
-            ->with('PriorityLevelList', $priorityLevelList);
+            ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
     }
-
+    //
     public function insertProduct(Request $request)
     {
-        $NewID = Common::getNewGUID();
-        $params = array();
-        $params['ID'] = $NewID;
-        $params['projectID'] = $request->input('ProjectID');
-        $params['referenceNumber'] = $request->input('ProductNumber');
-        $params['referenceName'] = $request->input('ProductName');
-        $params['requiredQuantity'] = $request->input('RequiredQuantity');
-        $params['deliveredQuantity'] = $request->input('DeliveredQuantity');
-        $params['deadline'] = $request->input('Deadline');
-        //$params['startDate'] = $request->input('StartDate');
-        $params['priorityLevel'] = $request->input('PriorityLevel');
-        $Parmas['created_at'] = Carbon::now();
-
-        try {
-            DB::beginTransaction();
-
-            $oProjectContent = new ProjectContent();
-            $oProjectContent->insert($params);
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '新增開發產品成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-
-        return $jo;
+        $params = array(
+            'projectID' => $request->input('ProjectID'),
+            'referenceNumber' => $request->input('ProductNumber'),
+            'referenceName' => $request->input('ProductName'),
+            'requiredQuantity' => $request->input('RequiredQuantity'),
+            'deliveredQuantity' => $request->input('DeliveredQuantity'),
+            'deadline' => $request->input('Deadline'),
+            'priorityLevel' => $request->input('PriorityLevel'),
+            'created_at' => Carbon::now(),
+        );
+        return $this->projectRepositories
+            ->insertData('projectContent', $params);
     }
-
+    //
     public function editProduct($ProductID)
     {
-        $ProjectContent = new ProjectContent();
-        $ProductData = $ProjectContent
-            ->where('ID', $ProductID)
-            ->first();
-
-        $priorityLevelList = ServerData::getPriorityLevel();
-
         return view('Product.EditProduct')
-            ->with('ProductData', $ProductData)
-            ->with('PriorityLevelList', $priorityLevelList);
+            ->with('ProductData', $this->projectRepositories->getProjectByID($projectID))
+            ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
     }
-
+    //
     public function updateProduct(Request $request)
     {
-        $params = array();
-        $ProductID = $request->input('ProductID');
-        $params['referenceNumber'] = $request->input('ProductNumber');
-        $params['referenceName'] = $request->input('ProductName');
-        $params['requiredQuantity'] = $request->input('RequiredQuantity');
-        $params['deliveredQuantity'] = $request->input('DeliveredQuantity');
-        $params['deadline'] = $request->input('Deadline');
-        //$params['startDate'] = $request->input('StartDate');
-        $params['priorityLevel'] = $request->input('PriorityLevel');
-
-        try {
-            DB::beginTransaction();
-
-            $ProjectContent = new ProjectContent();
-            $ProjectContent = $ProjectContent
-                ->where('ID',$ProductID);
-            
-            if ($ProjectContent->count() < 1) {
-                $jo = array(
-                    'success' => false,
-                    'msg' => '找不到該開發產品資訊!',
-                );
-                return $jo;
-            }
-            
-            $ProjectContent->update($params);
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '更新開發產品成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-
-        return $jo;
+        $productID = $request->input('ProductID');
+        $params = array(
+            'referenceNumber' => $request->input('ProductNumber'),
+            'referenceName' => $request->input('ProductName'),
+            'requiredQuantity' => $request->input('RequiredQuantity'),
+            'deliveredQuantity' => $request->input('DeliveredQuantity'),
+            'deadline' => $request->input('Deadline'),
+            'priorityLevel' => $request->input('PriorityLevel'),
+        );
+        return $this->projectRepositories
+            ->updateData('projectContent', $params, $productID);
     }
-
-    public function productExecute($ProductID)
+    //
+    public function productExecute($productID)
     {
-        
-        $Product = new ProjectContent();
-        $Product = $Product
-            ->where('ID', $ProductID);
-        $jo = array();
-
-        try {
-            if ($Product->count() > 0) {
-                DB::beginTransaction();
-                $Params = array(
-                    'execute' => '1',
-                );
-                $Product->update($Params);
-                DB::commit();
-                $jo = array(
-                    'success' => true,
-                    'msg' => '開始執行產品開發!',
-                );
-            } else {
-                $jo = array(
-                    'success' => false,
-                    'msg' => '找不到產品資料!',
-                );
-            }
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-        
-        return $jo;
+        return $this->projectRepositories->setProductExecute($productID);
     }
-
-    public function deleteProduct($ProductID)
+    //
+    public function deleteProduct($productID)
     {
-        $Product = new ProjectContent();
-        try {
-            DB::beginTransaction();
-
-            $Product->where('ID', $ProductID)->delete();
-            
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '刪除開發案成功!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e,
-            );
-        }
-        
-        return $jo;
+        return $this->projectRepositories->deleteData('projectContent', $productID);
     }
 }

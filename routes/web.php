@@ -46,26 +46,26 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
 
     Route::get('GetStaffByNodeID/{nodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
 
-    Route::get('Delete/{ProjectID}', 'ProductDevelopment\ProjectController@deleteProject');
+    Route::get('Delete/{projectID}', 'ProductDevelopment\ProjectController@deleteProject');
 
     Route::get('ShowProject/', 'ProductDevelopment\ProjectController@showProject');
-    Route::get('ShowProduct/{Project}', 'ProductDevelopment\ProjectController@showProduct');
-    Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
+    //Route::get('ShowProduct/{Project}', 'ProductDevelopment\ProjectController@showProduct');
+    //Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
     
-    Route::get('ProductList/{ProjectID}', 'ProductDevelopment\ProductController@productList');
+    Route::get('ProductList/{projectID}', 'ProductDevelopment\ProductController@productList');
 
-    Route::get('AddProduct/{ProjectID}', 'ProductDevelopment\ProductController@addProduct');
+    Route::get('AddProduct/{projectID}', 'ProductDevelopment\ProductController@addProduct');
     Route::post('InsertProduct', 'ProductDevelopment\ProductController@insertProduct');
 
-    Route::get('EditProduct/{ProductID}', 'ProductDevelopment\ProductController@editProduct');
+    Route::get('EditProduct/{productID}', 'ProductDevelopment\ProductController@editProduct');
     Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@updateProduct');
 
-    Route::get('ProductExecute/{ProcessID}', 'ProductDevelopment\ProductController@productExecute');
+    Route::get('ProductExecute/{processID}', 'ProductDevelopment\ProductController@productExecute');
 
-    Route::get('Delete/{ProductID}', 'ProductDevelopment\ProductController@deleteProduct');
+    Route::get('Delete/{productID}', 'ProductDevelopment\ProductController@deleteProduct');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {

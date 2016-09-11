@@ -64,26 +64,22 @@ class ServerData
         }
         return $List;
     }
+    //
     public function getAllNode()
     {
         return $this->staffRepositories->getAllNode();
     }
+    //
     public function getAllClient()
     {   
         return $this->clientRepositories->getAllClient();
     }
+    //
     public function getStaffByNodeID($nodeID)
     {
         return $this->staffRepositories->getStaffByNodeID($nodeID);
     }
-    public static function getPriorityLevel()
-    {
-        $para = new Para();
-        $priorityLevelList = $para
-            ->where('paracode','priorityLevel')
-            ->get();
-        return $priorityLevelList;
-    }
+    
     public static function getPhase()
     {
         $Phase = new Para();

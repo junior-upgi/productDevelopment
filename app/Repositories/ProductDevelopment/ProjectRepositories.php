@@ -82,15 +82,28 @@ class ProjectRepositories
 
         return $list->get();
     }
-
-    public function getProjectByID($ID)
+    public function getProductList($proejctID, $padding = 0)
     {
-        return $this->vProjectList->where('ID', $ID)->first();
+        $list = $this->vProductList
+            ->where()
+            ->where('projectID',$ProjectID)
+            //->orderBy('productStatus')
+            //->orderBy('priorityLevel')
+            ->orderBy('execute', 'desc')
+            ->orderBy('deadline')
+            ->orderBy('referenceNumber');
+            if ($padding > 0) return $list->paginate($padding);
+
+            return $list->get();
+    }
+    public function getProjectByID($id)
+    {
+        return $this->vProjectList->where('ID', $id)->first();
     }
 
-    public function getProjectContent($ProjectID)
+    public function getProjectContent($projectID)
     {
-        return $this->projectContent->where('projectID', $ProjectID)->get();
+        return $this->projectContent->where('projectID', $projectID)->get();
     }
 
     public function showProjectExecute()
@@ -123,7 +136,7 @@ class ProjectRepositories
             );
         }
     }
-    public function updateData($table, $params,$id, $primaryKey = 'ID')
+    public function updateData($table, $params, $id, $primaryKey = 'ID')
     {
         try {
             DB::beginTransaction();
@@ -141,6 +154,50 @@ class ProjectRepositories
                 'msg' => $e,
             );
         }
+    }
+    public function deleteData($table, $id, $primaryKey = 'ID')
+    {
+        try {
+            DB::beginTransaction();
+            $t = $this->getTable($table);
+            $t->where($primaryKey, $id)->delete();
+            DB::commit();
+            return array(
+                'success' => true,
+                'msg' => '刪除成功',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            return array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+    }
+    public function setProductExecute($productID)
+    {
+        $product = $this->projectContent->where($productID);
+        $executeStatus = $product->first()->execute;
+        if ($executeStatus == '0') {
+            $type = '執行產品開發';
+            $params = array('execute' => '1');
+            $result = $this->updateData('projectContent', $params, $productID);
+        } elseif ($executeStatus == '1') {
+            $type = '取消執行產品開發';
+            $params = array('execute' => '0');
+            $result = $this->updateData('projectContent', $params, $productID);
+        } else {
+            return array(
+                'success' => true,
+                'msg' => '資料異常',
+            );
+        }
+        if (!$result['success']) return array('success' => false, 'msg' => $type + '失敗');
+        return array('success' => true, 'msg' => $type + '成功');
+    }
+    public function getParaList($paracode)
+    {
+        return $this->para->where('paracode', $paracode)->get();
     }
     private function getTable($table)
     {
