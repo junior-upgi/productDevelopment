@@ -69,19 +69,19 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
-    Route::get('ProcessList/{ProductID}', 'ProductDevelopment\ProcessController@processList');
+    Route::get('ProcessList/{productID}', 'ProductDevelopment\ProcessController@processList');
 
     Route::post('InsertProcess', 'ProductDevelopment\ProcessController@insertProcess');
     
-    Route::get('GetProcessData/{ProcessID}', 'ProductDevelopment\ProcessController@getProcessData');
-    Route::get('GetPreparationList/{ProductID}/{ProcessID}', 'ProductDevelopment\ProcessController@getPreparationList');
-    Route::any('SetPreparation/{ProductID}/{ProcessID}/{ChSelect}', 'ProductDevelopment\ProcessController@setPreparation');
+    Route::get('GetProcessData/{processID}', 'ProductDevelopment\ProcessController@getProcessData');
+    Route::get('GetPreparationList/{productID}/{processID}', 'ProductDevelopment\ProcessController@getPreparationList');
+    Route::any('SetPreparation/{productID}/{processID}/{select}', 'ProductDevelopment\ProcessController@setPreparation');
     Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@saveProcessSort');
     Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
 
-    Route::get('ProcessComplete/{ProcessID}', 'ProductDevelopment\ProcessController@processComplete');
+    Route::get('ProcessComplete/{processID}', 'ProductDevelopment\ProcessController@processComplete');
 
-    Route::get('Delete/{ProcessID}', 'ProductDevelopment\ProcessController@deleteProcess');
+    Route::get('Delete/{processID}', 'ProductDevelopment\ProcessController@deleteProcess');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {

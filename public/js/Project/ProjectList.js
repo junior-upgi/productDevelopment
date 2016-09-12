@@ -37,7 +37,7 @@ function Delete(ProjectID) {
                     document.location.href = url + '/Project/ProjectList';
                 });
             } else {
-                swal("刪除資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("刪除資料失敗!", obj.msg, "error");
                 $('#BtnSave').button('reset');
             }
         }

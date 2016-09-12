@@ -102,7 +102,7 @@ function SaveSort() {
                         document.location.href = url + '/Process/ProcessList/' + ProductID;
                     });
                 } else {
-                    swal("資料儲存錯誤!", result.msg.errorInfo[2], "error");
+                    swal("資料儲存錯誤!", result.msg, "error");
                 }
             }
         })
@@ -151,7 +151,7 @@ function EditShow(ID) {
                 $('#BtnEdit').button('reset');
                 $('#EditModal').modal('show');
             } else {
-                swal("取得資料錯誤!", result.msg.errorInfo[2], "error");
+                swal("取得資料錯誤!", result.msg, "error");
             }
         }
     })
@@ -202,7 +202,7 @@ function SetPreparationShow(ProductID,ProcessID) {
                 });
                 $('#PreparationModal').modal('show');
             } else {
-                swal("取得資料錯誤!", result.msg.errorInfo[2], "error");
+                swal("取得資料錯誤!", result.msg, "error");
             }
         }
     })
@@ -237,7 +237,7 @@ function DoSetPreparation() {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("資料儲存錯誤!", result.msg.errorInfo[2], "error");
+                swal("資料儲存錯誤!", result.msg, "error");
             }
         }
     })
@@ -311,7 +311,7 @@ function DoInsert() {
                     document.location.href = url + '/Process/ProcessList/' + $('#ProductID').val();
                 });
             } else {
-                swal("新增資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("新增資料失敗!", obj.msg, "error");
                 $('#BtnAdd').button('reset');
             }
         },
@@ -345,7 +345,7 @@ function DoUpdate(ProcessID) {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("更新資料失敗!", obj.msg, "error");
                 $('#BtnEdit').button('reset');
             }
         },
@@ -379,7 +379,7 @@ function Complete($ProcessID) {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("更新資料失敗!", obj.msg, "error");
             }
         }
     });
@@ -426,7 +426,7 @@ function ExcuteAjax(ProductID) {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("更新資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("更新資料失敗!", obj.msg, "error");
             }
         }
     });
@@ -470,7 +470,7 @@ function Delete(ProductID, ProcessID) {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("刪除資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("刪除資料失敗!", obj.msg, "error");
                 $('#BtnSave').button('reset');
             }
         }

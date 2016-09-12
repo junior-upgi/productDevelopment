@@ -6,33 +6,28 @@ namespace App\Http\Controllers\ProductDevelopment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
+//use Custom Class
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
-
-//use DB
-use DB;
-use App\Models;
-use App\Models\productDevelopment\Project;
-use App\Models\productDevelopment\VProjectList;
-use App\Models\productDevelopment\VProductList;
-use App\Models\productDevelopment\ProjectContent;
-use App\Models\productDevelopment\Para;
-use App\Models\companyStructure\VStaff;
-use App\Models\companyStructure\Staff;
-use App\Models\companyStructure\Node;
-use App\Models\sales\Client;
 
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
 
 class ProductController extends Controller
 {
+    protected $common;
+    protected $serverData;
     protected $projectRepositories;
 
     public function __construct(
+        Common $common,
+        ServerData $serverData,
         ProjectRepositories $projectRepositories
     ) {
-        $this->projectRepositories = $projectReopsitories;
+        $this->common = $common;
+        $this->serverData = $serverData;
+        $this->projectRepositories = $projectRepositories;
     }
     //
     public function productList($projectID)
@@ -45,7 +40,7 @@ class ProductController extends Controller
     public function addProduct($projectID)
     {
         return view('Product.AddProduct')
-            ->with('ProjectID', $ProjectID)
+            ->with('ProjectID', $projectID)
             ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
     }
     //
@@ -65,10 +60,10 @@ class ProductController extends Controller
             ->insertData('projectContent', $params);
     }
     //
-    public function editProduct($ProductID)
+    public function editProduct($productID)
     {
         return view('Product.EditProduct')
-            ->with('ProductData', $this->projectRepositories->getProjectByID($projectID))
+            ->with('ProductData', $this->projectRepositories->getProductByID($productID))
             ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
     }
     //

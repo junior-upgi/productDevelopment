@@ -71,7 +71,7 @@
                     $StartDate = strtotime($list->processStartDate);
                     $EndDate = strtotime($list->processStartDate . '+' . ((int)$list->timeCost - 1)  . ' day');
                     $EditType = ' disabled';
-                    if (!Auth::user()->authorization === '99' && Auth::user()->erpID === $list->ID) {
+                    if (Auth::user()->authorization === '99' || Auth::user()->erpID === $list->ID) {
                         $EditType = '';
                     }
                 @endphp
@@ -83,7 +83,7 @@
                     <td>
                         <!--<button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>-->
                         <div class="dropdown ">
-                            <button type="button" id="SetBtn" class="btn btn-defaul {{$EditType}}" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
+                            <button type="button" id="SetBtn" class="btn btn-default {{$EditType}}" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">

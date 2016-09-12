@@ -36,7 +36,7 @@ function DoInsert() {
                     document.location.href = url + '/Product/ProductList/' + ProjectID;
                 });
             } else {
-                swal("新增資料失敗!!", obj.msg.errorInfo[2], "error");
+                swal("新增資料失敗!!", obj.msg, "error");
                 $('#BtnSave').button('reset');
             }
         },

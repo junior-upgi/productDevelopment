@@ -37,7 +37,7 @@ function Delete(ProjectID, ProductID) {
                     document.location.href = url + '/Product/ProductList/' + ProjectID;
                 });
             } else {
-                swal("刪除資料失敗!", obj.msg.errorInfo[2], "error");
+                swal("刪除資料失敗!", obj.msg, "error");
                 $('#BtnSave').button('reset');
             }
         }

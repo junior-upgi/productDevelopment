@@ -122,8 +122,8 @@ class ProjectController extends Controller
     {
         return view('Project.ShowProject')
             ->with('Project', $this->projectRepositories->showProjectExecute())
-            ->with('Product', $this->projectRepositories->vShowProduct)
-            ->with('Process', $this->projectRepositories->vShowProcess);
+            ->with('Product', $this->projectRepositories->vShowProduct())
+            ->with('Process', $this->projectRepositories->vShowProcess());
     }
 
     public function ldap()
