@@ -27,12 +27,12 @@
                 <a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
-                <button type="button" class="btn btn-primary {{$UserRole}}" onclick="AddShow()">新增</button>
-                <button type="button" class="btn btn-warning {{$UserRole}}" onclick="SaveSort()">儲存排序</button>
+                <button type="button" class="btn btn-primary {{$UserRole}}" onclick="AddShow()"><span class="glyphicon glyphicon-plus">新增</span></button>
+                <button type="button" class="btn btn-warning {{$UserRole}}" onclick="SaveSort()"><span class="glyphicon glyphicon-floppy-save">儲存排序</button>
                 @if($ProductData->execute == "0")
-                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute()">執行開發</button>
+                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute('run')"><span class="glyphicon glyphicon-play">執行開發</button>
                 @else
-                    <button type="button" class="btn btn-warning disabled" onclick="Execute()">開發執行中...</button>
+                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute('pause')"><span class="glyphicon glyphicon-pause">停止開發</span></button>
                 @endif
             </form>
         </ul>
@@ -52,7 +52,7 @@
                 <td width=50 class="text-center">工時</td>
                 <td width=110 class="text-center">工期</td>
                 <td width=100 class="text-center">完成時間</td>
-                <td width=60></td>
+                <td width=50></td>
             </tr>
         </thead>
         <tbody id="tableSort">
@@ -70,31 +70,40 @@
                     //$EndDate = strtotime($ProductData->startDate . '+' . $EndDays . ' day') 
                     $StartDate = strtotime($list->processStartDate);
                     $EndDate = strtotime($list->processStartDate . '+' . ((int)$list->timeCost - 1)  . ' day');
-                    $EditType = ' disabled';
-                    if (Auth::user()->authorization === '99' || Auth::user()->erpID === $list->ID) {
-                        $EditType = '';
+                    $admin = 'disabled';
+                    $self = 'disabled';
+                    if (Auth::user()->authorization === '99') {
+                        $admin = '';
+                    }
+                    if (Auth::user()->erpID === $list->staffID || Auth::user()->authorization === '99') {
+                        $self = '';
                     }
                 @endphp
                 @if($list->complete == "0")
                     <tr id="{{$list->ID}}" class="sTD">
-                @else
+                @elseif($list->complete == '1')
                     <tr id="{{$list->ID}}" class="ui-state-disabled sTD">
                 @endif
                     <td>
                         <!--<button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>-->
-                        <div class="dropdown ">
-                            <button type="button" id="SetBtn" class="btn btn-default {{$EditType}}" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
-                                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
-                                <li role="presentation">
-                                    <a role="menuitem" onclick="EditShow('{{$list->ID}}')" href="#{{$list->ID}}">編輯</a>
-                                </li>
-                                <li role="presentation">
-                                    <a role="menuitem" onclick="SetPreparationShow('{{$ProductData->ID}}', '{{$list->ID}}')" href="#{{$list->ID}}">前置流程</a>
-                                </li>
-                            </ul>
-                        </div>
+                        @if($admin == '')
+                            <div class="dropdown ">
+                                <button type="button" id="SetBtn" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
+                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
+                                    <li role="presentation">
+                                        <a role="menuitem" onclick="EditShow('{{$list->ID}}')" href="#{{$list->ID}}"><span class="glyphicon glyphicon-edit">編輯</span></a>
+                                    </li>
+                                    <li role="presentation">
+                                        <a role="menuitem" onclick="SetPreparationShow('{{$ProductData->ID}}', '{{$list->ID}}')" href="#{{$list->ID}}"><span class="glyphicon glyphicon-tasks">前置流程</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        @else
+                            <button type="button" class="btn btn-sm btn-default" {{$self}} onclick="EditShow('{{$list->ID}}')"><span class="glyphicon glyphicon-edit"></span></button>
+                            
+                        @endif
                     </td>
                     <td>{{$list->sequentialIndex}}</td>
                     <td class="text-center">
@@ -137,11 +146,11 @@
                         @if ($ProductData->execute != "0")
                             @if ($list->complete == "0")
                                 @if($Now > $Deadline)
-                                    <button type="button" class="btn btn-sm btn-danger bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-danger bCom {{$self}}" onclick="Complete('{{$list->ID}}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @elseif($Now > $EndDate)
-                                    <button type="button" class="btn btn-sm btn-warning bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-warning bCom {{$self}}" onclick="Complete('{{$list->ID}}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @else
-                                    <button type="button" class="btn btn-sm btn-default bCom {{$EditType}}" onclick="Complete('{{$list->ID}}')">完成</button>
+                                    <button type="button" class="btn btn-sm btn-success bCom {{$self}}" onclick="Complete('{{$list->ID}}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @endif
                             @else
                                 @php 
@@ -165,7 +174,7 @@
                         @endif
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger {{$EditType}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')">刪除</button>
+                        <button type="button" class="btn btn-sm btn-danger {{$admin}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             @endforeach

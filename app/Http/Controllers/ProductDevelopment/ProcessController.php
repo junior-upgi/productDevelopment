@@ -16,9 +16,9 @@ use App\Repositories\ProductDevelopment\ProjectRepositories;
 
 class ProcessController extends Controller
 {
-    protected $common;
-    protected $serverData;
-    protected $projectRepositories;
+    public $common;
+    public $serverData;
+    public $projectRepositories;
 
     public function __construct(
         Common $common,
@@ -91,7 +91,6 @@ class ProcessController extends Controller
     public function getProcessData($processID)
     {
         $processData = $this->projectRepositories->getProcessByID($processID);
-        $staffList = new Staff();
         $staffList = $this->serverData->getStaffByNodeID($processData->nodeID);
         $jo = array();
         if ($processData && $staffList) {
@@ -126,13 +125,14 @@ class ProcessController extends Controller
     public function updateProcess(Request $request)
     {
         $processID = $request->input('ProcessID');
+        $processName = $request->input('StaffID');
         $params = array(
             'referenceName' => $request->input('ProcessName'),
             'referenceNumber' => $request->input('ProcessNumber'),
             'projectProcessPhaseID' => $request->input('PhaseID'),
             'timeCost' => $request->input('TimeCost'),
             'staffID' => $request->input('StaffID'),
-            'processStartDate' => $$request->input('ProcessStartDate'),
+            'processStartDate' => $request->input('ProcessStartDate'),
         );
         return $this->projectRepositories->updateProcess($processID, $params);
     }
@@ -142,20 +142,21 @@ class ProcessController extends Controller
         $completeStatus = $this->projectRepositories->getProcessByID($processID)->complete;
         if ($completeStatus === '1') {
             $params = array('complete' => '0');
-        } elseif ($completeStatus === '1') {
+            $result = $this->projectRepositories->updateData('projectProcess', $params, $processID);
+        } elseif ($completeStatus === '0') {
+            $now = date('Y-m-d H:i:s', strtotime(carbon::now()));
             $params = array(
                 'complete' => '1',
-                'completeTime' => carbon::now(),
+                'completeTime' => $now,
             );
+            $result = $this->projectRepositories->setProcessComplete($processID, $params);
         } else {
             return $jo = array('success' => false, 'msg' => '資料異常!');
         }
-        
-        $result = $this->projectRepositories->updateData('projectProcess', $params, $processID);
-        
-        if ($result['success'] && $completeStatus === '1') {
+
+        if ($result['success'] && $completeStatus === '0') {
             return array('success' => true, 'msg' => '完成程序!');
-        } elseif ($result['success'] && $completeStatus === '0') {
+        } elseif ($result['success'] && $completeStatus === '1') {
             return array('success' => true, 'msg' => '取消完成程序!');
         } else {
             return $result;
@@ -170,7 +171,7 @@ class ProcessController extends Controller
     public function getPreparationList($productID, $processID)
     {
         $preparationList = $this->projectRepositories->getPreparationList($productID, $processID);
-        $selectList = $this->projectRepositories->getPreparationList($processID);
+        $selectList = $this->projectRepositories->getPreparationSelectList($processID);
         $s = array();
         foreach ($selectList as $list) {
             $cc = (string)$list->parentProcessID;

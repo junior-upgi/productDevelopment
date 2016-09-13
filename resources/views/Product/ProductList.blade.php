@@ -24,7 +24,7 @@
                 <a href="{{url('/')}}/Project/ProjectList" class="btn btn-default">
                     <span class="glyphicon glyphicon-chevron-left"></span>
                 </a>
-                <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary {{$UserRole}}">新增</a>
+                <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
             </form>
         </ul>
     </nav>
@@ -41,7 +41,7 @@
                 <td width=110>工期</td>
                 <td width=100>完工期限</td>
                 <td width=80 class="text-center">完成時間</td>
-                <td width=60></td>
+                <td width=50></td>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +51,7 @@
             @endphp
             @foreach($ProductList as $list)
                 <tr>
-                    <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}">編輯</a></td>
+                    <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
                     <td><a href="{{url('/')}}/Process/ProcessList/{{$list->ID}}" class="btn btn-sm btn-info">時程</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
@@ -92,7 +92,9 @@
                             <span class="{{$class}}">{{date('Y-m-d', strtotime($list->maxCompleteTime))}}</span>
                         @endif
                     </td>
-                    <td><input type="button" class="btn btn-sm btn-danger {{$UserRole}}" value="刪除" onclick="DoDelete('{{$ProjectData->ID}}', '{{$list->ID}}')"></td>
+                    <td>
+                        <button class="btn btn-sm btn-danger {{$UserRole}}" onclick="DoDelete('{{$ProjectData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
+                    </td>
                 </tr>
             @endforeach
         </tbody>

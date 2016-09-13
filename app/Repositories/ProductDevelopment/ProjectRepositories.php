@@ -3,6 +3,7 @@ namespace App\Repositories\ProductDevelopment;
 
 use DB;
 use App\Http\Controllers\Common;
+use Carbon\Carbon;
 
 use App\Models\productDevelopment\Para;
 use App\Models\productDevelopment\Project;
@@ -21,21 +22,21 @@ use App\Models\productDevelopment\VShowProcess;
 
 class ProjectRepositories
 {
-    protected $common;
-    protected $para;
-    protected $project;
-    protected $projectContent;
-    protected $projectProcess;
-    protected $processTree;
-    protected $vPreparation;
-    protected $vProjectList;
-    protected $vProcessList;
-    protected $vProductList;
-    protected $vProjectReport;
-    protected $vProductReport;
-    protected $vShowProject;
-    protected $vShowProduct;
-    protected $vShowProcess;
+    public $common;
+    public $para;
+    public $project;
+    public $projectContent;
+    public $projectProcess;
+    public $processTree;
+    public $vPreparation;
+    public $vProjectList;
+    public $vProcessList;
+    public $vProductList;
+    public $vProjectReport;
+    public $vProductReport;
+    public $vShowProject;
+    public $vShowProduct;
+    public $vShowProcess;
 
     public function __construct(
         Common $common,
@@ -311,14 +312,6 @@ class ProjectRepositories
     {
         try {
             DB::beginTransaction();
-            $Params = array(
-                'referenceName' => $ProcessName,
-                'referenceNumber' => $ProcessNumber,
-                'projectProcessPhaseID' => $PhaseID,
-                'timeCost' => $TimeCost,
-                'staffID' => $StaffID,
-                'processStartDate' => $StartDate,
-            );
             $process = $this->projectProcess->where('ID', $processID);
             $process->update($params);
 
@@ -376,6 +369,77 @@ class ProjectRepositories
         }
         return $jo;
     }
+    public function setProcessComplete($processID, $params)
+    {
+        try {
+            DB::beginTransaction();
+            $this->projectProcess->where('ID', $processID)->update($params);
+            $parent = $this->processTree->where('parentProcessID', $processID)->get();
+            foreach ($parent as $list) {
+                $subProcess = $this->projectProcess->where('ID', $list->projectProcessID)->first();
+                $now = date('Y-m-d', strtotime(carbon::now()));
+                $subProcessID = $list->projectProcessID;
+                $subStartDate = $subProcess->processStartDate;
+                $subTimeCost = $subProcess->timeCost;
+                $subEndDate = strtotime($subProcess->processStartDate . '+' . ($subProcess->timeCost - 1) . ' day');
+                $newTimeCost = (($subEndDate - strtotime($now)) / 86400);
+                $setDate = strtotime($now) + 86400;
+                $loop = $this->getParentList($subProcessID);
+                if (count($loop) > 0)
+                {
+                    $maxDate = array();
+                    $maxComplete = array();
+                    foreach($loop as $parList) {
+                        $search = $this->projectProcess->where('ID', $parList->parentProcessID)->first();
+                        array_push($maxDate, strtotime($search->processStartDate . '+' . ($search->timeCost) . ' day')); 
+                        if ($search->complete === '1') {
+                            array_push($maxComplete, strtotime(date('Y-m-d', strtotime($search->completeTime))));
+                        }
+                    }
+                    
+                    if (count($maxComplete) === 0 && count($maxDate) > 0) {
+                        $setDate = max($maxDate);
+                    } elseif (count($maxComplete) > 0 && count($maxDate) === 0) {
+                        $setDate = max($maxComplete);
+                    } elseif (count($maxComplete) > 0 && count($maxDate) > 0) {
+                        $setDate = max($maxComplete);
+                        if ((count($maxComplete) < count($maxDate)) && (max($maxComplete) < max($maxDate))) {
+                            $setDate = max($maxDate);
+                        }
+                    }
+                    if ($subEndDate > $setDate) {
+                        $newTimeCost = (($subEndDate - $setDate) / 86400);
+                    } else {
+                        $newTimeCost = $subTimeCost / 86400;
+                    }
+                }
+                $subParams = array(
+                    'timeCost' => $newTimeCost,
+                    'processStartDate' => date('Y-m-d', $setDate),
+                );
+                $this->projectProcess->where('ID', $subProcessID)->update($subParams);
+            }
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '設定前置流程成功!',
+            );
+         } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e['errorInfo'][2],
+            );
+        }
+        return $jo;
+    }
+    public function getParentList($processID)
+    {
+        return $this->processTree
+            ->where('projectProcessID', $processID)
+            ->where('parentProcessID', '<>', '00000000-0000-0000-0000-000000000000')
+            ->get();
+    }
     public function deleteProcess($processID)
     {
         try {
@@ -415,8 +479,8 @@ class ProjectRepositories
     public function getPreparationList($productID, $processID)
     {
         return $this->vProcessList
-            ->where('projectContentID', $ProductID)
-            ->where('ID', '<>', $ProcessID)
+            ->where('projectContentID', $productID)
+            ->where('ID', '<>', $processID)
             ->orderBy('sequentialIndex')
             ->get();
     }
@@ -431,10 +495,7 @@ class ProjectRepositories
     {
         $mainProcess = $this->projectProcess;
         $processTree = $this->processTree;
-        $loop = $processTree
-            ->where('projectProcessID', $processID)
-            ->where('parentProcessID', '<>', '00000000-0000-0000-0000-000000000000')
-            ->get();
+        $loop = $this->getParentList($processID);
         if (count($loop) > 0) {
             $maxDate = array();
             foreach($loop as $list) {
@@ -442,11 +503,18 @@ class ProjectRepositories
                 array_push($maxDate, strtotime($search->processStartDate . '+' . ($search->timeCost) . ' day')); 
             }
             $update = $mainProcess->where('ID', $processID);
+            $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
+            $update->update($params);
+            /*
             if (strtotime($update->first()->processStartDate) < max($maxDate)) {
                 $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
                 $update->update($params);
+            } else {
+                $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
+                $update->update($params);
             }
-            $callTree = $processTree->where('parentProcessID', $Update->first()->ID)->get();
+            */
+            $callTree = $processTree->where('parentProcessID', $update->first()->ID)->get();
             foreach ($callTree as $list) {
                 $this->updateStartDate($list->projectProcessID);
             }
@@ -454,7 +522,7 @@ class ProjectRepositories
     }
     public function updateChildsDate($processID)
     {
-        $parent = $this->processTree->where('parentProcessID', $ProcessID)->get();
+        $parent = $this->processTree->where('parentProcessID', $processID)->get();
         foreach ($parent as $list) {
             $this->updateStartDate($list->projectProcessID);
         }
@@ -474,17 +542,5 @@ class ProjectRepositories
             ->orderBy('deadline')
             ->orderBy('startDate')
             ->orderBy('endDate');
-    }
-    public function vShowProject()
-    {
-        return $this->vShowproject;
-    }
-    public function vShowProduct()
-    {
-        return $this->vShowProduct;
-    }
-    public function vShowProcess()
-    {
-        return $this->vShowProcess;
     }
 }

@@ -16,9 +16,9 @@ use App\Repositories\ProductDevelopment\ProjectRepositories;
 
 class ReportController extends Controller
 {
-    protected $common;
-    protected $serverData;
-    protected $projectRepositories;
+    public $common;
+    public $serverData;
+    public $projectRepositories;
 
     public function __construct(
         Common $common,

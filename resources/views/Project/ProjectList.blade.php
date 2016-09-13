@@ -13,7 +13,7 @@
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
             <form action="" class="navbar-form">
-                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary {{$UserRole}}">新增</a>
+                <a href="{{url('/')}}/Project/AddProject" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
             </form>
         </ul>
     </nav>
@@ -36,7 +36,7 @@
         <tbody>
             @foreach($ProjectList as $list)
                 <tr>
-                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}">編輯</a></td>
+                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
                     <td class="text-center"><a href="{{url('/')}}/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
@@ -80,7 +80,7 @@
                     </td>
                     -->
                     <td class="text-center">
-                        <input type="button" class="btn btn-sm btn-danger {{$UserRole}}" value="刪除" onclick="DoDelete('{{$list->ID}}')">
+                        <button class="btn btn-sm btn-danger {{$UserRole}}" onclick="DoDelete('{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             @endforeach

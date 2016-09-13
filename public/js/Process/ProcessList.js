@@ -384,12 +384,19 @@ function Complete($ProcessID) {
         }
     });
 }
-function Execute() {
+function Execute(type) {
     var ProductID = $('#ProductID').val();
-    var Title = "執行產品開發？";
-    var Message = "此動作無法再變更產品訊息!\n" 
+    if (type === 'run') {
+        var Title = "執行產品開發？";
+        var Message = "此動作無法再變更產品訊息!\n" 
                 + "並且會開始發送推播訊息!\n"
                 + "請問您確定要開始執行產品開發嗎？";
+    } else {
+        var Title = "停止產品開發？";
+        var Message = "此動作會停止發送訊息!\n" 
+                + "請問您確定要停止執行產品開發嗎？";
+    }
+    
     swal({
         title: Title,
         text: Message,

@@ -21,8 +21,8 @@ use App\Models\productDevelopment\Para;
 
 class ServerData
 {
-    protected $clientRepositories;
-    protected $staffRepositories;
+    public $clientRepositories;
+    public $staffRepositories;
 
     public function __construct(
         ClientRepositories $clientRepositories,
@@ -78,15 +78,5 @@ class ServerData
     public function getStaffByNodeID($nodeID)
     {
         return $this->staffRepositories->getStaffByNodeID($nodeID);
-    }
-    
-    public static function getPhase()
-    {
-        $Phase = new Para();
-        $PhaseList = $Phase
-            ->where('paracode', 'ProcessPhaseID')
-            ->orderBy('paracodeno')
-            ->get();
-        return $PhaseList;
     }
 }

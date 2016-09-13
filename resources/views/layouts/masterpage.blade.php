@@ -87,7 +87,7 @@
 								<ul class="dropdown-menu" role+"menu">
 									<span style="margin-left:20px;">{{ Auth::user()->mobileSystemAccount}}您好</span>
 									<li class="divider"></li>
-									<li><a href="{{url('/')}}/logout">登出</a></li>
+									<li><a href="{{url('/')}}/logout"><span class="glyphicon glyphicon-log-out">登出</span></a></li>
 								</ul>
 							@else
 								<a href="{{url('/')}}/login">登入</a>

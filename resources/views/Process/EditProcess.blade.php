@@ -12,22 +12,28 @@
                         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
                         <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
                         <input type="hidden" id="ProcessID" name="ProcessID" value="">
+                        @php 
+                            $disabled = 'disabled';
+                            if (Auth::user()->authorization === '99') {
+                                $disabled = '';
+                            }
+                        @endphp
                         <div class="form-group">
                             <label for="ProcessNumber" class="col-md-4 control-label">開發程序代號</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="ProcessNumber" name="ProcessNumber" value="" required>
+                                <input type="text" class="form-control" {{$disabled}} id="ProcessNumber" name="ProcessNumber" value="" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="ProcessName" class="col-md-4 control-label">開發程序名稱</label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" id="ProcessName" name="ProcessName" value="" required>
+                                <input type="text" class="form-control" {{$disabled}} id="ProcessName" name="ProcessName" value="" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="PhaseID" class="col-md-4 control-label">程序類別</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="PhaseID" name="PhaseID" required>
+                                <select class="form-control" {{$disabled}} id="PhaseID" name="PhaseID" required>
                                     <option value="">請選擇類別</option>
                                     @foreach($PhaseList as $list)
                                         <option value="{{$list->paracodeno}}">{{$list->paracodename}}</option>
@@ -38,7 +44,7 @@
                         <div class="form-group">
                             <label for="ProcessStartDate" class="col-md-4 control-label date">開始時間</label>
                             <div class="col-md-3">
-                                <input type="text" class="form-control date form_datetime" readonly id="ProcessStartDate" name="ProcessStartDate" value="" required>
+                                <input type="text" class="form-control date form_datetime" {{$disabled}} readonly id="ProcessStartDate" name="ProcessStartDate" value="" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -50,7 +56,7 @@
                         <div class="form-group">
                             <label for="NodeID" class="col-md-4 control-label">負責人</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Edit')" required>
+                                <select class="form-control" {{$disabled}} id="NodeID" name="NodeID" onchange="GetStaff('Edit')" required>
                                     <option value="">請選擇單位</option>
                                     @foreach($NodeList as $list)
                                         <option value="{{$list->ID}}">{{$list->name}}</option>
@@ -58,7 +64,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" id="StaffID" name="StaffID" required>
+                                <select class="form-control" {{$disabled}} id="StaffID" name="StaffID" required>
                                 </select>
                             </div>
                         </div>

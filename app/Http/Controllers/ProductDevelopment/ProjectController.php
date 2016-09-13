@@ -19,9 +19,9 @@ use App\Repositories\ProductDevelopment\ProjectRepositories;
 
 class ProjectController extends Controller
 {
-    protected $common;
-    protected $serverData;
-    protected $projectRepositories;
+    public $common;
+    public $serverData;
+    public $projectRepositories;
 
     public function __construct(
         Common $common,
@@ -122,8 +122,8 @@ class ProjectController extends Controller
     {
         return view('Project.ShowProject')
             ->with('Project', $this->projectRepositories->showProjectExecute())
-            ->with('Product', $this->projectRepositories->vShowProduct())
-            ->with('Process', $this->projectRepositories->vShowProcess());
+            ->with('Product', $this->projectRepositories->vShowProduct)
+            ->with('Process', $this->projectRepositories->vShowProcess);
     }
 
     public function ldap()
