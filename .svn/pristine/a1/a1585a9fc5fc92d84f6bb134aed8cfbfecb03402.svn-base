@@ -1,0 +1,92 @@
+<?php $__env->startSection('content'); ?>
+    <script src="<?php echo e(url('/')); ?>/js/Project/ProjectList.js?x=3"></script>
+    <link rel="stylesheet" type="" href="<?php echo e(url('/')); ?>/css/Project/ShowProject.css">
+    <!--專案進度顯示-->
+    <?php $__currentLoopData = $Project; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $list): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+        <div class="panel panel-default">
+            <div class="panel-heading" role="tab">
+                <h4 class="panel-title">
+                    <a href="#<?php echo e($list->projectID); ?>" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
+                        <?php echo e($list->projectNumber); ?>-<?php echo e($list->projectName); ?>
+
+                        [總工時：<?php echo e($list->projectTotalCost); ?>]
+                        <div style="float:right;">進度：<?php echo e(number_format($list->projectCompletePercent,1)); ?>%</div>
+                    </a>
+                </h4>
+            </div>
+            <div class="progress" style="margin-bottom:0px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo e($list->projectCompletePercent); ?>"
+                aria-valuemin="0" aria-valuemax="100" style="width:<?php echo e(number_format($list->projectCompletePercent,1)); ?>%;" >
+                    <?php echo e(number_format($list->projectCompletePercent,1)); ?>%
+                </div>
+            </div>
+            <div class="panel-collapse collapse" role="tabpanel" id="<?php echo e($list->projectID); ?>">
+                <div class="panel-body">
+                    <?php 
+                        $ProductList = $Product
+                            ->where('ProjectID', $list->projectID)
+                            ->orderBy('productStatus')
+                            ->orderBy('priorityLevel')
+                            ->orderBy('startDate','desc')
+                            ->get();  
+                     ?>
+                    <?php $__currentLoopData = $ProductList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $c): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab">
+                                <h4 class="panel-title">
+                                    <a href="#<?php echo e($c->productID); ?>" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
+                                        <?php echo e($c->productNumber); ?>-<?php echo e($c->productName); ?>
+
+                                        [總工時：<?php echo e($c->productTotalCost); ?>]
+                                        <div style="float:right;">進度：<?php echo e(number_format($c->productCompletePercent,1)); ?>%</div>
+                                    </a>
+                                </h4>
+                            </div>
+                            <div class="progress" style="margin-bottom:0px;">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo e($c->productCompletePercent); ?>"
+                                aria-valuemin="0" aria-valuemax="100" style="width:<?php echo e(number_format($c->productCompletePercent,1)); ?>%;" >
+                                    <?php echo e(number_format($c->productCompletePercent,1)); ?>%
+                                </div>
+                            </div>
+                            <div class="panel-collapse collapse" role="tabpanel" id="<?php echo e($c->productID); ?>">
+                                <div class="panel-body">
+                                    <?php 
+                                        $ProcessList = $Process
+                                            ->where('ProductID', $c->productID)
+                                            ->orderBy('PhaseID')
+                                            ->get();  
+                                     ?>
+                                    <?php $__currentLoopData = $ProcessList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getFirstLoop(); ?>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab">
+                                                <h4 class="panel-title">
+                                                    <a href="#<?php echo e($p->productID . $p->phaseID); ?>" data-toggle="collapse" aria-expanded="false" aria-controls="collapseOne">
+                                                        <?php echo e($p->phaseName); ?>
+
+                                                        [總工時：<?php echo e($p->phaseTotalCost); ?>]
+                                                        <div style="float:right;">進度：<?php echo e(number_format($p->phaseCompletePercent,1)); ?>%</div>
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div class="progress" style="margin-bottom:0px;">
+                                                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo e($p->phaseCompletePercent); ?>"
+                                                aria-valuemin="0" aria-valuemax="100" style="width:<?php echo e(number_format($p->phaseCompletePercent,1)); ?>%;" >
+                                                    <?php echo e(number_format($p->phaseCompletePercent,1)); ?>%
+                                                </div>
+                                            </div>
+                                            <div class="panel-collapse collapse" role="tabpanel" id="<?php echo e($p->productID . $p->phaseID); ?>">
+                                                <div class="panel-body">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getFirstLoop(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.masterpage', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
