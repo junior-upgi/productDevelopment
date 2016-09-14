@@ -6,10 +6,16 @@ namespace App\Http\Controllers\ProductDevelopment;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use DB;
+use App\Models\productDevelopment\ProjectProcess;
+use App\Models\productDevelopment\ProcessTree;
 
 //use Custom Class
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
+
+//use Service
+use App\Service\NotificationService;
 
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
@@ -18,15 +24,18 @@ class ProcessController extends Controller
 {
     public $common;
     public $serverData;
+    public $notification;
     public $projectRepositories;
 
     public function __construct(
         Common $common,
         ServerData $serverData,
+        NotificationService $notification,
         ProjectRepositories $projectRepositories
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
+        $this->notification = $notification;
         $this->projectRepositories = $projectRepositories;
     }
 
@@ -142,7 +151,7 @@ class ProcessController extends Controller
         $completeStatus = $this->projectRepositories->getProcessByID($processID)->complete;
         if ($completeStatus === '1') {
             $params = array('complete' => '0');
-            $result = $this->projectRepositories->updateData('projectProcess', $params, $processID);
+            $result = $this->projectRepositories->updateData($this->projectRepositories->projectProcess, $params, $processID);
         } elseif ($completeStatus === '0') {
             $now = date('Y-m-d H:i:s', strtotime(carbon::now()));
             $params = array(

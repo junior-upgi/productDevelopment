@@ -115,58 +115,52 @@ class WebServiceController extends Controller
     /*
     插入推播訊息動作時間
     test = 83e0b733-62a9-11e6-a882-1cb72cdefcf9
+    
+    [{"broadcastID": "56CC0758-E012-1DBB-83FD-211E65CCF3F4","action": "retracted"},
+    {"broadcastID": "0F80058D-ECA1-7F9B-9A89-99A617DED0A1","action": "acknowledged"}]
+
     */
-    public function messageTime($BroadcastID, $Action)
+    public function messageTime($time)
     {   
+        $json = json_decode($time);
         $MessageTime = new BroadcastStatus();
         $jo = array();
-        $Now = Carbon::now();
+        $Now = Carbon::now();;
         $Params = array();
-        $MessageTime = $MessageTime->where('ID', $BroadcastID);
-        //檢查訊息是否存在
-        if ($MessageTime->first()) {
-            switch ($Action) {
-                case 'sent':
-                case 'retracted':
-                case 'received':
-                case 'acknowledged':
-                    $Params = array(
-                        $Action => $Now
-                    );
-                    break;
-            }
-            if ($Params) {
-                try {
-                    //寫入動作時間 
-                    DB::beginTransaction();
-                    $MessageTime->update($Params);
-                    DB::commit();
-                    $jo = array(
-                        'success' => true,
-                        'msg' => $Action . ' Time:' . $Now,
-                    );
-                } catch (\PDOException $e) {
-                    DB::rollback();
-                    $jo = array(
-                        'success' => false,
-                        'msg' => $e,
-                    );
+        DB::beginTransaction();
+        try {
+            foreach($json as $list) {
+                $update = $MessageTime->where('ID', $list->broadcastID);
+                $t  = $update->first();
+                if ($t) {
+                    switch ($list->action) {
+                        case 'sent':
+                        case 'retracted':
+                        case 'received':
+                        case 'acknowledged':
+                            $Params = array(
+                                $list->action => $Now
+                            );
+                            break;
+                    }
+                    if (count($Params) > 0) {
+                        //寫入動作時間 
+                        $update->update($Params);
+                    }
                 }
-            } else {
-                //Action 參數不正確
-                $jo = array(
-                    'success' => false,
-                    'msg' => 'Action參數不正確(Action=' . $Action .')',
-                );
             }
-        } else {
-            //broadcastID不存在
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '寫入成功',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
             $jo = array(
                 'success' => false,
-                'msg' => 'broadcastID不存在!!'
+                'msg' => $e,
             );
         }
-
         return $jo;
     }
     public function testMessage($Account, $Title, $Content, $Url, $AudioFile)

@@ -2,8 +2,13 @@
 
 namespace App\Console;
 
+
+use DB;
+use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+
+use App\Models\productDevelopment\TestQueue;
 
 class Kernel extends ConsoleKernel
 {
@@ -14,6 +19,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        //\App\Console\Commands\Inspire::class,
+        \App\Console\Commands\TestLog::class,
     ];
 
     /**
@@ -26,6 +33,16 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        
+        $schedule->call(function () {
+            $test = new TestQueue();
+            $params = array(
+                'time' => Carbon::now()
+            );
+            $test->insert($params);
+        })->everyMinute();
+        
+        $schedule->command('test:Log')->everyMinute();
     }
 
     /**

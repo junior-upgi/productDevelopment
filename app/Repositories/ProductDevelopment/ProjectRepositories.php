@@ -133,6 +133,10 @@ class ProjectRepositories
     {
         return $this->getProductByID($productID)->projectID;
     }
+    public function getProductID($processID)
+    {
+        return $this->getProcessByID($processID)->projectContentID;
+    }
     public function showProjectExecute()
     {
         return $this->vShowProject
@@ -145,14 +149,14 @@ class ProjectRepositories
     {
         try
         {
-            DB::beginTransaction();
+            $this->projectProcess->getConnection()->beginTransaction();
             foreach($sort as $list)
             {
                 $process = $this->projectProcess->where('ID', $list['pid']);
                 $params = array('sequentialIndex' => $list['index']);
                 $process->update($params);
             }
-            DB::commit();
+            $this->projectProcess->getConnection()->commit();
             $jo = array(
                 'success' => true,
                 'msg' => '儲存排序成功',
@@ -160,7 +164,7 @@ class ProjectRepositories
         }
         catch (\PDOException $e)
         {
-            DB::rollback();
+            $this->projectProcess->getConnection()->rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
@@ -170,98 +174,15 @@ class ProjectRepositories
     }
     public function insertData($table, $params, $primaryKey = 'ID')
     {
-        try {
-            DB::beginTransaction();
-            /*
-            if (is_array($table) && is_array($params) && is_array($primaryKey)) {
-                //雙寫入
-                //******************** 未完成
-                if (count($table) === count($params) && count($table) ===  count($primaryKey)) {
-                    for ($i = 0 ; $i < count($table) ; $i++) {
-                        if ($i == 0) {
-                            $newID = $this->common->getNewGUID();
-                        } else {
-                            $newID = $this->common->getNewGUID();
-                        }
-                        $t = $table[i];
-                        $p = $params[i];
-                        $k = $primaryKey[i];
-                        
-                    }
-                } else {
-                    return array(
-                        'success' => false,
-                        'msg' => '資料設定錯誤',
-                    );
-                }
-            } elseif (is_array($table) || is_array($params) || is_array($primaryKey)) {
-                //資料設定錯誤
-                return array(
-                    'success' => false,
-                    'msg' => '資料設定錯誤',
-                );
-            } else {
-                //單寫入
-                $newID = $this->common->getNewGUID();
-                $params[$primaryKey] = $newID;
-                $t = $this->getTable($table);
-                $t->insert($params);
-            }
-            */
-            $newID = $this->common->getNewGUID();
-            $params[$primaryKey] = $newID;
-            $t = $this->getTable($table);
-            $t->insert($params);
-            DB::commit();
-            return array(
-                'success' => true,
-                'msg' => '新增成功',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            return array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
+        return $this->common->insertData($table, $params, $primaryKey);
     }
     public function updateData($table, $params, $id, $primaryKey = 'ID')
     {
-        try {
-            DB::beginTransaction();
-            $t = $this->getTable($table);
-            $t->where($primaryKey, $id)->update($params);
-            DB::commit();
-            return array(
-                'success' => true,
-                'msg' => '編輯成功',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            return array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
+        return $this->common->updateData($table, $params, $id, $primaryKey);
     }
     public function deleteData($table, $id, $primaryKey = 'ID')
     {
-        try {
-            DB::beginTransaction();
-            $t = $this->getTable($table);
-            $t->where($primaryKey, $id)->delete();
-            DB::commit();
-            return array(
-                'success' => true,
-                'msg' => '刪除成功',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            return array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
+        return $this->common->deleteData($table, $id, $primaryKey);
     }
     public function setProductExecute($productID)
     {
@@ -269,11 +190,11 @@ class ProjectRepositories
         if ($executeStatus == '0') {
             $type = '執行產品開發';
             $params = array('execute' => '1');
-            $result = $this->updateData('projectContent', $params, $productID);
+            $result = $this->updateData($this->projectContent, $params, $productID);
         } elseif ($executeStatus == '1') {
             $type = '取消執行產品開發';
             $params = array('execute' => '0');
-            $result = $this->updateData('projectContent', $params, $productID);
+            $result = $this->updateData($this->projectContent, $params, $productID);
         } else {
             return array(
                 'success' => true,
@@ -291,40 +212,23 @@ class ProjectRepositories
     {
         return $this->para->where('paracode', $paracode)->get();
     }
-    private function getTable($table)
-    {
-        switch ($table) {
-            case 'project' :
-                return $this->project;
-                break;
-            case 'projectContent' :
-                return $this->projectContent;
-                break;
-            case 'projectProcess' :
-                return $this->projectProcess;
-                break;
-            case 'processTree' :
-                return $this->processTree;
-                break;
-        }
-    }
     public function updateProcess($processID, $params)
     {
         try {
-            DB::beginTransaction();
+            $this->projectProcess->getConnection()->beginTransaction();
             $process = $this->projectProcess->where('ID', $processID);
             $process->update($params);
 
             $this->updateChildsDate($processID);
 
-            DB::commit();
+            $this->projectProcess->getConnection()->commit();
             
             $jo = array(
                 'success' => true,
                 'msg' => '更新程序成功!',
             );
         } catch (\PDOException $e) {
-            DB::rollback();
+            $this->projectProcess->getConnection()->rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
@@ -337,7 +241,7 @@ class ProjectRepositories
     {
         try {
             $data = json_decode($select);
-            DB::beginTransaction();
+            $this->processTree->getConnection()->beginTransaction();
             $processTree = $this->processTree
                 ->where('projectContentID', $productID)
                 ->where('projectProcessID', $processID)->forceDelete();
@@ -345,7 +249,6 @@ class ProjectRepositories
                 array_push($data, '00000000-0000-0000-0000-000000000000');
             }
             foreach($data as $list) {
-                $insProcessTree = new ProcessTree();
                 $params = array(
                     'projectContentID' => $productID,
                     'projectProcessID' => $processID,
@@ -355,7 +258,7 @@ class ProjectRepositories
             }
             //調整流程開始時間
             $this->updateStartDate($processID);
-            DB::commit();
+            $this->processTree->getConnection()->commit();
             $jo = array(
                 'success' => true,
                 'msg' => '設定前置流程成功!',
@@ -372,7 +275,7 @@ class ProjectRepositories
     public function setProcessComplete($processID, $params)
     {
         try {
-            DB::beginTransaction();
+            $this->projectProcess->getConnection()->beginTransaction();
             $this->projectProcess->where('ID', $processID)->update($params);
             $parent = $this->processTree->where('parentProcessID', $processID)->get();
             foreach ($parent as $list) {
@@ -419,13 +322,13 @@ class ProjectRepositories
                 );
                 $this->projectProcess->where('ID', $subProcessID)->update($subParams);
             }
-            DB::commit();
+            $this->projectProcess->getConnection()->commit();
             $jo = array(
                 'success' => true,
                 'msg' => '設定前置流程成功!',
             );
          } catch (\PDOException $e) {
-            DB::rollback();
+            $this->projectProcess->getConnection()->rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
@@ -443,15 +346,16 @@ class ProjectRepositories
     public function deleteProcess($processID)
     {
         try {
-            DB::beginTransaction();
+            $this->projectProcess->getConnection()->beginTransaction();
             $process = $this->projectProcess->where('ID', $processID);
-            $productID = $process->first()->projectContentID;
+            $a = $process->first();
+            $productID = $this->getProductID($processID);
             $process->delete();
             $this->processTree->where('projectProcessID', $processID)->delete();
 
             $sort = $this->processTree
-                ->where('projectContentID', $ProductID)
-                ->where('projectProcessID', '<>', $ProcessID)
+                ->where('projectContentID', $productID)
+                ->where('projectProcessID', '<>', $processID)
                 ->orderBy('seq')
                 ->get();
             //reset sort
@@ -461,13 +365,13 @@ class ProjectRepositories
                 $newTree->update($params);
             }
 
-            DB::commit();
+            $this->projectProcess->getConnection()->commit();
             $jo = array(
                 'success' => true,
                 'msg' => '刪除程序成功!',
             );
         } catch (\PDOException $e) {
-            DB::rollback();
+            $this->projectProcess->getConnection()->rollback();
             $jo = array(
                 'success' => false,
                 'msg' => $e,

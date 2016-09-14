@@ -63,7 +63,7 @@ class ProjectController extends Controller
             'projectDeadline' => $request->input('ProjectDeadline'),
         );
         return $this->projectRepositories
-            ->insertData('project', $params);
+            ->insertData($this->projectRepositories->project, $params);
     }
     //
     public function editProject($projectID)
@@ -99,7 +99,7 @@ class ProjectController extends Controller
         );
 
         return $this->projectRepositories
-            ->updateData('project', $params, $projectID);
+            ->updateData($this->projectRepositories->project, $params, $projectID);
     }
     //
     public function getStaffByNodeID($nodeID)
@@ -115,7 +115,7 @@ class ProjectController extends Controller
                'msg' => '您沒有權限使用此功能',
            );
         } 
-        return $this->projectRepositories->deleteData('project', $projectID);
+        return $this->projectRepositories->deleteData($this->projectRepositories->project, $projectID);
     }
     //
     public function showProject()

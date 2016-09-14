@@ -79,4 +79,9 @@ class ServerData
     {
         return $this->staffRepositories->getStaffByNodeID($nodeID);
     }
+    //
+    public function getUserByerpID($erpID)
+    {
+        return $this->staffRepositories->getUser($erpID);
+    }
 }

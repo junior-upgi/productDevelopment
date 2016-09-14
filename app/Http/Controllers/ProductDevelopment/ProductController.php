@@ -11,6 +11,9 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 
+//use Service
+use App\Service\NotificationService;
+
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
 
@@ -18,15 +21,18 @@ class ProductController extends Controller
 {
     public $common;
     public $serverData;
+    public $notification;
     public $projectRepositories;
 
     public function __construct(
         Common $common,
         ServerData $serverData,
+        NotificationService $notification,
         ProjectRepositories $projectRepositories
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
+        $this->notification = $notification;
         $this->projectRepositories = $projectRepositories;
     }
     //
@@ -57,7 +63,7 @@ class ProductController extends Controller
             'created_at' => Carbon::now(),
         );
         return $this->projectRepositories
-            ->insertData('projectContent', $params);
+            ->insertData($this->projectRepositories->projectContent, $params);
     }
     //
     public function editProduct($productID)
@@ -79,16 +85,20 @@ class ProductController extends Controller
             'priorityLevel' => $request->input('PriorityLevel'),
         );
         return $this->projectRepositories
-            ->updateData('projectContent', $params, $productID);
+            ->updateData($this->projectRepositories->projectContent, $params, $productID);
     }
     //
     public function productExecute($productID)
     {
-        return $this->projectRepositories->setProductExecute($productID);
+        $exe = $this->projectRepositories->setProductExecute($productID);
+        if ($exe['success']) {
+            $this->notification->productExecute($productID);
+        }
+        return $exe;
     }
     //
     public function deleteProduct($productID)
     {
-        return $this->projectRepositories->deleteData('projectContent', $productID);
+        return $this->projectRepositories->deleteData($this->projectRepositories->projectContent, $productID);
     }
 }

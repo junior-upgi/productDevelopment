@@ -31,7 +31,7 @@ Route::get('hashPassword', 'Auth\LoginController@hashPassword');
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
-    Route::get('MessageTime/{BroadcastID}/{Action}', 'Service\WebServiceController@messageTime');
+    Route::get('MessageTime/{time}', 'Service\WebServiceController@messageTime');
     Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
