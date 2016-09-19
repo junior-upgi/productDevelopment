@@ -13,13 +13,13 @@
 
 Route::get('/', 'ProductDevelopment\ProjectController@showProject');
 
-Route::get('/ldap', 'ProductDevelopment\projectController@ldap');
+Route::get('ldap', 'ProductDevelopment\projectController@ldap');
 
-Route::get('/phpinfo', function () {
+Route::get('phpinfo', function () {
     phpinfo();
 });
 
-Route::get('/errorRoute', function () {
+Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
 

@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         //
         //\App\Console\Commands\Inspire::class,
         \App\Console\Commands\TestLog::class,
+        \App\Console\Commands\CheckProcess::class,
     ];
 
     /**
@@ -33,7 +34,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        
+        /*
         $schedule->call(function () {
             $test = new TestQueue();
             $params = array(
@@ -41,7 +42,8 @@ class Kernel extends ConsoleKernel
             );
             $test->insert($params);
         })->everyMinute();
-        
+        */
+        //$schedule->command('checkProcess')->everyMinute();
         $schedule->command('test:Log')->everyMinute();
     }
 
