@@ -89,6 +89,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
     Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
     Route::get('GetStaffList/{NodeID}', 'SystemManagement\StaffController@getStaffList');
+    Route::get('InsertUser/{account}/{password}', 'SystemManagement\StaffController@insertUser');
 
     Route::get('MoveData', 'SystemManagement\StaffController@moveData');
 

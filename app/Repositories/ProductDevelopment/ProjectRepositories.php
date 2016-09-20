@@ -23,6 +23,7 @@ use App\Models\productDevelopment\VShowProcess;
 class ProjectRepositories
 {
     public $common;
+    public $carbon;
     public $para;
     public $project;
     public $projectContent;
@@ -40,6 +41,7 @@ class ProjectRepositories
 
     public function __construct(
         Common $common,
+        Carbon $carbon,
         Para $para,
         Project $project,
         ProjectContent $projectContent,
@@ -56,6 +58,7 @@ class ProjectRepositories
         VShowProcess $vShowProcess
     ) {
         $this->common = $common;
+        $this->carbon = $carbon;
         $this->para = $para;
         $this->project = $project;
         $this->projectContent = $projectContent;
@@ -150,7 +153,7 @@ class ProjectRepositories
         try
         {
             $this->projectProcess->getConnection()->beginTransaction();
-            foreach($sort as $list)
+            foreach ($sort as $list)
             {
                 $process = $this->projectProcess->where('ID', $list['pid']);
                 $params = array('sequentialIndex' => $list['index']);
@@ -248,7 +251,7 @@ class ProjectRepositories
             if (count($data) == 0) {
                 array_push($data, '00000000-0000-0000-0000-000000000000');
             }
-            foreach($data as $list) {
+            foreach ($data as $list) {
                 $params = array(
                     'projectContentID' => $productID,
                     'projectProcessID' => $processID,
@@ -292,7 +295,7 @@ class ProjectRepositories
                 {
                     $maxDate = array();
                     $maxComplete = array();
-                    foreach($loop as $parList) {
+                    foreach ($loop as $parList) {
                         $search = $this->projectProcess->where('ID', $parList->parentProcessID)->first();
                         array_push($maxDate, strtotime($search->processStartDate . '+' . ($search->timeCost) . ' day')); 
                         if ($search->complete === '1') {
@@ -402,7 +405,7 @@ class ProjectRepositories
         $loop = $this->getParentList($processID);
         if (count($loop) > 0) {
             $maxDate = array();
-            foreach($loop as $list) {
+            foreach ($loop as $list) {
                 $search = $this->projectProcess->where('ID', $list->parentProcessID)->first();
                 array_push($maxDate, strtotime($search->processStartDate . '+' . ($search->timeCost) . ' day')); 
             }
@@ -446,5 +449,14 @@ class ProjectRepositories
             ->orderBy('deadline')
             ->orderBy('startDate')
             ->orderBy('endDate');
+    }
+    public function getDelayProcess()
+    {
+        $now = date('Y-m-d', $this->carbon->now());
+        return $delayList = $this->vProcessList
+            ->where('execute', '1')
+            ->where('complete', '0' )
+            ->where('processEndDate', '>', $now)
+            ->get();
     }
 }

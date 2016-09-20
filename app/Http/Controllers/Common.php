@@ -24,7 +24,7 @@ class Common
     {
         $this->DB->rollback();
     }
-    public function getNewGUID()
+    public static function getNewGUID()
     {
         $charid = strtoupper(md5(uniqid(mt_rand(), true)));
         $hyphen = chr(45);// "-"

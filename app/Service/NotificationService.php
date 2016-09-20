@@ -40,13 +40,13 @@ class NotificationService
         $productName = $list->first()->ProductName;
         //$salesID = $list->first()->salesID;
         //$salesName = $server->getUserByerpID($salesID)->name;
-        $salesID = $server->getuserByerpID($list->first()->salesID)->ID;
+        $salesID = $server->getUserByerpID($list->first()->salesID)->ID;
         //to sales
         $title = "開始執行開發";
         $content = "[$projectNumber]$projectName _ [$productNumber]$productName 開始執行開發";
         $url = '';
         $audioFile = '';
-        $sendSales = $mobile->insertNotify($title, $content, 3, 0, $uid, $salesID, $url, $projectID, $productID);
+        $sendSales = $mobile->insertNotify($title, $content, 3, 0, $uid, $salesID, $url, $audioFile, $projectID, $productID);
         //to all process staff
         $sendStaff = array();
         foreach($list as $p) {
@@ -58,7 +58,7 @@ class NotificationService
             $title = '工作排程通知';
             $content = "[$phaseName][$processNumber]$processName,開始時間:$startDate,工時:$cost 天";
             $recipientID = $server->getuserByerpID($p->staffID)->ID;
-            $a = $mobile->insertNotify($title, $content, 3, 0, $uid, $recipientID, $url, $projectID, $productID, $p->ID);
+            $a = $mobile->insertNotify($title, $content, 3, 0, $uid, $recipientID, $url, $audioFile, $projectID, $productID, $p->ID);
             array_push($sendStaff, array(
                 'processID' => $p->ID,
                 'success' => $a['success'],

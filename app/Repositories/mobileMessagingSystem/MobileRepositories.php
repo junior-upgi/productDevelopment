@@ -119,6 +119,10 @@ class MobileRepositories
             );
         }
     }
+    public function insertNotifies($data)
+    {
+        
+    }
     private function insertData($table, $params, $primaryKey = 'ID')
     {
         return $this->common->insertData($table, $params, $primaryKey);

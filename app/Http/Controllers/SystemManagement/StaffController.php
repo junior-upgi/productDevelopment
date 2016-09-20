@@ -27,6 +27,41 @@ use App\Models\UPGWeb\ERPStaffNode;
 
 class StaffController extends Controller
 {
+    public $common;
+    
+    public function __construct(
+        Common $common
+    ) {
+        $this->common = $common;
+    }
+
+    public function insertUser($account, $password)
+    {
+        try {
+            DB::beginTransaction();
+            $password = \Hash::make($password);
+            $s = new User();
+            $newID = $this->common->getNewGUID();
+            $params = array(
+                'ID' => $newID,
+                'mobileSystemAccount' => $account,
+                'password' => $password,
+            );
+            $s->insert($params);
+            DB::commit();
+            $jo = array(
+                'success' => true,
+                'msg' => '帳號新增成功',
+            );
+        } catch (\PDOException $e) {
+            DB::rollback();
+            $jo = array(
+                'success' => false,
+                'msg' => $e,
+            );
+        }
+        return $jo;
+    }
     public function staffList(Request $request)
     {
         $Search = $request->input('Search');
