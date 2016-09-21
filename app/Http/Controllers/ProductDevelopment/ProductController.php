@@ -91,7 +91,7 @@ class ProductController extends Controller
     public function productExecute($productID)
     {
         $exe = $this->projectRepositories->setProductExecute($productID);
-        if ($exe['success']) {
+        if ($exe['toNotify']) {
             $this->notification->productExecute($productID);
         }
         return $exe;

@@ -2,6 +2,7 @@
 namespace App\Service;
 
 use App\Http\Controllers\Common;
+use App\Http\Controllers\ServerData;
 use Carbon\Carbon;
 use App\Repositories\mobileMessagingSystem\MobileRepositories;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
@@ -44,26 +45,30 @@ class ProjectCheckService
 
     public function delayProcess()
     {
-        $processList = $project->getDelayProcess();
+        $processList = $this->project->getDelayProcess();
         $mobile = $this->mobile;
         $server = $this->serverData;
+        $now = date('Y-m-d', strtotime($this->carbon->now()));
         $jo = array();
         foreach ($processList as $list) {
             $title = "[$list->referenceNumber]$list->referenceName 已延誤";
-            $content = "開始時間:$startDate,工時:$cost 天";
+            $delayDays = (strtotime($now) - strtotime($list->processStartDate)) / (60*60*24);
+            $content = "[$list->referenceNumber]$list->referenceName 已延誤 $delayDays 天";
             $staff = $server->getUserByerpID($list->staffID);
-            $url="";
+            $url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
+            $audioFile="";
             $projectID = $list->projectID;
             $productID = $list->productID;
             $processID = $list->processID;
-            $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $projectID, $productID, $processID);
+            $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
             $log = array(
-                'title' => $title,
-                'content' => $content,
-                'staff' => $staff->erpID,
-                'time' => $this->carbon->now(),
                 'success' => $result['success'],
-                'msg' => $result['msg'],
+                'type' => 'delayProcess',
+                'time' => $this->carbon->now(),
+                'broadcastID' => $result['broadcastID'],
+                'projectID' => $projectID,
+                'productID' => $productID,
+                'processID' => $processID,
             );
             array_push($jo, $log);
         }

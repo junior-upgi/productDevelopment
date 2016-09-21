@@ -31,7 +31,7 @@ class NotificationService
         $mobile = $this->mobile;
         $server = $this->serverData;
 
-        $list = $project->getProcessList($productID);
+        $list = $project->getNonCompleteProcessList($productID);
         $projectID = $list->first()->projectID;
         $projectNumber = $list->first()->projectNumber;
         $projectName = $list->first()->projectName;

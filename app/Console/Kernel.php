@@ -8,8 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-use App\Models\productDevelopment\TestQueue;
-
 class Kernel extends ConsoleKernel
 {
     /**
@@ -43,8 +41,9 @@ class Kernel extends ConsoleKernel
             $test->insert($params);
         })->everyMinute();
         */
-        //$schedule->command('checkProcess')->everyMinute();
-        $schedule->command('test:Log')->everyMinute();
+        //$schedule->command('checkProcess')->dailyAt('07:00');
+        $schedule->command('checkProcess')->everyMinute();
+        //$schedule->command('test:Log')->everyMinute();
     }
 
     /**

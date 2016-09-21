@@ -16,7 +16,7 @@ class CheckProcess extends Command
 
     public $check;
 
-    public function __construct(ProjetCheckService $check)
+    public function __construct(ProjectCheckService $check)
     {
         parent::__construct();
         $this->check = $check;
@@ -25,16 +25,20 @@ class CheckProcess extends Command
     // Console 執行的程式
     public function handle()
     {
-        //執行排程檢查
-        $process = $check->delayProcess();
-
-        // 檔案紀錄在 storage/test.log
+        // 檔案紀錄在 storage/logs/checkProcess.log
         $log_file_path = storage_path('logs/checkProcess.log');
 
-        // 記錄 JSON 字串
-        $log_info_json = json_encode($process) . "\r\n";
+        //執行排程檢查
+        $process = $this->check->delayProcess();
+        $success = 0;
+        $fail = 0;
+        $total = count($process);
+        foreach ($process as $list) {
+            $list['success'] ? $success++ : $fail++;
+        }
 
-        // 記錄 Log
-        File::append($log_file_path, $log_info_json);
+        //寫入log
+        $log_info = 'DelayProcess# ' .  date('Y-m-d H:i:s') . ",total=$total,success=$success,fail=$fail" . "\r\n";
+        File::append($log_file_path, $log_info);
     }
 }

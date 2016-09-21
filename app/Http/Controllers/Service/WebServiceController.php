@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use Illuminate\Support\Facades\Hash;
 
-//use DB
+use DB;
 use App\Models\productDevelopment\Para;
 use App\Models\productDevelopment\Project;
 use App\Models\productDevelopment\VProjectList;
@@ -30,12 +30,21 @@ use App\Models\mobileMessagingSystem\SystemCategory;
 use App\Models\mobileMessagingSystem\VBroadcastList;
 use App\Models;
 
-use DB;
+use App\Service\ProjectCheckService;
+
 /*
 1、提供開發案系統與推播App傳遞資料
 */
 class WebServiceController extends Controller
 {
+    public $projectCheck;
+
+    public function __construct(
+        ProjectCheckService $projectCheck
+    ) {
+        $this->projectCheck = $projectCheck;
+    }
+
     /*
     首次登入驗證使用者資訊
     */
@@ -214,5 +223,12 @@ class WebServiceController extends Controller
             );
         }
         return $jo;
+    }
+
+    public function test()
+    {
+        $process = $this->projectCheck->delayProcess();
+
+        return json_encode($process);
     }
 }

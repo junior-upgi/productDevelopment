@@ -26,7 +26,8 @@ class TestLog extends Command
 
         // 記錄當時的時間
         $log_info = [
-            'date'=>date('Y-m-d H:i:s')
+            'date'=>date('Y-m-d H:i:s'),
+            'set'=>'yyy'
         ];
 
         // 記錄 JSON 字串

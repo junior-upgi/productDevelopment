@@ -116,6 +116,15 @@ class ProjectRepositories
             ->get();
         return $list;
     }
+    public function getNonCompleteProcessList($productID)
+    {
+        $list = $this->vProcessList
+            ->where('projectContentID', $productID)
+            ->where('complete', '0')
+            ->orderBy('sequentialIndex', 'asc')
+            ->get();
+        return $list;
+    }
     public function getProjectByID($id)
     {
         return $this->vProjectList->where('ID', $id)->first();
@@ -205,7 +214,8 @@ class ProjectRepositories
             );
         }
         if (!$result['success']) return array('success' => false, 'msg' => $type . '失敗');
-        return array('success' => true, 'msg' => $type . '成功');
+        $toNotify = ($executeStatus == '0') ? true : false;
+        return array('success' => true, 'msg' => $type . '成功', 'toNotify' => $toNotify);
     }
     public function getMaxSeqIndex($productID)
     {
@@ -452,11 +462,12 @@ class ProjectRepositories
     }
     public function getDelayProcess()
     {
-        $now = date('Y-m-d', $this->carbon->now());
+        $date = $this->carbon->now();
+        $now = date('Y-m-d', strtotime($date));
         return $delayList = $this->vProcessList
             ->where('execute', '1')
             ->where('complete', '0' )
-            ->where('processEndDate', '>', $now)
+            ->where('processEndDate', '<', $now)
             ->get();
     }
 }

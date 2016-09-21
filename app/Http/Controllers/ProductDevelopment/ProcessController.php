@@ -197,4 +197,29 @@ class ProcessController extends Controller
     {
         return $this->projectRepositories->setPreparation($productID, $processID, $select);
     }
+    public function userSettingCost($processID, $staffID)
+    {
+        $processData = $this->projectRepositories->getProcessByID($processID);
+        //if ($processData->staffID != $staffID) return array('success'=>false, 'msg'=>'驗證錯誤');
+        $jo = array();
+        if ($processData) {
+            $jo = array(
+                'success' => true,
+                'ID' => $processData->ID,
+                'ProcessNumber' => $processData->referenceNumber,
+                'ProcessName' => $processData->referenceName,
+                'PhaseName' => $processData->PhaseName,
+                'TimeCost' => $processData->timeCost,
+                'StaffID' => $processData->staffID,
+                'ProcessStartDate' => date('Y-m-d', strtotime($processData->processStartDate)),
+            );
+        } else {
+            $jo = array(
+                'success' => false,
+                'msg' => '找不到程序資訊!',
+            );
+        }
+        return view('Mobile.SettingCost')
+            ->with('processData', $processData);
+    }
 }

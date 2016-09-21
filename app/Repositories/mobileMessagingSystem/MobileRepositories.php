@@ -109,6 +109,7 @@ class MobileRepositories
             return array(
                 'success' => true,
                 'msg' => '完成寫入',
+                'broadcastID' => $broadcastID,
             );
         } catch (\PDOException $e) {
             $this->message->getConnection()->rollback();
@@ -116,6 +117,7 @@ class MobileRepositories
             return array(
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
+                'broadcastID' => '',
             );
         }
     }
