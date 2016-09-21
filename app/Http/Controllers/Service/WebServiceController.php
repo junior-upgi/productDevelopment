@@ -227,8 +227,9 @@ class WebServiceController extends Controller
 
     public function test()
     {
-        $process = $this->projectCheck->delayProcess();
+        $uid = '16080003';
+        $password = 'pa676579';
 
-        return json_encode($process);
+        
     }
 }

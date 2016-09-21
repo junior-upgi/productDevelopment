@@ -39,6 +39,7 @@ return [
         'web' => [
             'driver' => 'session',
             'provider' => 'users',
+            //'provider' => 'ldap-users',
         ],
 
         'api' => [
@@ -69,7 +70,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\upgiSystem\User::class,
         ],
-
+        'ldap-users' => [
+            'driver' => 'ldap',
+            'model'  => \Krenor\LdapAuth\Objects\LdapUser::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

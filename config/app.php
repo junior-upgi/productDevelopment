@@ -166,7 +166,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Krenor\LdapAuth\LdapAuthServiceProvider::class,
         //
 
         /*

@@ -16,6 +16,9 @@ Route::get('/', 'ProductDevelopment\ProjectController@showProject');
 Route::get('ldap', 'ProductDevelopment\projectController@ldap');
 
 Route::get('test', 'Service\WebServiceController@test');
+//Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
+
+Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
 
 Route::get('phpinfo', function () {
     phpinfo();
@@ -85,7 +88,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
 
     Route::get('Delete/{processID}', 'ProductDevelopment\ProcessController@deleteProcess');
 
-    Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost')->name('userSettingCost');
+    
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {

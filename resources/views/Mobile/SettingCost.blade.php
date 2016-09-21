@@ -30,24 +30,20 @@
 	<script src="{{url('/')}}/script/bootstrap-datetimepicker.zh-TW.js"></script>
 	<script src="{{url('/')}}/script/master.js"></script>
 </head>
-<body style="padding-top:40px;padding-bottom:40px;background-color:#eee;">
+<body>
     <div class="container">
-        <form class="form-signin" role="form" action="login" method="POST" style="max-width:330px;padding:15px;margin:auto;">
-			<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
-            <h2 class="form-signin-heading">請輸入帳號密碼</h2>
-			<label for="account" class="sr-only">帳號</label>
-			<input type="text" id="account" name="account" class="form-control" placeholder="帳號(員工編號)" required="" autofocus="">
-			<label for="password" class="sr-only">密碼</label>
-			<input type="password" id="password" name="password" class="form-control" placeholder="密碼" required="">
-            <div class="checkbox">
-				<label>
-				<input type="checkbox" id="remember" name="remember" value="remember">記住我</label>
-			</div>
-			@if ($errors->has('fail'))
-				<div class="fail">{{ $errors->first('fail') }}</div>
-			@endif
-			<button class="btn btn-lg btn-primary btn-block" type="submit">登入</button>
-		</form>
+		@inject('mobile', 'App\Presenters\MobilePresenter')
+		@php 
+			$pc = $processData
+		@endphp
+		@if($processData)
+			<form class="" role="form" method="POST">
+				<h4>開發案名稱</h4>
+				<p>{{"[$pc->projectNumber]$pc->projectName"}}</p>
+			</form>
+		@else
+			{!! $mobile->error() !!}
+		@endif
     </div>
 </body>
 </html>
