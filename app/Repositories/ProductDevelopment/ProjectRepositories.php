@@ -225,6 +225,13 @@ class ProjectRepositories
     {
         return $this->para->where('paracode', $paracode)->get();
     }
+    public function getParaValue($type, $value)
+    {
+        return $this->para
+            ->where('paracode', $type)
+            ->where('paracodeno', $value)
+            ->first()->paracodename;
+    }
     public function updateProcess($processID, $params)
     {
         try {

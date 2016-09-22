@@ -25,8 +25,8 @@ class CheckProcess extends Command
     // Console 執行的程式
     public function handle()
     {
-        // 檔案紀錄在 storage/logs/checkProcess.log
-        $log_file_path = storage_path('logs/checkProcess.log');
+        // 檔案紀錄在 storage/logs/check.log
+        $log_file_path = storage_path('logs/check.log');
 
         //執行排程檢查
         $process = $this->check->delayProcess();

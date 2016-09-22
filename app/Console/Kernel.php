@@ -20,6 +20,8 @@ class Kernel extends ConsoleKernel
         //\App\Console\Commands\Inspire::class,
         \App\Console\Commands\TestLog::class,
         \App\Console\Commands\CheckProcess::class,
+        \App\Console\Commands\CheckProduct::class,
+        \App\Console\Commands\CheckProject::class,
     ];
 
     /**
@@ -30,20 +32,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')
-        //          ->hourly();
-        /*
-        $schedule->call(function () {
-            $test = new TestQueue();
-            $params = array(
-                'time' => Carbon::now()
-            );
-            $test->insert($params);
-        })->everyMinute();
-        */
+
         //$schedule->command('checkProcess')->dailyAt('07:00');
+        //$schedule->command('checkProduct')->dailyAt('07:00');
+        //$schedule->command('checkProject')->dailyAt('07:00');
+
         $schedule->command('checkProcess')->everyMinute();
-        //$schedule->command('test:Log')->everyMinute();
+        //$schedule->command('checkProduct')->everyMinute();
+        //$schedule->command('checkProject')->everyMinute();
     }
 
     /**

@@ -4,13 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use DB;
+use Auth;
+use App\Models\upgiSystem\User;
 
 class Common
 {
     public $DB;
+    public $user;
 
-    public function __construct(DB $DB) {
+    public function __construct(
+        DB $DB,
+        User $user
+    ) {
         $this->DB = $DB;
+        $this->user = $user;
     }
     public function transaction()
     {
@@ -130,6 +137,45 @@ class Common
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
             );
+        }
+    }
+    public function upgiDB($account, $password)
+    {
+        return Auth::attempt([
+                'mobileSystemAccount' => $account,
+                'password' => $password,
+            ], true);
+    }
+    public function upgiLDAP($account, $password)
+    {
+        $ldaphost = "192.168.168.86";  // your ldap servers
+        $ldapport = 389;                 // your ldap server's port number
+
+        // Connecting to LDAP
+        $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
+        if ($ldapconn) {
+            ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+            try {
+                $ldapbind = ldap_bind($ldapconn, "uid=$account,ou=user,dc=upgi,dc=ddns,dc=net", $password);
+            } catch (\Exception $e) {
+                return false;
+            }
+            //return $ldapbind;
+            if ($ldapbind && $this->userLogin($account)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    public function userLogin($account)
+    {
+        $auth = $this->user->where('mobileSystemAccount', $account)->first();
+        if ($auth) {
+            Auth::loginUsingId($auth->ID);
+            return true;
+        } else {
+            return false;
         }
     }
 }

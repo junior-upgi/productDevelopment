@@ -13,20 +13,6 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Illuminate\Support\Facades\Hash;
 
-use DB;
-use App\Models;
-use App\Models\productDevelopment\Para;
-use App\Models\productDevelopment\Project;
-use App\Models\productDevelopment\VProjectList;
-use App\Models\productDevelopment\VProcessList;
-use App\Models\productDevelopment\VPreparation;
-use App\Models\productDevelopment\ProjectContent;
-use App\Models\productDevelopment\ProjectProcess;
-use App\Models\productDevelopment\ProcessTree;
-use App\Models\companyStructure\VStaff;
-use App\Models\companyStructure\Staff;
-use App\Models\companyStructure\Node;
-use App\Models\sales\Client;
 use App\Models\upgiSystem\User;
 //use App\Models;
 
@@ -35,20 +21,23 @@ class LoginController extends Controller
 {
     
     public $user;
+    public $common;
 
     public function __construct(
-        User $user
+        User $user,
+        Common $common
     ) {
         $this->user = $user;
+        $this->common = $common;
     }
 
     public function hashPassword()
     {
-        $user = $this->user->all();
-        foreach ($user as $list) {
+        $userList = $this->user->all();
+        foreach ($userList as $list) {
             $id = $list->ID;
             $p = Hash::make($list->mobileSystemAccount);
-            $us = new user();
+            $us = $this->user;
             $us = $us->where('ID', $id);
             $pa = array(
                 'password' => $p,
@@ -76,15 +65,9 @@ class LoginController extends Controller
         $validator = Validator::make($input, $rules);
 
         if ($validator->passes()) {
-            /*
-            $attempt = Auth::attempt([
-                'mobileSystemAccount' => $input['account'],
-                'password' => $input['password'],
-            ], $remember);
-            */
-            $attempt = $this->LDAP($input['account'], $input['password']);
-            $login = $this->userLogin($input['account']);
-            if ($attempt && $login) {
+            $attempt = $this->common->upgiDB($input['account'], $input['password']);
+            //$attempt = $this->common->upgiLDAP($input['account'], $input['password']);
+            if ($attempt) {
                 if (Auth::check()) {
                     return Redirect::intended('/Project/ProjectList');
                 } else {
@@ -104,33 +87,5 @@ class LoginController extends Controller
     {
         Auth::logout();
         return Redirect::to('login');
-    }
-
-    public function LDAP($account, $password)
-    {
-        $ldaphost = "192.168.168.86";  // your ldap servers
-        $ldapport = 389;                 // your ldap server's port number
-
-        // Connecting to LDAP
-        $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
-        if ($ldapconn) {
-            ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
-            try {
-                $ldapbind = ldap_bind($ldapconn, "uid=$account,ou=user,dc=upgi,dc=ddns,dc=net", $password);
-            } catch (\Exception $e) {
-                return false;
-            }
-            return $ldapbind;
-        }
-    }
-    public function userLogin($account)
-    {
-        $auth = $this->user->where('mobileSystemAccount', $account)->first();
-        if ($auth) {
-            Auth::loginUsingId($auth->ID);
-            return true;
-        } else {
-            return false;
-        }
     }
 }

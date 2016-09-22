@@ -40,7 +40,7 @@ class ProjectCheckService
 
     public function delayProduct()
     {
-
+        $productList = $this->project->getOverdueProduct();
     }
 
     public function delayProcess()
