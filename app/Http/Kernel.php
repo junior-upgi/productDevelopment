@@ -62,7 +62,6 @@ class Kernel extends HttpKernel
      */
     protected $commands = [
         \App\Console\Commands\Inspire::class,
-        \App\Console\Commands\TestLog::class,
     ];
 
     /**

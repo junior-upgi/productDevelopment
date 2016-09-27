@@ -65,8 +65,9 @@ class LoginController extends Controller
         $validator = Validator::make($input, $rules);
 
         if ($validator->passes()) {
-            $attempt = $this->common->upgiDB($input['account'], $input['password']);
-            //$attempt = $this->common->upgiLDAP($input['account'], $input['password']);
+            //single sign on type 0=DB, 1=LDAP
+            $attempt = $this->common->singleSignOn($input['account'], $input['password'], 0);
+
             if ($attempt) {
                 if (Auth::check()) {
                     return Redirect::intended('/Project/ProjectList');

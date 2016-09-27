@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Repositories\sales\ClientRepositories;
 use App\Repositories\companyStructure\StaffRepositories;
+use App\Repositories\UPGWeb\MemberRepositories;
 
 use DB;
 use App\Models\companyStructure\Relationship;
@@ -23,13 +24,16 @@ class ServerData
 {
     public $clientRepositories;
     public $staffRepositories;
+    public $memberRepositories;
 
     public function __construct(
+        MemberRepositories $memberRepositories,
         ClientRepositories $clientRepositories,
         StaffRepositories $staffRepositories
     ) {
         $this->clientRepositories = $clientRepositories;
         $this->staffRepositories = $staffRepositories;
+        $this->memberRepositories = $memberRepositories;
     }
 
     public static function getStaffDetail($ERPStaffID = "")
@@ -83,5 +87,10 @@ class ServerData
     public function getUserByerpID($erpID)
     {
         return $this->staffRepositories->getUser($erpID);
+    }
+
+    public function checkPersonal($ID, $personalID)
+    {
+        return $this->memberRepositories->checkPersonal($ID, $personalID);
     }
 }

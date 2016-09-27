@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Bus\DispatchesJobs;
+use App\Jobs\Sendnotify;
 
 use DB;
 use App\Models\productDevelopment\Para;
@@ -37,11 +39,16 @@ use App\Service\ProjectCheckService;
 */
 class WebServiceController extends Controller
 {
+    use DispatchesJobs;
+
+    public $server;
     public $projectCheck;
 
     public function __construct(
+        ServerData $server,
         ProjectCheckService $projectCheck
     ) {
+        $this->server = $server;
         $this->projectCheck = $projectCheck;
     }
 
@@ -79,7 +86,7 @@ class WebServiceController extends Controller
                 DB::rollback();
                 $jo = array(
                     'success' => false,
-                    'msg' => $e,
+                    'msg' => $e['errorInfo'][2],
                 );
             }
         } else {
@@ -167,7 +174,7 @@ class WebServiceController extends Controller
             DB::rollback();
             $jo = array(
                 'success' => false,
-                'msg' => $e,
+                'msg' => $e['errorInfo'][2],
             );
         }
         return $jo;
@@ -219,17 +226,43 @@ class WebServiceController extends Controller
             DB::rollback();
             $jo = array(
                 'success' => false,
-                'msg' => $e,
+                'msg' => $e['errorInfo'][2],
             );
         }
         return $jo;
     }
 
-    public function test()
+    public function sendMessage(Request $request)
     {
-        $uid = '16080003';
-        $password = 'pa676579';
-
+        try {
+            $getData = $request->json()->all();
+            foreach ($getData as $list) {
+                $recipientID = $server->getUserByerpID($list['recipientID']);
+                $message = array(
+                    'title' => $list['title'],
+                    'content' => $list['content'],
+                    'messageID' => $list['messageID'],
+                    'systemID' => $list['systemID'],
+                    'uid' => $list['uid'],
+                    'recipientID' => $recipientID,
+                    'url' => $list['url'],
+                    'audioFile' => $list['audioFile'],
+                    'projectID' => '',
+                    'productID' => '',
+                    'processID' => '',
+                );
+                $this->dispatch(new SendNotify($message));
+            }
+            return array(
+                'success' => true,
+                'msg' => '訊息送出成功!',
+            );
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'msg' => $e['errorInfo'][2],
+            );
+        }
         
     }
 }

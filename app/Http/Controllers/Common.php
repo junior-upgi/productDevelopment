@@ -139,6 +139,20 @@ class Common
             );
         }
     }
+    public function singleSignOn($account, $password, $type)
+    {
+        switch ($type) {
+            case 0:
+                return $this->upgiDB($account, $password);
+                break;
+            case 1:
+                return $this->upgiLDAP($account, $password);
+                break;
+            default:
+                return false;
+        }
+        return false;
+    }
     public function upgiDB($account, $password)
     {
         return Auth::attempt([
@@ -148,15 +162,10 @@ class Common
     }
     public function upgiLDAP($account, $password)
     {
-        $ldaphost = "192.168.168.86";  // your ldap servers
-        $ldapport = 389;                 // your ldap server's port number
-
-        // Connecting to LDAP
-        $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
+        $ldapconn = $this->connLDAP();
         if ($ldapconn) {
-            ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
             try {
-                $ldapbind = ldap_bind($ldapconn, "uid=$account,ou=user,dc=upgi,dc=ddns,dc=net", $password);
+                $ldapbind = $this->checkLDAP($account, $password);
             } catch (\Exception $e) {
                 return false;
             }
@@ -177,5 +186,50 @@ class Common
         } else {
             return false;
         }
+    }
+    public function connLDAP()
+    {
+        $ldaphost = "192.168.168.86";  // your ldap servers
+        $ldapport = 389;                 // your ldap server's port number 
+        // Connecting to LDAP
+        $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
+        ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        return $ldapconn;
+    }
+    public function checkLDAP($account, $password, $conn = null)
+    {
+        $conn = $this->getLDAPConn($conn);
+        try {
+            return ldap_bind($conn, "uid=$account,ou=user,dc=upgi,dc=ddns,dc=net", $password);
+        } catch (\Exception $e) {
+            return false;
+        }
+        return false;
+    }
+    //新增LDAP資料
+    function addLDAP($uid, $password, $conn = null)
+    {
+        $conn = $this->getLDAPConn($conn);
+        $adminac = env('LDAP_ADMIN', '');
+        $adminpw = env('LDAP_PW', '');
+        ldap_bind($conn, $adminac, $adminpw);
+        $set = array('userPassword' => $password);
+        return ldap_add($this->_ldapconn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
+    }
+
+    //修改LDAP資料
+    function modifyLDAP($uid, $password, $conn = null)
+    {
+        $conn = $this->getLDAPConn($conn);
+        $adminac = env('LDAP_ADMIN', '');
+        $adminpw = env('LDAP_PW', '');
+        ldap_bind($conn, $adminac, $adminpw);
+        $set = array('userPassword' => $password);
+        return ldap_modify($conn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
+    }
+
+    public function getLDAPConn($conn)
+    {
+        if (is_null($conn)) $conn = $this->connLDAP();
     }
 }

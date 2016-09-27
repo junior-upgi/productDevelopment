@@ -203,4 +203,29 @@ class ProcessController extends Controller
         return view('Mobile.SettingCost')
             ->with('processData', $processData);
     }
+    public function userSaveCost(Request $request)
+    {
+        $processID = $request->input('ProcessID');
+        $oldTimeCost = $this->projectrepositories->getProcessByID($processID)->timeCost;
+        $timeCost = $request->input('TimeCost');
+        if ($oldTimeCost != $timeCost) {
+            $params = array(
+                'timeCost' => $timeCost
+            );
+            $update = $this->projectRepositories->updateProcess($processID, $params);
+            if ($update['success']) {
+                //發送通知給後續工序負責人
+                
+                return $update;
+            } else {
+                return $update;
+            }
+        } else {
+            //沒有變更工時，不改變後續工序時間
+            return array(
+                'success' => true,
+                'msg' => '沒有變更資料。',
+            );
+        }
+    }
 }

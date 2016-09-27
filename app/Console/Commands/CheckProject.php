@@ -6,10 +6,10 @@ use Illuminate\Console\Command;
 use File;
 use App\Service\ProjectCheckService;
 
-class CheckProcess extends Command
+class CheckProject extends Command
 {
     // 命令名稱
-    protected $signature = 'checkProcess';
+    protected $signature = 'checkProject';
 
     // 說明文字
     protected $description = '[檢核]每日檢核程序執行狀態';

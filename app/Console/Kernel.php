@@ -18,7 +18,6 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         //\App\Console\Commands\Inspire::class,
-        \App\Console\Commands\TestLog::class,
         \App\Console\Commands\CheckProcess::class,
         \App\Console\Commands\CheckProduct::class,
         \App\Console\Commands\CheckProject::class,

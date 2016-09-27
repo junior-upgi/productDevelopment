@@ -237,6 +237,7 @@ class ProjectRepositories
         try {
             $this->projectProcess->getConnection()->beginTransaction();
             $process = $this->projectProcess->where('ID', $processID);
+
             $process->update($params);
 
             $this->updateChildsDate($processID);
@@ -361,6 +362,12 @@ class ProjectRepositories
         return $this->processTree
             ->where('projectProcessID', $processID)
             ->where('parentProcessID', '<>', '00000000-0000-0000-0000-000000000000')
+            ->get();
+    }
+    public function getChildrenList($processID)
+    {
+        return $this->processTree
+            ->where('parentProcessID', $processID)
             ->get();
     }
     public function deleteProcess($processID)

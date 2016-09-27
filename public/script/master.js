@@ -1,6 +1,8 @@
 function goLoading(msg) {
     $.blockUI({ 
         baseZ: 30000,
+        centerX: true, 
+        centerY: true, 
         css: { 
             border: 'none', 
             padding: '15px', 
@@ -10,7 +12,7 @@ function goLoading(msg) {
             opacity: .5, 
             color: '#fff',
             theme: true,
-            
+            textAlign: 'center', 
         },
         message: msg,
     }); 

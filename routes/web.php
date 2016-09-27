@@ -18,8 +18,6 @@ Route::get('ldap', 'ProductDevelopment\projectController@ldap');
 Route::get('test', 'Service\WebServiceController@test');
 //Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
 
-Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
-
 Route::get('phpinfo', function () {
     phpinfo();
 });
@@ -37,6 +35,7 @@ Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
     Route::get('MessageTime/{time}', 'Service\WebServiceController@messageTime');
+    Route::post('SendMessage', 'Service\WebServiceController@sendMessage');
     Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
@@ -47,13 +46,13 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
     Route::post('InsertProject', 'ProductDevelopment\ProjectController@insertProject');
 
     Route::get('EditProject/{projectID}', 'ProductDevelopment\ProjectController@editProject');
-    Route::post('UpdateProject/', 'ProductDevelopment\ProjectController@updateProject');
+    Route::post('UpdateProject', 'ProductDevelopment\ProjectController@updateProject');
 
     Route::get('GetStaffByNodeID/{nodeID}', 'ProductDevelopment\ProjectController@getStaffByNodeID');
 
     Route::get('Delete/{projectID}', 'ProductDevelopment\ProjectController@deleteProject');
 
-    Route::get('ShowProject/', 'ProductDevelopment\ProjectController@showProject');
+    Route::get('ShowProject', 'ProductDevelopment\ProjectController@showProject');
     //Route::get('ShowProduct/{Project}', 'ProductDevelopment\ProjectController@showProduct');
     //Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
 });
@@ -66,7 +65,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
     Route::post('InsertProduct', 'ProductDevelopment\ProductController@insertProduct');
 
     Route::get('EditProduct/{productID}', 'ProductDevelopment\ProductController@editProduct');
-    Route::post('UpdateProduct/', 'ProductDevelopment\ProductController@updateProduct');
+    Route::post('UpdateProduct', 'ProductDevelopment\ProductController@updateProduct');
 
     Route::get('ProductExecute/{processID}', 'ProductDevelopment\ProductController@productExecute');
 
@@ -81,8 +80,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
     Route::get('GetProcessData/{processID}', 'ProductDevelopment\ProcessController@getProcessData');
     Route::get('GetPreparationList/{productID}/{processID}', 'ProductDevelopment\ProcessController@getPreparationList');
     Route::any('SetPreparation/{productID}/{processID}/{select}', 'ProductDevelopment\ProcessController@setPreparation');
-    Route::post('SaveProcessSort/', 'ProductDevelopment\ProcessController@saveProcessSort');
-    Route::post('UpdateProcess/', 'ProductDevelopment\ProcessController@updateProcess');
+    Route::post('SaveProcessSort', 'ProductDevelopment\ProcessController@saveProcessSort');
+    Route::post('UpdateProcess', 'ProductDevelopment\ProcessController@updateProcess');
 
     Route::get('ProcessComplete/{processID}', 'ProductDevelopment\ProcessController@processComplete');
 
@@ -113,6 +112,10 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Report'], function() {
     Route::any('ProductExecuteRate', 'ProductDevelopment\ReportController@productExecuteRate');
 });
 
-//'middleware' => 'auth',
-
-//Route::auth();
+Route::group(['prefix' => 'Mobile'], function() {
+    Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
+    Route::post('SaveCost', 'ProductDevelopment\ProcessController@userSaveCost');
+    Route::get('testSend', function () {
+        return view('Mobile.SendMessage');
+    });
+});
