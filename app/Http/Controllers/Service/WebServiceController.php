@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
+use App\Http\Controllers\ServerData;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use App\Jobs\Sendnotify;
@@ -237,7 +238,7 @@ class WebServiceController extends Controller
         try {
             $getData = $request->json()->all();
             foreach ($getData as $list) {
-                $recipientID = $server->getUserByerpID($list['recipientID']);
+                $recipientID = $this->server->getUserByerpID($list['recipientID'])->ID;
                 $message = array(
                     'title' => $list['title'],
                     'content' => $list['content'],

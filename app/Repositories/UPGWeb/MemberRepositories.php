@@ -1,5 +1,5 @@
 <?php
-namespace App\Repositories;
+namespace App\Repositories\UPGWeb;
 
 use App\Models\UPGWeb\ERPStaff;
 

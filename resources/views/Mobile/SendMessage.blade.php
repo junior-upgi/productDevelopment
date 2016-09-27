@@ -3,10 +3,11 @@
 	<script>
         function send() {
             var message = getMessage();
-            var url = 'http://upgi.ddns.net/productDevelopment/Service/SendMessage';
-            $ajax(function () {
+            //var sendurl = 'http://upgi.ddns.net/productDevelopment/Service/SendMessage';
+            var sendurl = url +  '/Service/SendMessage';
+            $.ajax({
+                url: sendurl,
                 type: 'POST',
-                url: url,
                 headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, //Laravel驗證表單用
                 data: message,
                 dataType: 'JSON',
@@ -43,8 +44,7 @@
                 }
             ]
             */
-            var send1 = new array();
-            send1 = array(
+            var send1 = {
                 "title": "測試訊息1",
                 "content": "測試內容1",
                 "messageID": 1,
@@ -53,9 +53,8 @@
                 "recipientID": "16080003",
                 "url": "https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/",
                 "audioFile": "warning.mp3"
-            );
-            var send2 = new array();
-            send2 = array(
+            };
+            var send2 = {
                 "title": "測試訊息2",
                 "content": "測試內容2",
                 "messageID": 0,
@@ -64,14 +63,14 @@
                 "recipientID": "16080003",
                 "url": "http://blog.tonycube.com/2015/01/laravel-9-form.html",
                 "audioFile": "siren.mp3"
-            );
-            var message = new array();
+            };
+            var message = new Array();
             message.push(send1);
             message.push(send2);
             return JSON.stringify(message);
         }
     </script>
     <form id="SetCostForm" class="form-horizontal" role="form" method="POST" style="margin-top:15px;">
-        <button type="submit" class="btn btn-primary btn-sm" id="BtnSend" name="BtnSend" onclick="send()">測試</button>
+        <button type="button" class="btn btn-primary btn-sm" id="BtnSend" name="BtnSend" onclick="send()">測試</button>
     </form>
 @endsection
