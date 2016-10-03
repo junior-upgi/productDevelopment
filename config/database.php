@@ -1,7 +1,7 @@
 <?php
-$MySqlHost = '192.168.168.86';
+//$MySqlHost = '192.168.168.86';
 //$MySqlHost = '192.168.1.252';
-//MySqlHost = 'upgi.ddns.net';
+$MySqlHost = 'upgi.ddns.net';
 return [
 
     /*
@@ -58,7 +58,7 @@ return [
             'driver' => 'mysql',
             'host' => $MySqlHost,
             'port' => '3306',
-            'database' => 'productDevelopment',
+            'database' => 'upgiSystem',
             'username' => 'spark',
             'password' => 'pa676579',
             'charset' => 'utf8',

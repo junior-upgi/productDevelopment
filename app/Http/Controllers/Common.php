@@ -6,18 +6,22 @@ use App\Http\Controllers\Controller;
 use DB;
 use Auth;
 use App\Models\upgiSystem\User;
+use App\Models\upgiSystem\File;
 
 class Common
 {
     public $DB;
     public $user;
+    public $file;
 
     public function __construct(
         DB $DB,
-        User $user
+        User $user,
+        File $file
     ) {
         $this->DB = $DB;
         $this->user = $user;
+        $this->file = $file;
     }
     public function transaction()
     {
@@ -231,5 +235,25 @@ class Common
     public function getLDAPConn($conn)
     {
         if (is_null($conn)) $conn = $this->connLDAP();
+    }
+
+    public function getFile($id)
+    {
+        $file = $this->file;
+        return $file->getFileCode($id);
+    }
+    public function saveFile($data)
+    {
+        $name = $data->getClientOriginalName();
+        $fe = $data->getClientOriginalExtension();
+        $type = $data->getMimeType();
+        $file = $this->file;
+        $id = $this->getNewGUID();
+        $result = $file->saveFile($data, $type, $name, $fe, $id);
+        if ($result) {
+            return $id;
+        } else {
+            return null;
+        }
     }
 }

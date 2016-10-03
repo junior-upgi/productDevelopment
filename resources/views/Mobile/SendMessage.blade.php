@@ -45,17 +45,17 @@
             ]
             */
             var send1 = {
-                "title": "測試訊息1",
+                "title": "測試訊息111111",
                 "content": "測試內容1",
                 "messageID": 1,
                 "systemID": 1,
                 "uid": "",
                 "recipientID": "16080003",
-                "url": "https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/",
+                "url": "",
                 "audioFile": "warning.mp3"
             };
             var send2 = {
-                "title": "測試訊息2",
+                "title": "測試訊息222222",
                 "content": "測試內容2",
                 "messageID": 0,
                 "systemID": 0,

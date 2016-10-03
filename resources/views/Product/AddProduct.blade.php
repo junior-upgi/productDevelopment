@@ -33,7 +33,7 @@
         <div class="form-group">
             <label for="DeliveredQuantity" class="col-md-2 control-label">交貨數量</label>
             <div class="col-md-2">
-                <input type="number" class="form-control text-right" min="0" max="9999999" name="DeliveredQuantity" value="0" required>
+                <input type="number" class="form-control text-right" min="0" max="9999999" name="DeliveredQuantity" value="0">
             </div>
         </div>
         <div class="form-group">
@@ -61,11 +61,36 @@
                 </select>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">產品圖片</label>
+            <div class="col-md-5">
+                <input id="img" name="img" type="file" class="file-loading" data-show-upload="false" accept="image/*">
+            </div>
+            <script>
+                $("#img").fileinput({
+                    language: 'zh-TW',
+                    previewFileType: "image",
+                    allowedFileExtensions: ["jpg", "jpeg", "png", "gif"],
+                    previewClass: "bg-warning",
+                    browseClass: "btn btn-success",
+                    browseLabel: "選擇圖片",
+                    browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
+                    removeClass: "btn btn-danger",
+                    removeLabel: "移除",
+                    removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
+                    fileActionSettings: {
+                        showZoom: false,
+                        zoomIcon: "",
+                        zoomClass: "",
+                        zoomTitle: "",
+                    }
+                });
+            </script>
+        </div>
         <div class="form-group text-right col-md-7">
             <a href="{{url('/')}}/Product/ProductList/{{$ProjectID}}" class="btn btn-default">取消</a>
             <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
                 id="BtnSave" name="BtnSave" onclick="DoInsert()">儲存</button>
         </div>
-        
     </form>
 @endsection

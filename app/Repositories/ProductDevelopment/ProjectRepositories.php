@@ -484,4 +484,21 @@ class ProjectRepositories
             ->where('processEndDate', '<', $now)
             ->get();
     }
+    public function getProductPic($id)
+    {
+        $pic = $this->getProductByID($id)->contentImg;
+        if (!isset($pic)) {
+            $pic = $this->projectProcess
+            ->where('projectContentID', $id)
+            ->where(function ($q)
+            {
+                $q->where('processImg', '<>', null)
+                ->orWhere('processImg', '<>', '');
+            })
+            ->orderBy('sequentialIndex', 'desc')
+            ->first();
+            if (isset($pic)) return $pic->processImg;
+        }
+        return $pic;
+    }
 }
