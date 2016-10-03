@@ -10,7 +10,6 @@
         <li class="active">產品開發流程</li>
     </ol>
     <!--product info panel-->
-    @inject('system', 'App\Presenters\SystemPresenter')
     @php 
         $Deadline = strtotime($ProductData->deadline);
         Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole='';
@@ -73,27 +72,23 @@
                     $EndDate = strtotime($list->processStartDate . '+' . ((int)$list->timeCost - 1)  . ' day');
                     $admin = 'disabled';
                     $self = 'disabled';
-                    $complete = 'disabled';
                     if (Auth::user()->authorization === '99') {
                         $admin = '';
                     }
                     if (Auth::user()->erpID === $list->staffID || Auth::user()->authorization === '99') {
                         $self = '';
                     }
-                    if ($list->complete == '0') {
-                        $complete = '';
-                    }
                 @endphp
                 @if($list->complete == "0")
                     <tr id="{{$list->ID}}" class="sTD">
                 @elseif($list->complete == '1')
-                    <tr id="{{$list->ID}}" class="sTD">
+                    <tr id="{{$list->ID}}" class="ui-state-disabled sTD">
                 @endif
                     <td>
                         <!--<button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')">編輯</button>-->
                         @if($admin == '')
                             <div class="dropdown ">
-                                <button type="button" id="SetBtn" class="btn btn-default" {{$complete}} data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
+                                <button type="button" id="SetBtn" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
                                     <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
                                 </button>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
@@ -106,7 +101,8 @@
                                 </ul>
                             </div>
                         @else
-                            <button type="button" class="btn btn-sm btn-default" {{$complete}} {{$self}} onclick="EditShow('{{$list->ID}}')"><span class="glyphicon glyphicon-edit"></span></button>
+                            <button type="button" class="btn btn-sm btn-default" {{$self}} onclick="EditShow('{{$list->ID}}')"><span class="glyphicon glyphicon-edit"></span></button>
+                            
                         @endif
                     </td>
                     <td>{{$list->sequentialIndex}}</td>
@@ -118,7 +114,6 @@
                     </td>
                     <td>
                         <span>{{$list->referenceName}}</span>
-                        {!! $system->getIconPic($list->processImg) !!}
                     </td>
                     <td>
                         <span>{{$list->name}}</span>
@@ -179,7 +174,7 @@
                         @endif
                     </td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger {{$complete}} {{$admin}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button type="button" class="btn btn-sm btn-danger {{$admin}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             @endforeach
@@ -188,5 +183,4 @@
     @include('Process.AddProcess')
     @include('Process.EditProcess')
     @include('Process.SetPreparation')
-    @include('Process.PicModal')
 @endsection

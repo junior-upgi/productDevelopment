@@ -35,8 +35,6 @@ use App\Models;
 
 use App\Service\ProjectCheckService;
 
-use App\Repositories\mobileMessagingSystem\MobileRepositories;
-
 /*
 1、提供開發案系統與推播App傳遞資料
 */
@@ -46,16 +44,13 @@ class WebServiceController extends Controller
 
     public $server;
     public $projectCheck;
-    public $mobile;
 
     public function __construct(
         ServerData $server,
-        ProjectCheckService $projectCheck,
-        MobileRepositories $mobile
+        ProjectCheckService $projectCheck
     ) {
         $this->server = $server;
         $this->projectCheck = $projectCheck;
-        $this->mobile = $mobile;
     }
 
     /*
@@ -257,8 +252,7 @@ class WebServiceController extends Controller
                     'productID' => '',
                     'processID' => '',
                 );
-                //$this->dispatch(new SendNotify($message));
-                $this->send($message);
+                $this->dispatch(new SendNotify($message));
             }
             return array(
                 'success' => true,
@@ -271,21 +265,5 @@ class WebServiceController extends Controller
             );
         }
         
-    }
-    public function send($message)
-    {
-        $m = $message;
-        $title = $m['title'];
-        $content = $m['content'];
-        $messageID = $m['messageID'];
-        $systemID = $m['systemID'];
-        $uid = $m['uid'];
-        $recipientID = $m['recipientID'];
-        $url = $m['url'];
-        $audioFile = $m['audioFile'];
-        $projectID = $m['projectID'];
-        $productID = $m['productID'];
-        $processID = $m['processID'];
-        $this->mobile->insertNotify($title, $content, $messageID, $systemID, $uid, $recipientID, $url, $audioFile, $projectID, $productID, $processID);
     }
 }

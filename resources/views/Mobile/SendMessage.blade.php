@@ -45,23 +45,50 @@
             ]
             */
             var send1 = {
-                "title": "測試訊息111111",
+<<<<<<< HEAD
+<<<<<<< HEAD
+                "title": "開始執行開發",
+                "content": "990001產品開始執行開發",
+=======
+=======
+>>>>>>> parent of 40e156f... 新增產品與程序圖片上傳功能
+                "title": "測試訊息1",
                 "content": "測試內容1",
+>>>>>>> parent of 40e156f... 新增產品與程序圖片上傳功能
                 "messageID": 1,
-                "systemID": 1,
+                "systemID": 0,
                 "uid": "",
-                "recipientID": "16080003",
+<<<<<<< HEAD
+<<<<<<< HEAD
+                "recipientID": "manager",
                 "url": "",
                 "audioFile": "warning.mp3"
             };
             var send2 = {
-                "title": "測試訊息222222",
+                "title": "[OP]噴漆加工 已延誤",
+                "content": "[OP]噴漆加工 已延誤 3天",
+                "messageID": 1,
+=======
+                "recipientID": "16080003",
+                "url": "https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/",
+                "audioFile": "warning.mp3"
+            };
+            var send2 = {
+=======
+                "recipientID": "16080003",
+                "url": "https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/",
+                "audioFile": "warning.mp3"
+            };
+            var send2 = {
+>>>>>>> parent of 40e156f... 新增產品與程序圖片上傳功能
+                "title": "測試訊息2",
                 "content": "測試內容2",
                 "messageID": 0,
+>>>>>>> parent of 40e156f... 新增產品與程序圖片上傳功能
                 "systemID": 0,
                 "uid": "",
-                "recipientID": "16080003",
-                "url": "http://blog.tonycube.com/2015/01/laravel-9-form.html",
+                "recipientID": "manager",
+                "url": "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/F3E39738-3994-0469-F186-943368E6FF54/manager",
                 "audioFile": "siren.mp3"
             };
             var message = new Array();

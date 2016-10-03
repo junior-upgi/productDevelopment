@@ -52,19 +52,7 @@ class ProcessController extends Controller
     public function insertProcess(Request $request)
     { 
         try {
-            $processID = $this->common->getNewGUID();
-            $file = $request->file('img');
-            if (isset($file)) {
-                $pic = $this->common->saveFile($file);
-                if (!isset($pic)) {
-                    return array(
-                        'success' => false,
-                        'msg' => '圖片上傳失敗',
-                    );
-                }
-                $upload = true;
-            }
-            
+            $processID = $this->common->getNewGUID();;
             DB::beginTransaction();
             $params = array(
                 'ID' => $processID,
@@ -76,10 +64,8 @@ class ProcessController extends Controller
                 'staffID' => iconv("UTF-8", "BIG-5", $request->input('StaffID')),
                 'sequentialIndex' => $this->projectRepositories->getMaxSeqIndex($request->input('ProductID')) + 1,
                 'processStartDate' => $request->input('ProcessStartDate'),
-                //'processImg' => $pic,
                 //'created_at' => Carbon::now(),
             );
-            if (isset($upload)) $params['processImg'] = $pic;
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($params);
 
@@ -117,7 +103,6 @@ class ProcessController extends Controller
         $staffList = $this->serverData->getStaffByNodeID($processData->nodeID);
         $jo = array();
         if ($processData && $staffList) {
-            $pic = $this->common->getFile($processData->processImg);
             $jo = array(
                 'success' => true,
                 'ID' => $processData->ID,
@@ -128,7 +113,6 @@ class ProcessController extends Controller
                 'StaffID' => $processData->staffID,
                 'NodeID' => $processData->nodeID,
                 'StaffList' => $staffList,
-                'processImg' => $pic,
                 'ProcessStartDate' => date('Y-m-d', strtotime($processData->processStartDate)),
             );
         } else {
@@ -151,18 +135,6 @@ class ProcessController extends Controller
     {
         $processID = $request->input('ProcessID');
         $processName = $request->input('StaffID');
-        $file = $request->file('img');
-        if (isset($file)) {
-            $pic = $this->common->saveFile($file);
-            if (!isset($pic)) {
-                return array(
-                    'success' => false,
-                    'msg' => '圖片上傳失敗',
-                );
-            }
-            $upload = true;
-        }
-        
         $params = array(
             'referenceName' => $request->input('ProcessName'),
             'referenceNumber' => $request->input('ProcessNumber'),
@@ -170,9 +142,7 @@ class ProcessController extends Controller
             'timeCost' => $request->input('TimeCost'),
             'staffID' => $request->input('StaffID'),
             'processStartDate' => $request->input('ProcessStartDate'),
-            //'processImg' => $pic,
         );
-        if (isset($upload)) $params['processImg'] = $pic;
         return $this->projectRepositories->updateProcess($processID, $params);
     }
     //

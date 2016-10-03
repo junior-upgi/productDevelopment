@@ -52,18 +52,6 @@ class ProductController extends Controller
     //
     public function insertProduct(Request $request)
     {
-        $file = $request->file('img');
-        if (isset($file)) {
-            $pic = $this->common->saveFile($file);
-            if (!isset($pic)) {
-                return array(
-                    'success' => false,
-                    'msg' => '圖片上傳失敗',
-                );
-            }
-            $upload = true;
-        }
-        
         $params = array(
             'projectID' => $request->input('ProjectID'),
             'referenceNumber' => $request->input('ProductNumber'),
@@ -72,10 +60,8 @@ class ProductController extends Controller
             'deliveredQuantity' => $request->input('DeliveredQuantity'),
             'deadline' => $request->input('Deadline'),
             'priorityLevel' => $request->input('PriorityLevel'),
-            //'contentImg' => $pic,
             'created_at' => Carbon::now(),
         );
-        if (isset($upload)) $params['contentImg'] = $pic;
         return $this->projectRepositories
             ->insertData($this->projectRepositories->projectContent, $params);
     }
@@ -90,18 +76,6 @@ class ProductController extends Controller
     public function updateProduct(Request $request)
     {
         $productID = $request->input('ProductID');
-        $file = $request->file('img');
-        if (isset($file)) {
-            $pic = $this->common->saveFile($file);
-            if (!isset($pic)) {
-                return array(
-                    'success' => false,
-                    'msg' => '圖片上傳失敗',
-                );
-            }
-            $upload = true;
-        }
-        
         $params = array(
             'referenceNumber' => $request->input('ProductNumber'),
             'referenceName' => $request->input('ProductName'),
@@ -109,9 +83,7 @@ class ProductController extends Controller
             'deliveredQuantity' => $request->input('DeliveredQuantity'),
             'deadline' => $request->input('Deadline'),
             'priorityLevel' => $request->input('PriorityLevel'),
-            //'contentImg' => $pic,
         );
-        if (isset($upload)) $params['contentImg'] = $pic;
         return $this->projectRepositories
             ->updateData($this->projectRepositories->projectContent, $params, $productID);
     }

@@ -7,7 +7,6 @@
         <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
         <li class="active">開發產品清單</li>
     </ol>
-    @inject('system', 'App\Presenters\SystemPresenter')
     <!--project info panel-->
     <p class="bg-info">
         <span style="margin-right:20px;">專案代碼：{{$ProjectData->referenceNumber}}</span>
@@ -55,10 +54,7 @@
                     <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
                     <td><a href="{{url('/')}}/Process/ProcessList/{{$list->ID}}" class="btn btn-sm btn-info">時程</a></td>
                     <td>{{$list->referenceNumber}}</td>
-                    <td>
-                        {{$list->referenceName}}
-                        {!! $system->getProductPic($list->ID) !!}
-                    </td>
+                    <td>{{$list->referenceName}}</td>
                     <td class="text-right">{{$list->requiredQuantity}}</td>
                     <td class="text-right">{{$list->deliveredQuantity}}</td>
                     <td>
@@ -106,5 +102,4 @@
     <div class="text-center">
         {{$ProductList->links()}}
     </div>
-    @include('Process.PicModal')
 @endsection

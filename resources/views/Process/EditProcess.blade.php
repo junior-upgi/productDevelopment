@@ -68,13 +68,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-md-4">完成品圖片</label>
-                            <div class="col-md-6">
-                                <div id="editImgDiv">
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>

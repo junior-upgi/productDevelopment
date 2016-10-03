@@ -60,10 +60,7 @@ $(function () {
         headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
     });
 })
-function showimage(source) {
-    $("#PicModal").find("#img_show").html("<image src='"+source+"' class='carousel-inner img-responsive img-rounded' />");
-    $("#PicModal").modal('show');
-}
+
 function SaveSort() {
     var sort = [];
     $("#tableSort tr").each(function (index, element) {
@@ -151,33 +148,6 @@ function EditShow(ID) {
                     }
                     $("#EditProcessForm #StaffID option[value=" + result.StaffID + "]").attr('selected', true);
                 }
-                if (result.processImg != null) {
-                    var img = "<img src='" + result.processImg + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
-                } else {
-                    var img = null;
-                }
-                $("#editImgDiv").empty();
-                $("#editImgDiv").html("<input id='editImg' name='img' type='file' class='file-loading' data-show-upload='false' accept='image/*'>");
-                $("#editImg").fileinput({
-                    language: 'zh-TW',
-                    previewFileType: "image",
-                    allowedFileExtensions: ["jpg", "jpeg", "png", "gif"],
-                    previewClass: "bg-warning",
-                    browseClass: "btn btn-success",
-                    browseLabel: "選擇圖片",
-                    browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
-                    removeClass: "btn btn-danger",
-                    removeLabel: "移除",
-                    removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
-                    fileActionSettings: {
-                        showZoom: false,
-                        showDrag: false,
-                    },
-                    initialPreview: 
-                        [img]
-                });
-
-                $("#editPreview").attr("src", img);
                 $('#BtnEdit').button('reset');
                 $('#EditModal').modal('show');
             } else {

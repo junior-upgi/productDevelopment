@@ -60,30 +60,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">完成品圖片</label>
-                        <div class="col-md-6">
-                            <input id="img" name="img" type="file" class="file-loading" data-show-upload="false" accept="image/*">
-                        </div>
-                        <script>
-                            $("#img").fileinput({
-                                language: 'zh-TW',
-                                previewFileType: "image",
-                                allowedFileExtensions: ["jpg", "jpeg", "png", "gif"],
-                                previewClass: "bg-warning",
-                                browseClass: "btn btn-success",
-                                browseLabel: "選擇圖片",
-                                browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
-                                removeClass: "btn btn-danger",
-                                removeLabel: "移除",
-                                removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
-                                fileActionSettings: {
-                                    showZoom: false,
-                                    showDrag: false,
-                                }
-                            });
-                        </script>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
