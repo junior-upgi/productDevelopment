@@ -7,8 +7,8 @@
             var sendurl = url +  '/Service/SendMessage';
             $.ajax({
                 url: sendurl,
-                type: 'POST',
-                headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, //Laravel驗證表單用
+                type: 'GET',
+                //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, //Laravel驗證表單用
                 data: message,
                 dataType: 'JSON',
                 error: function (xhr) {
@@ -47,8 +47,6 @@
             var send1 = {
                 "title": "開始執行開發",
                 "content": "990001產品開始執行開發",
-                "title": "測試訊息1",
-                "content": "測試內容1",
                 "messageID": 1,
                 "systemID": 0,
                 "uid": "",
@@ -60,8 +58,10 @@
                 "title": "[OP]噴漆加工 已延誤",
                 "content": "[OP]噴漆加工 已延誤 3天",
                 "messageID": 1,
-                "recipientID": "16080003",
-                "url": "https://blog.wu-boy.com/2011/04/%E4%BD%A0%E4%B8%8D%E5%8F%AF%E4%B8%8D%E7%9F%A5%E7%9A%84-json-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%B4%B9/",
+                "systemID": 0,
+                "uid": "",
+                "recipientID": "manager",
+                "url": "upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/F3E39738-3994-0469-F186-943368E6FF54/manager",
                 "audioFile": "warning.mp3"
             };
             var message = new Array();

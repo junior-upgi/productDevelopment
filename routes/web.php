@@ -22,6 +22,12 @@ Route::get('phpinfo', function () {
     phpinfo();
 });
 
+/*
+Route::get('csrfToken', function () {
+    return csrf_token();
+});
+*/
+
 Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
@@ -35,7 +41,7 @@ Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
     Route::get('MessageTime/{time}', 'Service\WebServiceController@messageTime');
-    Route::post('SendMessage', 'Service\WebServiceController@sendMessage');
+    Route::any('SendMessage', 'Service\WebServiceController@sendMessage');
     Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
