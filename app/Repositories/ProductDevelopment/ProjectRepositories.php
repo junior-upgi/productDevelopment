@@ -481,13 +481,13 @@ class ProjectRepositories
         return $delayList = $this->vProcessList
             ->where('execute', '1')
             ->where('complete', '0' )
-            ->where('processEndDate', '<', $now)
+            ->where('processEndDate', '<=', $now)
             ->get();
     }
-    public function checkOverdue($processID)
+    public function checkOverdue($productID)
     {
         $process = $this->vProcessList
-            ->where('ID', $processID)
+            ->where('productID', $productID)
             ->orderBy('processEndDate', 'desc')
             ->first();
         if (date('Y-m-d', strtotime($process->processEndDate)) > date('Y-m-d', strtotime($process->deadline))) {

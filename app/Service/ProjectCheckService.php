@@ -91,7 +91,7 @@ class ProjectCheckService
 
         foreach ($processList as $list) {
             //通知負責人修正程序工期延至今日
-            $extension = $this->notifyExtension($lis, $jo);
+            $extension = $this->notifyExtension($list, $jo);
             $jo = $extension;
             //檢查是否最後完成時間己逾期
             $overdue = $this->notifyOverdue($list, $jo);
@@ -103,12 +103,13 @@ class ProjectCheckService
     {
         $mobile = $this->mobile;
         $server = $this->serverData;
+        $startDate = date('Y-m-d', strtotime($list->processStartDate));
         $now = date('Y-m-d', strtotime($this->carbon->now()));
-        $newCost = (strtotime($now) - strtotime($list->processStartDate)) / (60*60*24);
+        $newCost = ((strtotime($now) - strtotime($startDate)) / (60*60*24)) + 1;
         $params = array(
             'timeCost' => $newCost,
         );
-        $setCost = $project->updateProcess($list->ID, $params);
+        $setCost = $this->project->updateProcess($list->ID, $params);
         if (!$setCost['success']) {
             array_push($jo, $this->setLog(false, 'up cost error', $setCost['msg'], '', $list->projectID, $list->productID, $list->ID));
             return $jo;
@@ -121,7 +122,7 @@ class ProjectCheckService
         $audioFile="";
         $projectID = $list->projectID;
         $productID = $list->productID;
-        $processID = $list->processID;
+        $processID = $list->ID;
         $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
         array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
         return $jo;
@@ -131,23 +132,23 @@ class ProjectCheckService
         $project = $this->project;
         $mobile = $this->mobile;
         $server = $this->serverData;
-        $overdue = $project->checkOverdue($list->ID);
+        $overdue = $project->checkOverdue($list->productID);
         if ($overdue) {
             //通知業務
             $sales = $server->getUserByerpID($list->salesID); 
             $title = "[$list->projectNumber]$list->projectName [$list->productNumber]$list->projectName 逾期警訊"; 
             $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
-            $url = route('OverdueInfo', ['processID' => $list->ID]);
+            $url = route('overdueInfo', ['processID' => $list->ID]);
             $audioFile="";
             $projectID = $list->projectID;
             $productID = $list->productID;
-            $processID = $list->processID;
-            $result = $mobile->insertNotify($title, $content, 1, 0, '', $s->ID, $url, $audioFile, $projectID, $productID, $processID);
+            $processID = $list->ID;
+            $result = $mobile->insertNotify($title, $content, 1, 0, '', $sales->ID, $url, $audioFile, $projectID, $productID, $processID);
             array_push($jo, $this->setLog($result['success'], 'notify sales', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
         }
         return $jo;
     }
-    public function setLog($success, $type, $msg, $broadcastID, $projectID, $productID, $processsID)
+    public function setLog($success, $type, $msg, $broadcastID, $projectID, $productID, $processID)
     {
         $log = array(
             'success' => $success,
