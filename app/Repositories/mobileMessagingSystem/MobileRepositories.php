@@ -108,7 +108,7 @@ class MobileRepositories
             $this->broadcastStatus->getConnection()->commit();
             return array(
                 'success' => true,
-                'msg' => '完成寫入',
+                'msg' => '完成訊息寫入',
                 'broadcastID' => $broadcastID,
             );
         } catch (\PDOException $e) {

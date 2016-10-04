@@ -401,7 +401,7 @@ class ProjectRepositories
             $this->projectProcess->getConnection()->rollback();
             $jo = array(
                 'success' => false,
-                'msg' => $e,
+                'msg' => $e['errorInfo'][2],
             );
         }
         
@@ -483,5 +483,17 @@ class ProjectRepositories
             ->where('complete', '0' )
             ->where('processEndDate', '<', $now)
             ->get();
+    }
+    public function checkOverdue($processID)
+    {
+        $maxDate = $this->vProcessList
+            ->where('ID', $processID)
+            ->orderBy('processEndDate', 'desc')
+            ->first()->processEndDate;
+        $now = $this->carbon->now();
+        if (date('Y-m-d', strtotime($now)) > date('Y-m-d', strtotime($maxDate))) {
+            return true;
+        }
+        return false;
     }
 }

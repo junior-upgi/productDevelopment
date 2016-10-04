@@ -1,14 +1,19 @@
 @extends('layouts.mobileLayout')
 @section('content')
 	<script>
-        function send() {
+        function send(type) {
             var message = getMessage();
-            //var sendurl = 'http://upgi.ddns.net/productDevelopment/Service/SendMessage';
-            var sendurl = url +  '/Service/SendMessage';
+            if (type == 'true') {
+                var csrf = getCSRF();
+                var sendurl = 'http://upgi.ddns.net/productDevelopment/Service/SendMessage';
+            } else {
+                var csrf = $('meta[name="csrf-token"]').attr('content');
+                var sendurl = url +  '/Service/SendMessage';
+            }
             $.ajax({
                 url: sendurl,
-                type: 'GET',
-                //headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }, //Laravel驗證表單用
+                type: 'POST',
+                headers: { 'X-CSRF-TOKEN': csrf }, //Laravel驗證表單用
                 data: message,
                 dataType: 'JSON',
                 error: function (xhr) {
@@ -28,6 +33,9 @@
                     }
                 }
             });
+        }
+        function getCSRF() {
+
         }
         function getMessage() {
             /*  傳送格式範例
@@ -71,6 +79,7 @@
         }
     </script>
     <form id="SetCostForm" class="form-horizontal" role="form" method="POST" style="margin-top:15px;">
-        <button type="button" class="btn btn-primary btn-sm" id="BtnSend" name="BtnSend" onclick="send()">測試</button>
+        <button type="button" class="btn btn-primary btn-sm" id="BtnSend" name="BtnSend" onclick="send('false')">測試機測試</button>
+        <button type="button" class="btn btn-primary btn-sm" id="BtnSend" name="BtnSend" onclick="send('true')">正試機測試</button>
     </form>
 @endsection

@@ -9,8 +9,8 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use App\Jobs\Sendnotify;
+//use Illuminate\Foundation\Bus\DispatchesJobs;
+//use App\Jobs\Sendnotify;
 
 use DB;
 use App\Models\productDevelopment\Para;
@@ -34,23 +34,27 @@ use App\Models\mobileMessagingSystem\VBroadcastList;
 use App\Models;
 
 use App\Service\ProjectCheckService;
+use App\Service\NotificationService;
 
 /*
 1、提供開發案系統與推播App傳遞資料
 */
 class WebServiceController extends Controller
 {
-    use DispatchesJobs;
+    //use DispatchesJobs;
 
     public $server;
     public $projectCheck;
+    public $notify;
 
     public function __construct(
         ServerData $server,
-        ProjectCheckService $projectCheck
+        ProjectCheckService $projectCheck,
+        NotificationService $notify
     ) {
         $this->server = $server;
         $this->projectCheck = $projectCheck;
+        $this->notify = $notify;
     }
 
     /*
@@ -235,35 +239,8 @@ class WebServiceController extends Controller
 
     public function sendMessage(Request $request)
     {
-        try {
-            $getData = $request->json()->all();
-            foreach ($getData as $list) {
-                $recipientID = $this->server->getUserByerpID($list['recipientID'])->ID;
-                $message = array(
-                    'title' => $list['title'],
-                    'content' => $list['content'],
-                    'messageID' => $list['messageID'],
-                    'systemID' => $list['systemID'],
-                    'uid' => $list['uid'],
-                    'recipientID' => $recipientID,
-                    'url' => $list['url'],
-                    'audioFile' => $list['audioFile'],
-                    'projectID' => '',
-                    'productID' => '',
-                    'processID' => '',
-                );
-                $this->dispatch(new SendNotify($message));
-            }
-            return array(
-                'success' => true,
-                'msg' => '訊息送出成功!',
-            );
-        } catch (\Exception $e) {
-            return array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
-        
+        $getData = $request->json()->all();
+        $result = $this->notify->sendMessageBase($getData);
+        return $result;
     }
 }

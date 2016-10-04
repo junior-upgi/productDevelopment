@@ -132,4 +132,35 @@ class NotificationService
         );
         $this->dispatch(new SendNotify($message));
     }
+    public function sendMessageBase($getData) 
+    {
+        try {
+            foreach ($getData as $list) {
+                $recipientID = $this->serverData->getUserByerpID($list['recipientID'])->ID;
+                $message = array(
+                    'title' => $list['title'],
+                    'content' => $list['content'],
+                    'messageID' => $list['messageID'],
+                    'systemID' => $list['systemID'],
+                    'uid' => $list['uid'],
+                    'recipientID' => $recipientID,
+                    'url' => $list['url'],
+                    'audioFile' => $list['audioFile'],
+                    'projectID' => '',
+                    'productID' => '',
+                    'processID' => '',
+                );
+                $this->dispatch(new SendNotify($message));
+            }
+            return array(
+                'success' => true,
+                'msg' => '訊息送出成功!',
+            );
+        } catch (\Exception $e) {
+            return array(
+                'success' => false,
+                'msg' => $e['errorInfo'][2],
+            );
+        }
+    }
 }
