@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use File;
 use App\Service\ProjectCheckService;
 
-class CheckProcess extends Command
+class CheckEveryDay extends Command
 {
     // 命令名稱
     protected $signature = 'checkEveryDay';

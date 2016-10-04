@@ -85,7 +85,7 @@ class ProjectCheckService
 
         //取得現階段執行且延誤之程序 getDelayProcess()
         
-        $processList = $project->getDelayProcess();
+        $processList = $this->project->getDelayProcess();
         
         $jo = array();
 
@@ -134,12 +134,10 @@ class ProjectCheckService
         $overdue = $project->checkOverdue($list->ID);
         if ($overdue) {
             //通知業務
-            $productData = $project->getProductByID($list->productID);
-            $projectData = $project->getProjectByID($productData->ID);
-            $sales = $server->getUserByerpID($projectData->salesID); 
-            $title = "[$projectData->referenceNumber]$projectData->referenceName 逾期警訊"; 
+            $sales = $server->getUserByerpID($list->salesID); 
+            $title = "[$list->projectNumber]$list->projectName [$list->productNumber]$list->projectName 逾期警訊"; 
             $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
-            $url = route('projectInfo', ['processID' => $list->ID]);
+            $url = route('OverdueInfo', ['processID' => $list->ID]);
             $audioFile="";
             $projectID = $list->projectID;
             $productID = $list->productID;

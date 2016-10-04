@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CheckProcess::class,
         \App\Console\Commands\CheckProduct::class,
         \App\Console\Commands\CheckProject::class,
+        \App\Console\Commands\CheckEveryDay::class,
     ];
 
     /**
@@ -35,10 +36,12 @@ class Kernel extends ConsoleKernel
         //$schedule->command('checkProcess')->dailyAt('07:00');
         //$schedule->command('checkProduct')->dailyAt('07:00');
         //$schedule->command('checkProject')->dailyAt('07:00');
+        //$schedule->command('checkEveryDay')->everyMinute();
 
-        $schedule->command('checkProcess')->everyMinute();
+        //$schedule->command('checkProcess')->everyMinute();
         //$schedule->command('checkProduct')->everyMinute();
         //$schedule->command('checkProject')->everyMinute();
+        $schedule->command('checkEveryDay')->everyMinute();
     }
 
     /**

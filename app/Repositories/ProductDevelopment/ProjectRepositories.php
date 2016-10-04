@@ -486,12 +486,11 @@ class ProjectRepositories
     }
     public function checkOverdue($processID)
     {
-        $maxDate = $this->vProcessList
+        $process = $this->vProcessList
             ->where('ID', $processID)
             ->orderBy('processEndDate', 'desc')
-            ->first()->processEndDate;
-        $now = $this->carbon->now();
-        if (date('Y-m-d', strtotime($now)) > date('Y-m-d', strtotime($maxDate))) {
+            ->first();
+        if (date('Y-m-d', strtotime($process->processEndDate)) > date('Y-m-d', strtotime($process->deadline))) {
             return true;
         }
         return false;

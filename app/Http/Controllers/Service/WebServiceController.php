@@ -36,6 +36,7 @@ use App\Models;
 use App\Service\ProjectCheckService;
 use App\Service\NotificationService;
 
+
 /*
 1、提供開發案系統與推播App傳遞資料
 */
@@ -242,5 +243,11 @@ class WebServiceController extends Controller
         $getData = $request->json()->all();
         $result = $this->notify->sendMessageBase($getData);
         return $result;
+    }
+
+    public function test()
+    {
+        $process = $this->projectCheck->everyDay();
+        return $process;
     }
 }
