@@ -6,11 +6,12 @@
 		$pc = $processData
 	@endphp
 	@if($processData)
-		<form id="SetCostForm" class="form-horizontal" action role="form" method="POST"">
+		<form id="SetCostForm" class="form-horizontal" action role="form" method="POST">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4>{{ "[$pc->projectNumber] $pc->projectName" }}</h4>
 				</div>
+				<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
 				<input type="hidden" id="ProcessID" name="ProcessID" value="{{ $pc->ID }}">
 				<div class="panel-body">
 					<div class="form-group from-group-sm">

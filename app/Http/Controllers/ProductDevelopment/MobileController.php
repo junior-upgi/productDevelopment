@@ -41,11 +41,11 @@ class MobileController extends Controller
         return view('Mobile.SettingCost')
             ->with('processData', $processData);
     }
-    public function userSaveCost(Request $request)
+    public function auserSaveCost(Request $request)
     {
         return 'true';
     }
-    public function auserSaveCost(Request $request)
+    public function userSaveCost(Request $request)
     {
         $processID = $request->input('ProcessID');
         $oldTimeCost = $this->project->getProcessByID($processID)->timeCost;

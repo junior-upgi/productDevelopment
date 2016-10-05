@@ -16,10 +16,8 @@ function DoSave() {
                     confirmButtonClass: "btn-success",
                     confirmButtonText: "OK",
                     closeOnConfirm: false
-                },
-                function () {
-                    $.unblockUI();
                 });
+                $.unblockUI();
             } else {
                 swal("更新資料失敗!", obj.msg, "error");
                 $('#BtnEdit').button('reset');
