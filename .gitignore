@@ -1,3 +1,4 @@
 storage/
 .svn/
 wc.db
+.svn/wc.db
