@@ -70,7 +70,14 @@ class LoginController extends Controller
 
             if ($attempt) {
                 if (Auth::check()) {
-                    return Redirect::intended('/Project/ProjectList');
+                    $user = Auth::user();
+                    $role = $user->authorization;
+                    if ($role === '99') {
+                        return redirect('Project/ProjectList');
+                    } else {
+                        return redirect('Process/MyProcess');
+                    }
+                    //return Redirect::intended('/Project/ProjectList');
                 } else {
                     return Redirect::to('login')
                     ->withErrors(['fail'=>'登入失敗!']);

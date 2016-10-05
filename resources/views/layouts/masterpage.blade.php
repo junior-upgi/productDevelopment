@@ -72,6 +72,11 @@
 							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
 						</li>
 						@if (Auth::check())
+							@if (Auth::user()->authorization === '1')
+								<li class="@yield('personal')">
+									<a href="{{url('/')}}/Process/MyProcess">個人工序清單</a>
+								</li>
+							@endif
 							@if (Auth::user()->authorization === '99')
 								<li class="@yield('sysoption')">
 									<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>

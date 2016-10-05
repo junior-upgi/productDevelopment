@@ -93,6 +93,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
 
     Route::get('Delete/{processID}', 'ProductDevelopment\ProcessController@deleteProcess');
 
+    Route::get('MyProcess', 'ProductDevelopment\ProcessController@myProcess');
     
 });
 

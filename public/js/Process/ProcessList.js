@@ -354,9 +354,8 @@ function DoInsert() {
 function DoUpdate(ProcessID) {
     var ProductID = $('#ProductID').val();
     var ProcessID = $('#ProcessID').val();
-    var ss = url + '/Process/UpdateProcess';
     $("#EditProcessForm").ajaxForm({
-        url: ss,
+        url: url + '/Process/UpdateProcess',
         beforeSubmit: function () {
             $('#BtnEdit').button('loading');
         },
@@ -496,7 +495,7 @@ function Delete(ProductID, ProcessID) {
         success: function (result) {
           if (result.success) {
                 swal({
-                    title: "刪資料成功!",
+                    title: "刪除資料成功!",
                     text: result.msg,
                     type: "success",
                     showCancelButton: false,

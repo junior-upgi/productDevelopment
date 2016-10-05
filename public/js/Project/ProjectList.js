@@ -25,7 +25,7 @@ function Delete(ProjectID) {
         success: function (result) {
           if (result.success) {
                 swal({
-                    title: "刪資料成功!",
+                    title: "刪除資料成功!",
                     text: result.msg,
                     type: "success",
                     showCancelButton: false,

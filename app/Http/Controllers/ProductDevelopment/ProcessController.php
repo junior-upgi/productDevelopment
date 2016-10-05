@@ -157,16 +157,18 @@ class ProcessController extends Controller
                 $pic = null;
             }
         }
-        
-        $params = array(
-            'referenceName' => $request->input('ProcessName'),
-            'referenceNumber' => $request->input('ProcessNumber'),
-            'projectProcessPhaseID' => $request->input('PhaseID'),
-            'timeCost' => $request->input('TimeCost'),
-            'staffID' => $request->input('StaffID'),
-            'processStartDate' => $request->input('ProcessStartDate'),
-            //'processImg' => $pic,
-        );
+        $processNumber = $request->input('ProcessName'); 
+        $processName = $request->input('ProcessName');
+        $phaseID = $request->input('PhaseID');
+        $timeCost = $request->input('TimeCost');
+        $staffID = $request->input('StaffID');
+        $processStartDate = $request->input('ProcessStartDate');
+        if (isset($processNumber)) $params['referenceName'] = $processNumber;
+        if (isset($processName)) $params['referenceNumber'] = $processName;
+        if (isset($phaseID)) $params['projectProcessPhaseID'] = $phaseID;
+        if (isset($timeCost)) $params['timeCost'] = $timeCost;
+        if (isset($staffID)) $params['staffID'] = $staffID;
+        if (isset($processStartDate)) $params['processStartDate'] = $processStartDate;
         if (isset($upload)) $params['processImg'] = $pic;
         return $this->projectRepositories->updateProcess($processID, $params);
     }
@@ -226,9 +228,14 @@ class ProcessController extends Controller
         $user = Auth::user();
         $role = $user->authorization;
         if ($role === '99') {
-            return view();
+            return redirect('Project/ProjectList');
         } else if ($role === '1') {
-
+            $userID = $user->erpID;
+            $process = $this->projectRepositories->getPersonalProcess($userID);
+            return view('Process.MyProcess')
+                ->with('process', $process)
+                ->with('NodeList', $this->serverData->getAllNode())
+                ->with('PhaseList', $this->projectRepositories->getParaList('ProcessPhaseID'));
         }
     }
 }

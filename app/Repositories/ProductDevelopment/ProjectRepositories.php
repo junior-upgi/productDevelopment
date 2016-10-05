@@ -512,4 +512,14 @@ class ProjectRepositories
         }
         return false;
     }
+    public function getPersonalProcess($userID)
+    {
+        $process = $this->vProcessList
+            ->where('staffID', $userID)
+            ->where('execute', '1')
+            ->where('complete', '0')
+            ->orderBy('processStartDate')
+            ->get();
+        return $process;
+    }
 }
