@@ -93,6 +93,11 @@ class ProductController extends Controller
                 );
             }
             $upload = true;
+        } else {
+            if ($request->input('fileSet') == 'true') {
+                $upload = true;
+                $pic = null;
+            }
         }
         
         $params = array(

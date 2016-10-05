@@ -153,6 +153,7 @@ function EditShow(ID) {
                 }
                 if (result.processImg != null) {
                     var img = "<img src='" + result.processImg + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
+                    $('#EditProcessForm #fileSet').val('true');
                 } else {
                     var img = null;
                 }

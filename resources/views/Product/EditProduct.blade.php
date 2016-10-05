@@ -14,6 +14,7 @@
         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
         <input type="hidden" id="ProjectID" name="ProjectID" value="{{$ProductData->projectID}}">
         <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
+        <input type="hidden" id="fileSet" name="fileSet" value="">
         <div class="form-group">
             <label for="ProductNumber" class="col-md-2 control-label">開發產品代號</label>
             <div class="col-md-5">
@@ -76,6 +77,7 @@
                 var set = "{{$system->getImgSrc($ProductData->contentImg)}}";
                 if (set != '') {
                     img  = "<img src='" + set + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
+                    $('#fileSet').val('true');
                 } else {
                     img = null;
                 }

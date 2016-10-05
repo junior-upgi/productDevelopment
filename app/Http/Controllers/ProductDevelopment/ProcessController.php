@@ -151,6 +151,11 @@ class ProcessController extends Controller
                 );
             }
             $upload = true;
+        } else {
+            if ($request->input('fileSet') == 'true') {
+                $upload = true;
+                $pic = null;
+            }
         }
         
         $params = array(
@@ -225,6 +230,5 @@ class ProcessController extends Controller
         } else if ($role === '1') {
 
         }
-
     }
 }

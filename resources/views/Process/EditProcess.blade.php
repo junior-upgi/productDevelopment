@@ -12,6 +12,7 @@
                         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
                         <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
                         <input type="hidden" id="ProcessID" name="ProcessID" value="">
+                        <input type="hidden" id="fileSet" name="fileSet" value="">
                         @php 
                             $disabled = 'disabled';
                             if (Auth::user()->authorization === '99') {
