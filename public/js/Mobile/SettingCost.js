@@ -1,6 +1,6 @@
 function DoSave() {
     $("#SetCostForm").ajaxForm({
-        url: url + '/Mobile/SaveCost/',
+        url: url + '/Mobile/SaveCost',
         beforeSubmit: function () {
             $('#BtnEdit').button('loading');
             goLoading('資料處理中，請稍候!');

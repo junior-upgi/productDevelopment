@@ -1,23 +1,23 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Http\Controllers\Controller;
 use DB;
 use Auth;
 use App\Models\upgiSystem\User;
-
+use App\Models\upgiSystem\File;
 class Common
 {
     public $DB;
     public $user;
-
+    public $file;
     public function __construct(
         DB $DB,
-        User $user
+        User $user,
+        File $file
     ) {
         $this->DB = $DB;
         $this->user = $user;
+        $this->file = $file;
     }
     public function transaction()
     {
@@ -44,7 +44,6 @@ class Common
         
         return $uuid;
     }
-
     public function insertData($table, $params, $primaryKey = 'ID')
     {
         try {
@@ -216,7 +215,6 @@ class Common
         $set = array('userPassword' => $password);
         return ldap_add($this->_ldapconn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
     }
-
     //修改LDAP資料
     function modifyLDAP($uid, $password, $conn = null)
     {
@@ -227,9 +225,27 @@ class Common
         $set = array('userPassword' => $password);
         return ldap_modify($conn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
     }
-
     public function getLDAPConn($conn)
     {
         if (is_null($conn)) $conn = $this->connLDAP();
+    }
+    public function getFile($id)
+    {
+        $file = $this->file;
+        return $file->getFileCode($id);
+    }
+    public function saveFile($data)
+    {
+        $name = $data->getClientOriginalName();
+        $fe = $data->getClientOriginalExtension();
+        $type = $data->getMimeType();
+        $file = $this->file;
+        $id = $this->getNewGUID();
+        $result = $file->saveFile($data, $type, $name, $fe, $id);
+        if ($result) {
+            return $id;
+        } else {
+            return null;
+        }
     }
 }

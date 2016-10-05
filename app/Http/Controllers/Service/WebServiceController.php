@@ -47,15 +47,18 @@ class WebServiceController extends Controller
     public $server;
     public $projectCheck;
     public $notify;
+    public $user;
 
     public function __construct(
         ServerData $server,
         ProjectCheckService $projectCheck,
-        NotificationService $notify
+        NotificationService $notify,
+        User $user
     ) {
         $this->server = $server;
         $this->projectCheck = $projectCheck;
         $this->notify = $notify;
+        $this->user = $user;
     }
 
     /*
@@ -88,6 +91,7 @@ class WebServiceController extends Controller
                     'success' => true,
                     'msg' => '驗證通過，設備訊息已寫入!',
                 );
+                $this->resetToken($Account, $DeviceOS, $DeviceID);
             } catch (\PDOException $e) {
                 DB::rollback();
                 $jo = array(
@@ -109,6 +113,16 @@ class WebServiceController extends Controller
     /*
     驗證設備資訊是否已寫入Server
     */
+    public function resetToken($account, $os, $device)
+    {
+        $user = $this->user;
+        $check = $user
+            ->where('mobileSystemAccount', '<>', $account)
+            ->where('deviceOS', $os)
+            ->where('deviceID', $device);
+        $params = ['deviceToken' => null];
+        $check->update($params);
+    }
     public function checkDevice($DeviceOS, $DeviceID, $DeviceToken)
     {
         $User = new User();

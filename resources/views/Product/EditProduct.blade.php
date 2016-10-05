@@ -8,6 +8,7 @@
         <li><a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}">開發產品清單</a></li>
         <li class="active">編輯開發產品</li>
     </ol>
+    @inject('system', 'App\Presenters\SystemPresenter')
     <!--add project form-->
     <form id="EditProductForm" class="form-horizontal" action method="POST">
         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
@@ -34,7 +35,7 @@
         <div class="form-group">
             <label for="DeliveredQuantity" class="col-md-2 control-label">交貨數量</label>
             <div class="col-md-2">
-                <input type="number" class="form-control text-right" name="DeliveredQuantity" value="{{$ProductData->deliveredQuantity}}" required>
+                <input type="number" class="form-control text-right" name="DeliveredQuantity" value="{{$ProductData->deliveredQuantity}}">
             </div>
         </div>
         <div class="form-group">
@@ -65,6 +66,39 @@
                     @endforeach
                 </select>
             </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-md-2">產品圖片</label>
+            <div class="col-md-5">
+                <input id="img" name="img" type="file" class="file-loading" data-show-upload="false" accept="image/*">
+            </div>
+            <script>
+                var set = "{{$system->getImgSrc($ProductData->contentImg)}}";
+                if (set != '') {
+                    img  = "<img src='" + set + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
+                } else {
+                    img = null;
+                }
+                $("#img").fileinput({
+                    language: 'zh-TW',
+                    previewFileType: "image",
+                    allowedFileExtensions: ["jpg", "jpeg", "png", "gif"],
+                    previewClass: "bg-warning",
+                    browseClass: "btn btn-success",
+                    browseLabel: "選擇圖片",
+                    browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
+                    removeClass: "btn btn-danger",
+                    removeLabel: "移除",
+                    removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
+                    fileActionSettings: {
+                        showZoom: false,
+                        zoomIcon: "",
+                        zoomClass: "",
+                        zoomTitle: "",
+                    },
+                    initialPreview: [img]
+                });
+            </script>
         </div>
         <div class="form-group text-right col-md-7">
             <a href="{{url('/')}}/Product/ProductList/{{$ProductData->projectID}}" class="btn btn-default">取消</a>

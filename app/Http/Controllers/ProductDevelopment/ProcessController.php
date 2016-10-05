@@ -1,7 +1,5 @@
 <?php
-
 namespace App\Http\Controllers\ProductDevelopment;
-
 //use Class
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -9,24 +7,19 @@ use Carbon\Carbon;
 use DB;
 use App\Models\productDevelopment\ProjectProcess;
 use App\Models\productDevelopment\ProcessTree;
-
 //use Custom Class
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
-
 //use Service
 use App\Service\NotificationService;
-
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
-
 class ProcessController extends Controller
 {
     public $common;
     public $serverData;
     public $notification;
     public $projectRepositories;
-
     public function __construct(
         Common $common,
         ServerData $serverData,
@@ -38,7 +31,6 @@ class ProcessController extends Controller
         $this->notification = $notification;
         $this->projectRepositories = $projectRepositories;
     }
-
     //
     public function processList($productID)
     {
@@ -52,7 +44,19 @@ class ProcessController extends Controller
     public function insertProcess(Request $request)
     { 
         try {
-            $processID = $this->common->getNewGUID();;
+            $processID = $this->common->getNewGUID();
+            $file = $request->file('img');
+            if (isset($file)) {
+                $pic = $this->common->saveFile($file);
+                if (!isset($pic)) {
+                    return array(
+                        'success' => false,
+                        'msg' => '圖片上傳失敗',
+                    );
+                }
+                $upload = true;
+            }
+            
             DB::beginTransaction();
             $params = array(
                 'ID' => $processID,
@@ -64,11 +68,12 @@ class ProcessController extends Controller
                 'staffID' => iconv("UTF-8", "BIG-5", $request->input('StaffID')),
                 'sequentialIndex' => $this->projectRepositories->getMaxSeqIndex($request->input('ProductID')) + 1,
                 'processStartDate' => $request->input('ProcessStartDate'),
+                //'processImg' => $pic,
                 //'created_at' => Carbon::now(),
             );
+            if (isset($upload)) $params['processImg'] = $pic;
             $ProjectProcess = new ProjectProcess();
             $ProjectProcess->insert($params);
-
             
             $Params = array(
                 'projectContentID' => $request->input('ProductID'),
@@ -93,7 +98,6 @@ class ProcessController extends Controller
                 'msg' => $e,
             );
         }
-
         return $jo;
     }
     //
@@ -103,6 +107,7 @@ class ProcessController extends Controller
         $staffList = $this->serverData->getStaffByNodeID($processData->nodeID);
         $jo = array();
         if ($processData && $staffList) {
+            $pic = $this->common->getFile($processData->processImg);
             $jo = array(
                 'success' => true,
                 'ID' => $processData->ID,
@@ -113,6 +118,7 @@ class ProcessController extends Controller
                 'StaffID' => $processData->staffID,
                 'NodeID' => $processData->nodeID,
                 'StaffList' => $staffList,
+                'processImg' => $pic,
                 'ProcessStartDate' => date('Y-m-d', strtotime($processData->processStartDate)),
             );
         } else {
@@ -121,7 +127,6 @@ class ProcessController extends Controller
                 'msg' => '找不到程序資訊!',
             );
         }
-
         return $jo;
     }
     //
@@ -135,6 +140,18 @@ class ProcessController extends Controller
     {
         $processID = $request->input('ProcessID');
         $processName = $request->input('StaffID');
+        $file = $request->file('img');
+        if (isset($file)) {
+            $pic = $this->common->saveFile($file);
+            if (!isset($pic)) {
+                return array(
+                    'success' => false,
+                    'msg' => '圖片上傳失敗',
+                );
+            }
+            $upload = true;
+        }
+        
         $params = array(
             'referenceName' => $request->input('ProcessName'),
             'referenceNumber' => $request->input('ProcessNumber'),
@@ -142,7 +159,9 @@ class ProcessController extends Controller
             'timeCost' => $request->input('TimeCost'),
             'staffID' => $request->input('StaffID'),
             'processStartDate' => $request->input('ProcessStartDate'),
+            //'processImg' => $pic,
         );
+        if (isset($upload)) $params['processImg'] = $pic;
         return $this->projectRepositories->updateProcess($processID, $params);
     }
     //
@@ -162,7 +181,6 @@ class ProcessController extends Controller
         } else {
             return $jo = array('success' => false, 'msg' => '資料異常!');
         }
-
         if ($result['success'] && $completeStatus === '0') {
             return array('success' => true, 'msg' => '完成程序!');
         } elseif ($result['success'] && $completeStatus === '1') {
@@ -196,5 +214,36 @@ class ProcessController extends Controller
     public function setPreparation($productID, $processID, $select)
     {
         return $this->projectRepositories->setPreparation($productID, $processID, $select);
+    }
+    public function userSettingCost($processID, $staffID)
+    {
+        $processData = $this->projectRepositories->getProcessByID($processID);
+        return view('Mobile.SettingCost')
+            ->with('processData', $processData);
+    }
+    public function userSaveCost(Request $request)
+    {
+        $processID = $request->input('ProcessID');
+        $oldTimeCost = $this->projectrepositories->getProcessByID($processID)->timeCost;
+        $timeCost = $request->input('TimeCost');
+        if ($oldTimeCost != $timeCost) {
+            $params = array(
+                'timeCost' => $timeCost
+            );
+            $update = $this->projectRepositories->updateProcess($processID, $params);
+            if ($update['success']) {
+                //發送通知給後續工序負責人
+                
+                return $update;
+            } else {
+                return $update;
+            }
+        } else {
+            //沒有變更工時，不改變後續工序時間
+            return array(
+                'success' => true,
+                'msg' => '沒有變更資料。',
+            );
+        }
     }
 }

@@ -1,14 +1,11 @@
 <?php
 namespace App\Presenters;
-
 use App\Http\Controllers\Common;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
-
 class SystemPresenter
 {
     public $common;
     public $project;
-
     public function __construct(
         Common $common,
         ProjectRepositories $project

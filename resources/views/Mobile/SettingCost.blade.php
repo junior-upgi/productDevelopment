@@ -6,7 +6,7 @@
 		$pc = $processData
 	@endphp
 	@if($processData)
-		<form id="SetCostForm" class="form-horizontal" role="form" method="POST" style="margin-top:15px;">
+		<form id="SetCostForm" class="form-horizontal" action role="form" method="POST"">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4>{{ "[$pc->projectNumber] $pc->projectName" }}</h4>
@@ -56,7 +56,7 @@
 						</div>
 					</div>
 					<div class="form-group from-group-sm">
-						<label for="" class="control-label col-xs-4">工時：</label>
+						<label for="" class="control-label col-xs-4">工時</label>
 						<div class="col-xs-4">
 							<input type="number" class="form-control input-sm text-right"
 								min="{{ $pc->timeCost }}" id="TimeCost" name="TimeCost" value="{{ $pc->timeCost }}">

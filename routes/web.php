@@ -119,9 +119,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Report'], function() {
 });
 
 Route::group(['prefix' => 'Mobile'], function() {
-    Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\MobileController@userSettingCost')->name('userSettingCost');
-    Route::get('OverdueInfo/{processID}', 'ProductDevelopment\MobileController@overdueInfo')->name('overdueInfo');
-    Route::post('SaveCost', 'ProductDevelopment\MobileController@userSaveCost');
+    Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\MobileController@userSettingCost');
+    Route::get('OverdueInfo/{processID}', 'ProductDevelopment\MobileController@overdueInfo');
+    Route::any('SaveCost', 'ProductDevelopment\MobileController@userSaveCost');
     Route::get('testSend', function () {
         return view('Mobile.SendMessage');
     });

@@ -118,7 +118,8 @@ class ProjectCheckService
         $title = "[$list->referenceNumber]$list->referenceName 已延誤";
         $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
         $staff = $server->getUserByerpID($list->staffID);
-        $url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
+        //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
+        $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
         $audioFile="";
         $projectID = $list->projectID;
         $productID = $list->productID;
@@ -138,7 +139,8 @@ class ProjectCheckService
             $sales = $server->getUserByerpID($list->salesID); 
             $title = "[$list->projectNumber]$list->projectName [$list->productNumber]$list->projectName 逾期警訊"; 
             $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
-            $url = route('overdueInfo', ['processID' => $list->ID]);
+            //$url = route('overdueInfo', ['processID' => $list->ID]);
+            $url = "http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/$list->ID";
             $audioFile="";
             $projectID = $list->projectID;
             $productID = $list->productID;

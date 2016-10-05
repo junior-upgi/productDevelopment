@@ -28,7 +28,7 @@ class MobileController extends Controller
 
     public function __construct(
         Common $common,
-        ServeData $server,
+        ServerData $server,
         ProjectRepositories $project
     ) {
         $this->common = $common;
@@ -42,6 +42,10 @@ class MobileController extends Controller
             ->with('processData', $processData);
     }
     public function userSaveCost(Request $request)
+    {
+        return 'true';
+    }
+    public function auserSaveCost(Request $request)
     {
         $processID = $request->input('ProcessID');
         $oldTimeCost = $this->project->getProcessByID($processID)->timeCost;
@@ -68,7 +72,7 @@ class MobileController extends Controller
     {
         $processData = $this->project->getProcessByID($processID);
         $productData = $this->project->getProductByID($processData->productID);
-        return view('OverdueInfo')
+        return view('Mobile.OverdueInfo')
             ->with('processData', $processData)
             ->with('productData', $productData);
     }
