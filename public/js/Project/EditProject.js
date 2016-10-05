@@ -14,7 +14,7 @@ $(document).ready(function () {
 });
 function DoUpdate() {
     $("#EditProjectForm").ajaxForm({
-        url: url + '/Project/UpdateProject/',
+        url: url + '/Project/UpdateProject',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             //$.blockUI({ message: '<div>送出資料中請稍候...</div>' });

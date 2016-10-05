@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 use App\Models\productDevelopment\ProjectProcess;
 use App\Models\productDevelopment\ProcessTree;
 //use Custom Class
@@ -214,5 +215,16 @@ class ProcessController extends Controller
     public function setPreparation($productID, $processID, $select)
     {
         return $this->projectRepositories->setPreparation($productID, $processID, $select);
+    }
+    public function myProcess()
+    {
+        $user = Auth::user();
+        $role = $user->authorization;
+        if ($role === '99') {
+            return view();
+        } else if ($role === '1') {
+
+        }
+
     }
 }

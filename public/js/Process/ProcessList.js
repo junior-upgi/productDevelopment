@@ -82,7 +82,7 @@ function SaveSort() {
     var ProductID = $('#ProductID').val();
     if (sort.length > 0) {
         $.ajax({
-            url: url + '/Process/SaveProcessSort/',
+            url: url + '/Process/SaveProcessSort',
             type: 'POST',
             headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
             data: JSON.stringify(sort),
@@ -353,8 +353,9 @@ function DoInsert() {
 function DoUpdate(ProcessID) {
     var ProductID = $('#ProductID').val();
     var ProcessID = $('#ProcessID').val();
+    var ss = url + '/Process/UpdateProcess';
     $("#EditProcessForm").ajaxForm({
-        url: url + '/Process/UpdateProcess/',
+        url: ss,
         beforeSubmit: function () {
             $('#BtnEdit').button('loading');
         },

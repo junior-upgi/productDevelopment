@@ -15,7 +15,7 @@ $(document).ready(function () {
 function DoUpdate() {
     var ProjectID = $("#ProjectID").val();
     $("#EditProductForm").ajaxForm({
-        url: url + '/Product/UpdateProduct/',
+        url: url + '/Product/UpdateProduct',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             //$.blockUI({ message: '<div>送出資料中請稍候...</div>' });
