@@ -99,3 +99,32 @@ function DoUpdate(ProcessID) {
         }
     });
 }
+function Complete($ProcessID) {
+    var ProductID = $('#ProductID').val();
+    $.ajax({
+        url: url + '/Process/ProcessComplete/' + $ProcessID,
+        type: 'GET',
+        dataType: 'JSON',
+        error: function (xhr) {
+            swal("更新資料失敗!", xhr.statusText, "error");
+        },
+        success: function (result) {
+            if (result.success) {
+                swal({
+                    title: "更新資料成功!",
+                    text: result.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function () {
+                    document.location.href = url + '/Process/MyProcess';
+                });
+            } else {
+                swal("更新資料失敗!", obj.msg, "error");
+            }
+        }
+    });
+}

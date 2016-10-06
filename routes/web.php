@@ -11,7 +11,10 @@
 |
 */
 
-Route::get('/', 'ProductDevelopment\ProjectController@showProject');
+//Route::get('/', 'ProductDevelopment\ProjectController@showProject');
+Route::get('/', function () {
+    return redirect('login');
+});
 
 Route::get('ldap', 'ProductDevelopment\projectController@ldap');
 

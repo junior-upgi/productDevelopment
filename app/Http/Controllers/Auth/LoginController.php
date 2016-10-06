@@ -50,7 +50,17 @@ class LoginController extends Controller
 
     public function show()
     {
-        return view('Login.login');
+        if (Auth::check()) {
+            $user = Auth::user();
+            $role = $user->authorization;
+            if ($role === '99') {
+                return redirect('Project/ProjectList');
+            } else {
+                return redirect('Process/MyProcess');
+            }
+        } else {
+            return view('Login.login');
+        }
     }
     public function login(Request $request)
     {
