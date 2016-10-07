@@ -76,7 +76,7 @@ class LoginController extends Controller
 
         if ($validator->passes()) {
             //single sign on type 0=DB, 1=LDAP
-            $attempt = $this->common->singleSignOn($input['account'], $input['password'], 0);
+            $attempt = $this->common->singleSignOn($input['account'], $input['password'], 1);
 
             if ($attempt) {
                 if (Auth::check()) {

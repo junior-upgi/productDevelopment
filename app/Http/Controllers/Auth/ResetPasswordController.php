@@ -84,7 +84,7 @@ class ResetPasswordController
             $ldap = $this->common->addLDAP($ID, $password);
         }
         if ($ldap) {
-            return 'success';
+            return view('Login.success');
         }
         return view('Login.reset')
             ->with('check', true)
@@ -92,5 +92,9 @@ class ResetPasswordController
             ->with('account', $check->ID)
             ->with('name', $check->name)
             ->with('error', '單一登入申請失敗');
+    }
+    public function testAD()
+    {
+        return $this->common->testAD();
     }
 }

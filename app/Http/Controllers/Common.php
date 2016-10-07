@@ -195,6 +195,14 @@ class Common
         ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
         return $ldapconn;
     }
+    public function LDAPAdmin($conn=null)
+    {
+        $conn = $this->getLDAPConn($conn);
+        $adminac = env('LDAP_ADMIN', '');
+        $adminpw = env('LDAP_PW', '');
+        ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
+        return $conn;
+    }
     public function checkLDAP($account, $password, $conn = null)
     {
         $conn = $this->getLDAPConn($conn);
@@ -216,28 +224,30 @@ class Common
     //新增LDAP資料
     function addLDAP($uid, $password, $conn = null)
     {
-        $conn = $this->getLDAPConn($conn);
-        $adminac = env('LDAP_ADMIN', '');
-        $adminpw = env('LDAP_PW', '');
-        ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
+        $bind = $this->LDAPAdmin($conn);
         $set = array();
-        $set['objectClass'][0] = 'top';
-        $set['objectClass'][1] = 'account';
-        $set['objectClass'][2] = 'simpleSecurityObject';
-        $set['userPassword'] = $password;
-        $add = ldap_add($conn, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
+        $set['objectClass'][0] = 'simpleSecurityObject';
+        $set['objectClass'][1] = 'top';
+        $set['objectClass'][2] = 'account';
+        $hash = $this->hashPassword($password);
+        $set['userPassword'] = $hash;
+        $add = ldap_add($bind, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
         return $add;
     }
     //修改LDAP資料
     function modifyLDAP($uid, $password, $conn = null)
     {
-        $conn = $this->getLDAPConn($conn);
-        $adminac = env('LDAP_ADMIN', '');
-        $adminpw = env('LDAP_PW', '');
-        ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
-        $set = array('userPassword' => $password);
-        $modify = ldap_modify($conn, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
+        $bind = $this->LDAPAdmin($conn);
+        $hash = $this->hashPassword($password);
+        $set = array('userPassword' => $hash);
+        $modify = ldap_modify($bind, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
         return $modify;
+    }
+    private function hashPassword($password)
+    {
+        //將密碼轉成md5
+        $hash = '{md5}' . base64_encode(pack('H*', md5($password)));
+        return $hash;
     }
     public function getLDAPConn($conn)
     {
