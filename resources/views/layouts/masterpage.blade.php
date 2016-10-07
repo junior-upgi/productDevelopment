@@ -99,11 +99,11 @@
 						<li class="dropdown">
 							@if(Auth::check())
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-									<span class="glyphicon glyphicon-user"></span>
+									<span class="glyphicon glyphicon-user">{{ Auth::user()->mobileSystemAccount }}</span>
 								</a>
 								<ul class="dropdown-menu" role+"menu">
-									<span style="margin-left:20px;">{{ Auth::user()->mobileSystemAccount}}您好</span>
-									<li class="divider"></li>
+									<!--<span style="margin-left:20px;">{{ Auth::user()->mobileSystemAccount}}您好</span>
+									<li class="divider"></li>-->
 									<li><a href="{{url('/')}}/logout"><span class="glyphicon glyphicon-log-out">登出</span></a></li>
 								</ul>
 							@else

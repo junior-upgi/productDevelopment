@@ -157,14 +157,14 @@ class ProcessController extends Controller
                 $pic = null;
             }
         }
-        $processNumber = $request->input('ProcessName'); 
+        $processNumber = $request->input('ProcessNumber'); 
         $processName = $request->input('ProcessName');
         $phaseID = $request->input('PhaseID');
         $timeCost = $request->input('TimeCost');
         $staffID = $request->input('StaffID');
         $processStartDate = $request->input('ProcessStartDate');
-        if (isset($processNumber)) $params['referenceName'] = $processNumber;
-        if (isset($processName)) $params['referenceNumber'] = $processName;
+        if (isset($processNumber)) $params['referenceNumber'] = $processNumber;
+        if (isset($processName)) $params['referenceName'] = $processName;
         if (isset($phaseID)) $params['projectProcessPhaseID'] = $phaseID;
         if (isset($timeCost)) $params['timeCost'] = $timeCost;
         if (isset($staffID)) $params['staffID'] = $staffID;

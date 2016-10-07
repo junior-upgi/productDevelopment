@@ -6,7 +6,7 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-use App\Jobs\Sendnotify;
+use App\Jobs\SendNotify;
 
 //use Repositories
 use App\Repositories\mobileMessagingSystem\MobileRepositories;

@@ -32,24 +32,33 @@
 </head>
 <body style="padding-top:40px;padding-bottom:40px;background-color:#eee;">
     <div class="container">
-        <form class="form-signin" role="form" action="login" method="POST" style="max-width:330px;padding:15px;margin:auto;">
-			<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
-            <h2 class="form-signin-heading">請輸入帳號密碼</h2>
-			<label for="account" class="sr-only">帳號</label>
-			<input type="text" id="account" name="account" class="form-control" placeholder="帳號(員工編號)" required="" autofocus="">
-			<label for="password" class="sr-only">密碼</label>
-			<input type="password" id="password" name="password" class="form-control" placeholder="密碼" required="">
-            <!--
-			<div class="checkbox">
-				<label>
-				<input type="checkbox" id="remember" name="remember" value="remember">記住我</label>
-			</div>
-			-->
-			@if ($errors->has('fail'))
-				<div class="fail">{{ $errors->first('fail') }}</div>
-			@endif
-			<button class="btn btn-lg btn-primary btn-block" style="margin-top:20px;" type="submit">登入</button>
-		</form>
+		@if (!$check)
+			<form class="form-signin" id="checkForm" role="form" action="checkPersonal" method="POST" style="max-width:330px;padding:15px;margin:auto;">
+				<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
+				<h2 class="form-signin-heading">單一登入帳號申請</h2>
+				<label for="account" class="control-label">帳號(員工編號)</label>
+				<input type="text" id="account" name="account" class="form-control" placeholder="請輸入員工編號" required autofocus="">
+				<label for="personalID" class="">身份證號</label>
+				<input type="text" id="personalID" name="personalID" class="form-control" placeholder="請輸入身份證號" required >
+				@if ($result)
+					<h4>錯誤訊息：{{ $msg }}</h4>
+				@endif
+				<button class="btn btn-lg btn-primary btn-block" style="margin-top:20px;" type="submit">驗證</button>
+			</form>
+		@else
+			<form class="form-signin" id="setadForm" role="form" action="setPassword" method="POST" style="max-width:330px;padding:15px;margin:auto;">
+				<p>員工編號：{{ $account }}</p>
+				<p>姓名：{{ $name }}</p>
+				<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
+				<input type="hidden" id="account" name="account" value="{{ $account }}">
+				<input type="hidden" id="name" name="name" value="{{ $name }}">
+				<input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼" required autofocus="">
+				@if (isset($error))
+					<h4>錯誤訊息：{{ $error }}</h4>
+				@endif 
+				<button class="btn btn-lg btn-primary btn-block" style="margin-top:20px;" type="submit">送出</button>
+			</form>
+		@endif
     </div>
 </body>
 </html>

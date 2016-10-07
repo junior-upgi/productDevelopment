@@ -3,8 +3,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
+use Illuminate\Http\Request;
+use Validator;
+use Redirect;
 
-use App\Repositories\StaffRpositories;
+use App\Repositories\companyStructure\StaffRepositories;
 
 class ResetPasswordController
 {
@@ -24,30 +27,39 @@ class ResetPasswordController
     
     public function resetPassword()
     {
-        return view();
+        return view('Login.reset')
+            ->with('check', false)
+            ->with('result', false);
     }
 
-    public function checkPersonal($ID, $personalID)
+    public function checkPersonal(Request $request)
     {
-        $check = $server->checkPersonal($ID, $personalID);
-        if ($check) {
-            return array(
-                'success' => true,
-                'msg' => '驗證成功'
-            );
+        $input = $request->input();
+        $ID = $input['account'];
+        $personalID = $input['personalID'];
+        $check = $this->server->checkPersonal($ID, $personalID);
+        if (isset($check)) {
+            return view('Login.reset')
+                ->with('check', true)
+                ->with('result', true)
+                ->with('account', $check->ID)
+                ->with('name', $check->name);
         } else {
-            return array(
-                'success' => false,
-                'msg' => '驗證失敗'
-            );
+            return view('Login.reset')
+                ->with('check', false)
+                ->with('result', true)
+                ->with('msg', '驗證失敗');
         }
     }
 
-    public function setPassword($ID, $password)
+    public function setPassword(Request $request)
     {
+        $input = $request->input();
+        $ID = $input['account'];
+        $name = $input['name'];
+        $password = $input['password'];
         $user = $this->staff;
         $existDB = $user->getUser($ID);
-        $existLDAP = $this->common->checkLDAP($ID, '');
         if (!$existDB) {
             //新增資料
             $params = array(
@@ -55,17 +67,30 @@ class ResetPasswordController
                 'erpID' => $ID
             );
             $db = $user->insertUser($params);
+            if (!$db['success'])  {
+                return view('Login.reset')
+                    ->with('check', true)
+                    ->with('result', true)
+                    ->with('account', $check->ID)
+                    ->with('name', $check->name)
+                    ->with('error', $db['msg']);
+            }
         }
-        if 
 
+        $existLDAP = $this->common->searchLDAP($ID);
         if ($existLDAP) {
-            $ldap = $this->common->addLDAP($ID, $password);
-        } else {
             $ldap = $this->common->modifyLDAP($ID, $password);
+        } else {
+            $ldap = $this->common->addLDAP($ID, $password);
         }
-        if (($db['success'] || !isset($db)) && $ldap) {
-            return true;
+        if ($ldap) {
+            return 'success';
         }
-        return false;
+        return view('Login.reset')
+            ->with('check', true)
+            ->with('result', true)
+            ->with('account', $check->ID)
+            ->with('name', $check->name)
+            ->with('error', '單一登入申請失敗');
     }
 }

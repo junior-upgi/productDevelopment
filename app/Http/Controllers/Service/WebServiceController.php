@@ -120,7 +120,11 @@ class WebServiceController extends Controller
             ->where('mobileSystemAccount', '<>', $account)
             ->where('deviceOS', $os)
             ->where('deviceID', $device);
-        $params = ['deviceToken' => null];
+        $params = [
+            'deviceToken' => null,
+            'deviceID' => null,
+            'deviceOS' => null,
+        ];
         $check->update($params);
     }
     public function checkDevice($DeviceOS, $DeviceID, $DeviceToken)

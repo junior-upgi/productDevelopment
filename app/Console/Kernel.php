@@ -43,7 +43,6 @@ class Kernel extends ConsoleKernel
         //$schedule->command('checkProject')->everyMinute();
         //$schedule->command('checkEveryDay')->everyMinute();
     }
-
     /**
      * Register the Closure based commands for the application.
      *

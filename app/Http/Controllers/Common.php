@@ -205,15 +205,28 @@ class Common
         }
         return false;
     }
+    public function searchLDAP($account, $conn = null)
+    {
+        $conn = $this->getLDAPConn($conn);
+        $result = ldap_search($conn,"ou=user,dc=upgi,dc=ddns,dc=net","uid=$account");
+        $data = ldap_get_entries($conn,$result);
+        if ($data['count'] > 0) return true;
+        return false;
+    }
     //新增LDAP資料
     function addLDAP($uid, $password, $conn = null)
     {
         $conn = $this->getLDAPConn($conn);
         $adminac = env('LDAP_ADMIN', '');
         $adminpw = env('LDAP_PW', '');
-        ldap_bind($conn, $adminac, $adminpw);
-        $set = array('userPassword' => $password);
-        return ldap_add($this->_ldapconn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
+        ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
+        $set = array();
+        $set['objectClass'][0] = 'top';
+        $set['objectClass'][1] = 'account';
+        $set['objectClass'][2] = 'simpleSecurityObject';
+        $set['userPassword'] = $password;
+        $add = ldap_add($conn, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
+        return $add;
     }
     //修改LDAP資料
     function modifyLDAP($uid, $password, $conn = null)
@@ -221,13 +234,17 @@ class Common
         $conn = $this->getLDAPConn($conn);
         $adminac = env('LDAP_ADMIN', '');
         $adminpw = env('LDAP_PW', '');
-        ldap_bind($conn, $adminac, $adminpw);
+        ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
         $set = array('userPassword' => $password);
-        return ldap_modify($conn, "uid=".$uid.",ou=user,dc=upgi,dc=ddns,dc=net", $password);
+        $modify = ldap_modify($conn, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
+        return $modify;
     }
     public function getLDAPConn($conn)
     {
-        if (is_null($conn)) $conn = $this->connLDAP();
+        if (is_null($conn)) {
+            $conn = $this->connLDAP();
+            return $conn;
+        }
     }
     public function getFile($id)
     {

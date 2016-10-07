@@ -51,7 +51,7 @@ class ProjectCheckService
         $now = date('Y-m-d', strtotime($this->carbon->now()));
         $jo = array();
         foreach ($processList as $list) {
-            $title = "[$list->referenceNumber]$list->referenceName 已延誤";
+            $title = "工序到期通知";
             $delayDays = (strtotime($now) - strtotime($list->processStartDate)) / (60*60*24);
             $content = "[$list->referenceNumber]$list->referenceName 已延誤 $delayDays 天";
             $staff = $server->getUserByerpID($list->staffID);
@@ -115,7 +115,7 @@ class ProjectCheckService
             return $jo;
         }
         //通知個人工期建誤
-        $title = "[$list->referenceNumber]$list->referenceName 已延誤";
+        $title = "專案開發工序已延誤";
         $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
         $staff = $server->getUserByerpID($list->staffID);
         //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
@@ -137,7 +137,7 @@ class ProjectCheckService
         if ($overdue) {
             //通知業務
             $sales = $server->getUserByerpID($list->salesID); 
-            $title = "[$list->projectNumber]$list->projectName [$list->productNumber]$list->projectName 逾期警訊"; 
+            $title = "專案開發逾期警訊"; 
             $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
             //$url = route('overdueInfo', ['processID' => $list->ID]);
             $url = "http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/$list->ID";

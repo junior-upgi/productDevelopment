@@ -20,13 +20,9 @@ class MemberRepositories
                 ->where('ID', $ID)
                 ->where('PersonalID', $PersonalID)
                 ->first();
-            if ($check) {
-                return true;
-            } else {
-                return false;
-            }
+            return $check;
         } catch (\Exception $e) {
-            return false;
+            return null;
         }
     }
 }

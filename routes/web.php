@@ -40,6 +40,10 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout');
 Route::get('hashPassword', 'Auth\LoginController@hashPassword');
 
+Route::get('reset', 'Auth\ResetPasswordController@resetPassword');
+Route::post('checkPersonal', 'Auth\ResetPasswordController@checkPersonal');
+Route::post('setPassword', 'Auth\ResetPasswordController@setPassword');
+
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
