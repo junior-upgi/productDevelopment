@@ -213,8 +213,13 @@ class ProjectRepositories
                 'msg' => '資料異常',
             );
         }
-        if (!$result['success']) return array('success' => false, 'msg' => $type . '失敗');
+
+        if (!$result['success']) {
+            return array('success' => false, 'msg' => $type . '失敗');
+        }
+
         $toNotify = ($executeStatus == '0') ? true : false;
+
         return array('success' => true, 'msg' => $type . '成功', 'toNotify' => $toNotify);
     }
     public function getMaxSeqIndex($productID)
@@ -519,6 +524,17 @@ class ProjectRepositories
             ->where('execute', '1')
             ->where('complete', '0')
             ->orderBy('processStartDate')
+            ->get();
+        return $process;
+    }
+    public function getStartProcess()
+    {
+        $now = data('Y-m-d', strtotime($this->carbon->now()));
+        $process = $this->vProcessList
+            ->where('execute', 1)
+            ->where('processStartDate', '<=', $now)
+            ->where('processEndDate', '>=', $now)
+            ->where('complete', 0)
             ->get();
         return $process;
     }

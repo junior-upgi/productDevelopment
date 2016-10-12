@@ -45,6 +45,10 @@ Route::post('checkPersonal', 'Auth\ResetPasswordController@checkPersonal');
 Route::post('setPassword', 'Auth\ResetPasswordController@setPassword');
 Route::get('testad', 'Auth\ResetPasswordController@testAD');
 
+Route::group(['prefix' => 'git'], function() {
+    Route::get('test', 'Service\GitApiController@test');
+});
+
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');

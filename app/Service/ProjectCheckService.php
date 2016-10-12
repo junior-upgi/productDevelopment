@@ -43,8 +43,28 @@ class ProjectCheckService
         $productList = $this->project->getOverdueProduct();
     }
 
-    public function delayProcess()
+    public function timeCostReport()
     {
+        /*
+        1、取得目前開始執行的工序
+        2、回報工作剩於天數給負責人
+        */
+        $processList = $this->project->getStartProcess();
+        $
+        $reciprocal = 
+        $title = "工序完工期限通知";
+        $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
+        $staff = $server->getUserByerpID($list->staffID);
+        //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
+        $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
+        $audioFile="";
+        $projectID = $list->projectID;
+        $productID = $list->productID;
+        $processID = $list->ID;
+        $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+        array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
+        return $jo;
+
         $processList = $this->project->getDelayProcess();
         $mobile = $this->mobile;
         $server = $this->serverData;
@@ -114,7 +134,7 @@ class ProjectCheckService
             array_push($jo, $this->setLog(false, 'up cost error', $setCost['msg'], '', $list->projectID, $list->productID, $list->ID));
             return $jo;
         }
-        //通知個人工期建誤
+        //通知個人工期延誤
         $title = "專案開發工序已延誤";
         $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
         $staff = $server->getUserByerpID($list->staffID);
