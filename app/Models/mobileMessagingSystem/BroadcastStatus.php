@@ -5,11 +5,11 @@ namespace App\Models\mobileMessagingSystem;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SystemCategory extends Model
+class BroadcastStatus extends Model
 {
     use SoftDeletes;
-
+    
     protected $connection = 'DB_mobileMessagingSystem';
-    protected $table = "systemCategory";
+    protected $table = "broadcastStatus";
     protected $softDelete = true;
 }

@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Models\sales;
+namespace App\Models\upgiSystem;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Client extends Model
+class UserGroup extends Model
 {
     use SoftDeletes;
     
-    protected $connection = 'DB_sales';
-    protected $table = "client";
+    protected $connection = 'DB_upgiSystem';
+    protected $table = "userGroup";
     protected $softDelete = true;
 }
