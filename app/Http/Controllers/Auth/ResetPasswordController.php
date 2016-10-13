@@ -58,6 +58,15 @@ class ResetPasswordController
         $ID = $input['account'];
         $name = $input['name'];
         $password = $input['password'];
+        $passwordConf = $input['passwordConf'];
+        if ($password !== $passwordConf) {
+            return view('Login.reset')
+                ->with('check', true)
+                ->with('result', true)
+                ->with('account', $ID)
+                ->with('name', $name)
+                ->with('error', '密碼與確認密碼不一致');
+        }
         $user = $this->staff;
         $existDB = $user->getUser($ID);
         if (!$existDB) {
@@ -71,8 +80,8 @@ class ResetPasswordController
                 return view('Login.reset')
                     ->with('check', true)
                     ->with('result', true)
-                    ->with('account', $check->ID)
-                    ->with('name', $check->name)
+                    ->with('account', $ID)
+                    ->with('name', $name)
                     ->with('error', $db['msg']);
             }
         }
@@ -89,8 +98,8 @@ class ResetPasswordController
         return view('Login.reset')
             ->with('check', true)
             ->with('result', true)
-            ->with('account', $check->ID)
-            ->with('name', $check->name)
+            ->with('account', $ID)
+            ->with('name', $name)
             ->with('error', '單一登入申請失敗');
     }
     public function testAD()

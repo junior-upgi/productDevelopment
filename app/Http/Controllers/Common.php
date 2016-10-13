@@ -138,14 +138,14 @@ class Common
             );
         }
     }
-    public function singleSignOn($account, $password, $type)
+    public function singleSignOn($account, $password, $type, $login=true)
     {
         switch ($type) {
             case 0:
                 return $this->upgiDB($account, $password);
                 break;
             case 1:
-                return $this->upgiLDAP($account, $password);
+                return $this->upgiLDAP($account, $password, $login);
                 break;
             default:
                 return false;
@@ -159,7 +159,7 @@ class Common
                 'password' => $password,
             ], true);
     }
-    public function upgiLDAP($account, $password)
+    public function upgiLDAP($account, $password, $login=true)
     {
         $ldapconn = $this->connLDAP();
         if ($ldapconn) {
@@ -167,6 +167,9 @@ class Common
                 $ldapbind = $this->checkLDAP($account, $password);
             } catch (\Exception $e) {
                 return false;
+            }
+            if ($login == false) {
+                return true;
             }
             //return $ldapbind;
             if ($ldapbind && $this->userLogin($account)) {

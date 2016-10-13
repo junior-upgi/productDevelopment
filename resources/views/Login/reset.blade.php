@@ -53,6 +53,7 @@
 				<input type="hidden" id="account" name="account" value="{{ $account }}">
 				<input type="hidden" id="name" name="name" value="{{ $name }}">
 				<input type="password" id="password" name="password" class="form-control" placeholder="請輸入密碼" required autofocus="">
+				<input type="password" id="passwordConf" name="passwordConf" class="form-control" placeholder="確認密碼" required autofocus="">
 				@if (isset($error))
 					<h4>錯誤訊息：{{ $error }}</h4>
 				@endif 

@@ -73,10 +73,10 @@ class LoginController extends Controller
         isset($input['remember']) ? $remember = true : $remember = false;
         //驗證表單
         $validator = Validator::make($input, $rules);
-
+        $type = $type = env('WebSSO', 1);
         if ($validator->passes()) {
             //single sign on type 0=DB, 1=LDAP
-            $attempt = $this->common->singleSignOn($input['account'], $input['password'], 1);
+            $attempt = $this->common->singleSignOn($input['account'], $input['password'], $type);
 
             if ($attempt) {
                 if (Auth::check()) {

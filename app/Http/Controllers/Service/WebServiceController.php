@@ -44,21 +44,30 @@ class WebServiceController extends Controller
 {
     //use DispatchesJobs;
 
+    public $common;
     public $server;
     public $projectCheck;
     public $notify;
     public $user;
 
     public function __construct(
+        Common $common,
         ServerData $server,
         ProjectCheckService $projectCheck,
         NotificationService $notify,
         User $user
     ) {
+        $this->common = $common;
         $this->server = $server;
         $this->projectCheck = $projectCheck;
         $this->notify = $notify;
         $this->user = $user;
+    }
+
+    private function checkUser($account, $password, $type)
+    {
+        //type=0 DB, type=1 AD
+        return $this->common->singleSignOn($account, $password, $type, false);
     }
 
     /*
@@ -70,12 +79,18 @@ class WebServiceController extends Controller
         $jo = array();
         //$Password = Hash::make($Password);
         //驗證使用者帳密
+        
         $CheckUser = $user
             ->where('mobileSystemAccount', $Account);
             //->where('password', $Password);
+        /*
         $u = $CheckUser->first();    
         $CheckPassword = Hash::check($Password, $u->password);
-        if ($CheckPassword) {
+        */
+        $type = env('MobileSSO', 1);
+        $sso = $this->checkUser($Account, $Password, $type);
+
+        if ($sso) {
             //通過驗證
             try {
                 //寫入使用者設備資訊 
