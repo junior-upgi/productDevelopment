@@ -56,7 +56,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost,
+            'host' => env('DB_MySql', '192.168.168.25'),
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -70,7 +70,7 @@ return [
 
         'DB_productDevelopment' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost,
+            'host' => env('DB_MySql', '192.168.168.25'),
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -84,7 +84,7 @@ return [
 
         'DB_companyStructure' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost,
+            'host' => env('DB_MySql', '192.168.168.25'),
             'port' => '3306',
             'database' => 'companyStructure',
             'username' => 'spark',
@@ -98,7 +98,7 @@ return [
 
         'DB_sales' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost, 
+            'host' => env('DB_MySql', '192.168.168.25'), 
             'port' => '3306',
             'database' => 'sales',
             'username' => 'spark',
@@ -112,7 +112,7 @@ return [
 
         'DB_upgiSystem' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost,
+            'host' => env('DB_MySql', '192.168.168.25'),
             'port' => '3306',
             'database' => 'upgiSystem',
             'username' => 'spark',
@@ -126,7 +126,7 @@ return [
 
         'DB_mobileMessagingSystem' => [
             'driver' => 'mysql',
-            'host' => $MySqlHost,
+            'host' => env('DB_MySql', '192.168.168.25'),
             'port' => '3306',
             'database' => 'mobileMessagingSystem',
             'username' => 'spark',
@@ -140,7 +140,7 @@ return [
 
         'DB_UPGWeb' => [
             'driver' => 'sqlsrv',
-            'host' => '192.168.168.2',
+            'host' => env('DB_SqlServer', '192.168.168.2'),
             'port' => '1433',
             'database' => 'UPGWeb',
             'username' => 'sa',
