@@ -1,36 +1,51 @@
 <?php
+/**
+ * 系統共用方法
+ *
+ * @version 1.0.0
+ * @author spark it@upgi.com.tw
+ * @date 16/10/14
+ * @since 1.0.0 spark: 於此版本開始編寫註解
+*/
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\Controller;
-use DB;
 use Auth;
 use App\Models\upgiSystem\User;
 use App\Models\upgiSystem\File;
+
+/**
+ * Class Common
+ *
+ * @package App\Http\Controllers
+*/
 class Common
 {
-    public $DB;
-    public $user;
-    public $file;
+    /** @var User 注入User Model */
+    private $user;
+    /** @var File 注入File Model */
+    private $file;
+
+    /**
+     * Common 建構式
+     *
+     * @param User $user
+     * @param File $file
+     * @return void
+    */
     public function __construct(
-        DB $DB,
         User $user,
         File $file
     ) {
-        $this->DB = $DB;
         $this->user = $user;
         $this->file = $file;
     }
-    public function transaction()
-    {
-        $this->DB->beginTransaction();
-    }
-    public function commit()
-    {
-        $this->DB->commit();
-    }
-    public function rollback()
-    {
-        $this->DB->rollback();
-    }
+
+    /**
+    * 產生GUID
+    *
+    * @return string 回傳GUID
+    */
     public static function getNewGUID()
     {
         $charid = strtoupper(md5(uniqid(mt_rand(), true)));
@@ -44,51 +59,24 @@ class Common
         
         return $uuid;
     }
+
+    /**
+    * 對Model進行insert的方法
+    * 
+    * @param Model $table Model物件
+    * @param array $params 參數與值
+    * @param string $primaryKey 主鍵欄位名稱
+    * @return array 回傳結果
+    * @throw PDOException pdo例外
+    */
     public function insertData($table, $params, $primaryKey = 'ID')
     {
         try {
             $table->getConnection()->beginTransaction();
-            /*
-            if (is_array($table) && is_array($params) && is_array($primaryKey)) {
-                //雙寫入
-                //******************** 未完成
-                if (count($table) === count($params) && count($table) ===  count($primaryKey)) {
-                    for ($i = 0 ; $i < count($table) ; $i++) {
-                        if ($i == 0) {
-                            $newID = $this->common->getNewGUID();
-                        } else {
-                            $newID = $this->common->getNewGUID();
-                        }
-                        $t = $table[i];
-                        $p = $params[i];
-                        $k = $primaryKey[i];
-                        
-                    }
-                } else {
-                    return array(
-                        'success' => false,
-                        'msg' => '資料設定錯誤',
-                    );
-                }
-            } elseif (is_array($table) || is_array($params) || is_array($primaryKey)) {
-                //資料設定錯誤
-                return array(
-                    'success' => false,
-                    'msg' => '資料設定錯誤',
-                );
-            } else {
-                //單寫入
-                $newID = $this->common->getNewGUID();
-                $params[$primaryKey] = $newID;
-                $t = $this->getTable($table);
-                $t->insert($params);
-            }
-            */
             $newID = $this->getNewGUID();
             $params[$primaryKey] = $newID;
             $table->insert($params);
             $table->getConnection()->commit();
-            //$this->commit();
             return array(
                 'success' => true,
                 'msg' => '新增成功',
@@ -102,6 +90,17 @@ class Common
             );
         }
     }
+
+    /**
+    * 對Model進行update的方法
+    * 
+    * @param Model $table Model物件
+    * @param array $params 參數與值
+    * @param string $id 更新的資料的主鍵值
+    * @param string $primaryKey 主鍵欄位名稱
+    * @return array 回傳結果
+    * @throw PDOException pdo例外
+    */
     public function updateData($table, $params, $id, $primaryKey = 'ID')
     {
         try {
@@ -120,6 +119,16 @@ class Common
             );
         }
     }
+
+    /**
+    * 對Model進行delete的方法
+    * 
+    * @param Model $table Model物件
+    * @param string $id 刪除的鍵值
+    * @param string $primaryKey 主鍵欄位名稱
+    * @return array 回傳結果
+    * @throw PDOException pdo例外
+    */
     public function deleteData($table, $id, $primaryKey = 'ID')
     {
         try {
@@ -138,13 +147,24 @@ class Common
             );
         }
     }
+
+    /**
+    * 系統單一登入認證
+    * 提供DB與LDAP兩種認證方式
+    * 
+    * @param string $account 帳號
+    * @param string $password 密碼
+    * @param string $type 認證方式
+    * @param bool $login LDAP認證後是否直接登入
+    * @return bool 回傳結果
+    */
     public function singleSignOn($account, $password, $type, $login=true)
     {
         switch ($type) {
-            case 0:
+            case 'DB':
                 return $this->upgiDB($account, $password);
                 break;
-            case 1:
+            case 'LDAP':
                 return $this->upgiLDAP($account, $password, $login);
                 break;
             default:
@@ -152,6 +172,14 @@ class Common
         }
         return false;
     }
+
+    /**
+    * 以DB方式驗證並登入
+    * 
+    * @param string $account 帳號
+    * @param string $password 密碼
+    * @return bool 回傳結果
+    */
     public function upgiDB($account, $password)
     {
         return Auth::attempt([
@@ -159,28 +187,49 @@ class Common
                 'password' => $password,
             ], true);
     }
+
+    /**
+    * 驗證LDAP帳號密碼
+    * 如果$login=true則進行驗䛠後登入
+    * 
+    * @param string $account 帳號
+    * @param string $password 密碼
+    * @param bool $login 是否驗證後登入
+    * @return bool 回傳驗證結果
+    * @throw Exception 各項例外狀況
+    */
     public function upgiLDAP($account, $password, $login=true)
     {
-        $ldapconn = $this->connLDAP();
-        if ($ldapconn) {
-            try {
-                $ldapbind = $this->checkLDAP($account, $password);
+        try {
+            // 取得LDAP連結
+            $ldapconn = $this->connLDAP();
+            if ($ldapconn) {
+                // 認證帳號密碼
+                $ldapbind = $this->checkLDAP($account, $password, $ldapconn);
                 if ($ldapbind) {
                     if ($login) {
+                        // 進行登入
                         $signin = $this->userLogin($account);
                         if ($signin) {
-                            return true;
+                            return true; //登入成功
                         }
-                        return false;
+                        return false; //登入失敗
                     }
-                    return true;
+                    return true; //驗證通過
                 }
-                return false;
-            } catch (\Exception $e) {
-                return false;
+                return false; //驗證失敗
             }
+        } catch (\Exception $e) {
+            return false;
         }
     }
+
+    /**
+    * 以使用者帳號進行登入動作
+    * 
+    * @param string $account 帳號
+    * @return bool 回傳登入結果
+    */
     public function userLogin($account)
     {
         $auth = $this->user->where('mobileSystemAccount', $account)->first();
@@ -191,15 +240,26 @@ class Common
             return false;
         }
     }
+
+    /**
+    * 建立LDAP連結
+    * 
+    * @return ldap_connect 連結結果
+    */
     public function connLDAP()
     {
-        $ldaphost = "192.168.168.86";  // your ldap servers
-        $ldapport = 389;                 // your ldap server's port number 
-        // Connecting to LDAP
+        $ldaphost = "192.168.168.86";
+        $ldapport = 389; 
         $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
         ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
         return $ldapconn;
     }
+
+    /**
+    * 以LDAP Admin帳號取得連結
+    * 
+    * @return ldap_connect 連結結果
+    */
     public function LDAPAdmin($conn=null)
     {
         $conn = $this->getLDAPConn($conn);
@@ -208,6 +268,16 @@ class Common
         ldap_bind($conn, "cn=$adminac,dc=upgi,dc=ddns,dc=net", $adminpw);
         return $conn;
     }
+
+    /**
+    * 驗證LDAP帳號密碼
+    * 
+    * @param string $account 帳號
+    * @param string $password 密碼
+    * @param ldap_connect $conn LDAP連結物件
+    * @return bool 回傳驗證結果
+    * @throw Exception 各項例外狀況
+    */
     public function checkLDAP($account, $password, $conn = null)
     {
         $conn = $this->getLDAPConn($conn);
@@ -218,6 +288,14 @@ class Common
         }
         return false;
     }
+
+    /**
+    * 搜尋LDAP帳號是否存在
+    * 
+    * @param string $account 帳號
+    * @param ldap_connect $conn LDAP連結物件 
+    * @return bool 回傳結果
+    */
     public function searchLDAP($account, $conn = null)
     {
         $conn = $this->getLDAPConn($conn);
@@ -226,6 +304,15 @@ class Common
         if ($data['count'] > 0) return true;
         return false;
     }
+
+    /**
+    * 薪增LDAP帳號
+    * 
+    * @param string $uid 帳號
+    * @param string $password 密碼
+    * @param ldap_connect $conn LDAP物件
+    * @return bool 回傳結果
+    */
     //新增LDAP資料
     function addLDAP($uid, $password, $conn = null)
     {
@@ -239,6 +326,15 @@ class Common
         $add = ldap_add($bind, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
         return $add;
     }
+
+    /**
+    * 修改LDAP密碼
+    * 
+    * @param string $uid 帳號
+    * @param string @password 密碼
+    * @param ldap_connect $conn LDAP物件
+    * @return bool 回傳結果
+    */
     //修改LDAP資料
     function modifyLDAP($uid, $password, $conn = null)
     {
@@ -248,24 +344,53 @@ class Common
         $modify = ldap_modify($bind, "uid=$uid,ou=user,dc=upgi,dc=ddns,dc=net", $set);
         return $modify;
     }
+
+    /**
+    * 將密碼以md5格式加密
+    * 
+    * @param string $password 密碼
+    * @return string md5加密密碼
+    */
     private function hashPassword($password)
     {
-        //將密碼轉成md5
         $hash = '{md5}' . base64_encode(pack('H*', md5($password)));
         return $hash;
     }
+
+    /**
+    * 判斷是否ldap連結為null
+    * 如果是，則取得ldap連結
+    * 
+    * @param ldap_connect $conn ldap連結
+    * @return ldap_connect ldap連結
+    */
     public function getLDAPConn($conn)
     {
         if (is_null($conn)) {
             $conn = $this->connLDAP();
             return $conn;
         }
+        return $conn;
     }
+
+    /**
+    * 取得檔案base64編碼
+    * 
+    * @param string $id 檔案id
+    * @return string base64編碼
+    */
     public function getFile($id)
     {
         $file = $this->file;
         return $file->getFileCode($id);
     }
+
+    /**
+    * 將檔案進行base64轉碼存入資料庫中，並回傳對應id
+    * 
+    * @param object $data 檔案物件
+    * @return string 檔案id
+    */
     public function saveFile($data)
     {
         $name = $data->getClientOriginalName();

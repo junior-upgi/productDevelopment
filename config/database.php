@@ -1,5 +1,6 @@
 <?php
 $MySqlHost = '192.168.168.86';
+$SqlServerHost = '192.168.168.2';
 //$MySqlHost = '192.168.1.252';
 //MySqlHost = 'upgi.ddns.net';
 return [
@@ -56,7 +57,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'),
+            'host' => env('DB_MySql', $MySqlHost),
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -70,7 +71,7 @@ return [
 
         'DB_productDevelopment' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'),
+            'host' => env('DB_MySql', $MySqlHost),
             'port' => '3306',
             'database' => 'productDevelopment',
             'username' => 'spark',
@@ -84,7 +85,7 @@ return [
 
         'DB_companyStructure' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'),
+            'host' => env('DB_MySql', $MySqlHost),
             'port' => '3306',
             'database' => 'companyStructure',
             'username' => 'spark',
@@ -98,7 +99,7 @@ return [
 
         'DB_sales' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'), 
+            'host' => env('DB_MySql', $MySqlHost), 
             'port' => '3306',
             'database' => 'sales',
             'username' => 'spark',
@@ -112,7 +113,7 @@ return [
 
         'DB_upgiSystem' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'),
+            'host' => env('DB_MySql', $MySqlHost),
             'port' => '3306',
             'database' => 'upgiSystem',
             'username' => 'spark',
@@ -126,7 +127,7 @@ return [
 
         'DB_mobileMessagingSystem' => [
             'driver' => 'mysql',
-            'host' => env('DB_MySql', '192.168.168.25'),
+            'host' => env('DB_MySql', $MySqlHost),
             'port' => '3306',
             'database' => 'mobileMessagingSystem',
             'username' => 'spark',
@@ -140,7 +141,7 @@ return [
 
         'DB_UPGWeb' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_SqlServer', '192.168.168.2'),
+            'host' => env('DB_SqlServer', $SqlServerHost),
             'port' => '1433',
             'database' => 'UPGWeb',
             'username' => 'sa',
