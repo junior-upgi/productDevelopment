@@ -26,7 +26,7 @@ class CheckProduct extends Command
     /** @var string 命令描述 */
     protected $description = '[檢核]每日檢核產品執行狀態';
     /** @var ProjectCheckService 注入ProjectCheckService */
-    public $check;
+    private $check;
 
     /**
      * 建構式

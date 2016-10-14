@@ -9,7 +9,6 @@
 */
 namespace App\Http\Controllers\Auth;
 
-//use Class
 use App\Http\Controllers\Controller;
 use Validator;
 use Auth;
@@ -21,7 +20,6 @@ use App\Http\Controllers\ServerData;
 use Illuminate\Support\Facades\Hash;
 
 use App\Models\upgiSystem\User;
-//use App\Models;
 
 /**
  * Class LoginController

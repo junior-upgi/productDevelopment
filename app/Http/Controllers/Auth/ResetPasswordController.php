@@ -1,4 +1,12 @@
 <?php
+/**
+ * 使用者申請與重設密碼
+ *
+ * @version 1.0.0
+ * @author spark it@upgi.com.tw
+ * @date 16/10/14
+ * @since 1.0.0 spark: 於此版本開始編寫註解
+*/
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Common;
@@ -9,12 +17,28 @@ use Redirect;
 
 use App\Repositories\companyStructure\StaffRepositories;
 
+/**
+ * Class ResetpasswordController
+ *
+ * @package App\Http\Controllers\Auth
+*/
 class ResetPasswordController
 {
-    public $common;
-    public $server;
-    public $staff;
+    /** @var Common 注入共用元件 */
+    private $common;
+    /** @var ServerData 注入ServerData */
+    private $server;
+    /** @var StaffRepositories 注入StaffRepositories */
+    private $staff;
 
+    /**
+     * 建構式
+     *
+     * @param Common $common
+     * @param ServerData $server
+     * @param StaffRepositories $staff
+     * @return void
+    */
     public function __construct(
         Common $common,
         ServerData $server,
@@ -25,6 +49,11 @@ class ResetPasswordController
         $this->staff = $staff;
     }
     
+    /**
+     * 回傳重設密碼頁面
+     *
+     * @return view 重設密碼頁面
+    */
     public function resetPassword()
     {
         return view('Login.reset')
@@ -32,6 +61,12 @@ class ResetPasswordController
             ->with('result', false);
     }
 
+    /**
+    * 驗證個人基本資料
+    * 
+    * @param Request $request request內容
+    * @return view 回傳頁面
+    */
     public function checkPersonal(Request $request)
     {
         $input = $request->input();
@@ -52,6 +87,12 @@ class ResetPasswordController
         }
     }
 
+    /**
+    * 對Model進行insert的方法
+    * 
+    * @param Request $request request內容
+    * @return view 回傳頁面
+    */
     public function setPassword(Request $request)
     {
         $input = $request->input();
@@ -101,9 +142,5 @@ class ResetPasswordController
             ->with('account', $ID)
             ->with('name', $name)
             ->with('error', '單一登入申請失敗');
-    }
-    public function testAD()
-    {
-        return $this->common->testAD();
     }
 }
