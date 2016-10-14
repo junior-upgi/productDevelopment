@@ -529,7 +529,7 @@ class ProjectRepositories
     }
     public function getStartProcess()
     {
-        $now = data('Y-m-d', strtotime($this->carbon->now()));
+        $now = date('Y-m-d', strtotime($this->carbon->now()));
         $process = $this->vProcessList
             ->where('execute', 1)
             ->where('processStartDate', '<=', $now)

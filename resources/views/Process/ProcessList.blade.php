@@ -30,8 +30,8 @@
                 </a>
                 <button type="button" class="btn btn-primary {{$UserRole}}" onclick="AddShow()"><span class="glyphicon glyphicon-plus">新增</span></button>
                 <button type="button" class="btn btn-warning {{$UserRole}}" onclick="SaveSort()"><span class="glyphicon glyphicon-floppy-save">儲存排序</button>
-                @if($ProductData->execute == "0")
-                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute('run')"><span class="glyphicon glyphicon-play">執行開發</button>
+                @if($ProductData->execute == 0)
+                    <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute('run')"><span class="glyphicon glyphicon-play">執行開發</span></button>
                 @else
                     <button type="button" class="btn btn-warning {{$UserRole}}" onclick="Execute('pause')"><span class="glyphicon glyphicon-pause">停止開發</span></button>
                 @endif

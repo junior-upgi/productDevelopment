@@ -280,7 +280,7 @@ class WebServiceController extends Controller
 
     public function test()
     {
-        $process = $this->projectCheck->everyDay();
+        $process = $this->projectCheck->timeCostReport();
         return $process;
     }
 }

@@ -33,7 +33,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        //$schedule->command('checkProcess')->dailyAt('07:00');
+        $schedule->command('checkProcess')->dailyAt('07:00');
         //$schedule->command('checkProduct')->dailyAt('07:00');
         //$schedule->command('checkProject')->dailyAt('07:00');
         $schedule->command('checkEveryDay')->dailyAt('07:00');

@@ -165,16 +165,18 @@ class Common
         if ($ldapconn) {
             try {
                 $ldapbind = $this->checkLDAP($account, $password);
-            } catch (\Exception $e) {
+                if ($ldapbind) {
+                    if ($login) {
+                        $signin = $this->userLogin($account);
+                        if ($signin) {
+                            return true;
+                        }
+                        return false;
+                    }
+                    return true;
+                }
                 return false;
-            }
-            if ($login == false) {
-                return true;
-            }
-            //return $ldapbind;
-            if ($ldapbind && $this->userLogin($account)) {
-                return true;
-            } else {
+            } catch (\Exception $e) {
                 return false;
             }
         }

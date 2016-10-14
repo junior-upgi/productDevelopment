@@ -49,48 +49,26 @@ class ProjectCheckService
         1、取得目前開始執行的工序
         2、回報工作剩於天數給負責人
         */
-        $processList = $this->project->getStartProcess();
-        $
-        $reciprocal = 
-        $title = "工序完工期限通知";
-        $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
-        $staff = $server->getUserByerpID($list->staffID);
-        //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
-        $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
-        $audioFile="";
-        $projectID = $list->projectID;
-        $productID = $list->productID;
-        $processID = $list->ID;
-        $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
-        array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
-        return $jo;
-
-        $processList = $this->project->getDelayProcess();
+        $jo = array();
         $mobile = $this->mobile;
         $server = $this->serverData;
+        $processList = $this->project->getStartProcess();
         $now = date('Y-m-d', strtotime($this->carbon->now()));
-        $jo = array();
         foreach ($processList as $list) {
-            $title = "工序到期通知";
-            $delayDays = (strtotime($now) - strtotime($list->processStartDate)) / (60*60*24);
-            $content = "[$list->referenceNumber]$list->referenceName 已延誤 $delayDays 天";
-            $staff = $server->getUserByerpID($list->staffID);
-            $url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
-            $audioFile="";
-            $projectID = $list->projectID;
-            $productID = $list->productID;
-            $processID = $list->processID;
-            $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
-            $log = array(
-                'success' => $result['success'],
-                'type' => 'delayProcess',
-                'time' => $this->carbon->now(),
-                'broadcastID' => $result['broadcastID'],
-                'projectID' => $projectID,
-                'productID' => $productID,
-                'processID' => $processID,
-            );
-            array_push($jo, $log);
+            $endDate = date('Y-m-d', strtotime($list->processEndDate));
+            $reciprocal = (strtotime($endDate) - strtotime($now)) / (60*60*24);
+            if ($reciprocal >= 0) {
+                $title = "工序完工期限通知";
+                $content = "[$list->referenceNumber]$list->referenceName 完工日： $endDate ，剩餘 $reciprocal 日";
+                $staff = $server->getUserByerpID($list->staffID);
+                $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
+                $audioFile = "";
+                $projectID = $list->projectID;
+                $productID = $list->productID;
+                $processID = $list->ID;
+                $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+                array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
+            }
         }
         return $jo;
     }
@@ -140,7 +118,7 @@ class ProjectCheckService
         $staff = $server->getUserByerpID($list->staffID);
         //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
         $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
-        $audioFile="";
+        $audioFile = "alarm.mp3";
         $projectID = $list->projectID;
         $productID = $list->productID;
         $processID = $list->ID;
@@ -161,7 +139,7 @@ class ProjectCheckService
             $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
             //$url = route('overdueInfo', ['processID' => $list->ID]);
             $url = "http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/$list->ID";
-            $audioFile="";
+            $audioFile = "alarm.mp3";
             $projectID = $list->projectID;
             $productID = $list->productID;
             $processID = $list->ID;

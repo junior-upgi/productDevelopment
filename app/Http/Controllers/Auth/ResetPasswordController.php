@@ -36,7 +36,7 @@ class ResetPasswordController
     {
         $input = $request->input();
         $ID = $input['account'];
-        $personalID = $input['personalID'];
+        $personalID = studly_case($input['personalID']);
         $check = $this->server->checkPersonal($ID, $personalID);
         if (isset($check)) {
             return view('Login.reset')
