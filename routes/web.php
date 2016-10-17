@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
 Route::group(['middleware' => 'auth', 'prefix' => 'Report'], function() {
     Route::any('ProjectExecuteRate', 'ProductDevelopment\ReportController@projectExecuteRate');
     Route::any('ProductExecuteRate', 'ProductDevelopment\ReportController@productExecuteRate');
+    Route::any('Meeting', 'ProductDevelopment\ReportController@meetingReport');
 });
 
 Route::group(['prefix' => 'Mobile'], function() {
