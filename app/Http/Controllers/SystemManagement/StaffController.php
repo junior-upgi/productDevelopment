@@ -28,11 +28,14 @@ use App\Models\UPGWeb\ERPStaffNode;
 class StaffController extends Controller
 {
     public $common;
+    private $server;
     
     public function __construct(
-        Common $common
+        Common $common,
+        ServerData $server
     ) {
         $this->common = $common;
+        $this->server = $server;
     }
 
     public function insertUser($account, $password)
@@ -65,7 +68,7 @@ class StaffController extends Controller
     public function staffList(Request $request)
     {
         $Search = $request->input('Search');
-        $StaffList = ServerData::getStaffDetail()
+        $StaffList = $this->server->getStaffDetail()
             ->where('serving', '1');
         $s = new ERPStaffNode();
         $s = $Search;
@@ -82,7 +85,8 @@ class StaffController extends Controller
                     ->orWhere('position', 'LIKE', "%{$Search}%");
                 });
         }
-        //$a = $StaffList->toSql();
+        $a = $StaffList->toSql();
+        $dd = $StaffList->get();
         return view('Staff.StaffList')
             ->with('StaffList', $StaffList->paginate(15))
             ->with('Search', $s);

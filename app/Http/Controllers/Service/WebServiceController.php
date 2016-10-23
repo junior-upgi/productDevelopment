@@ -244,6 +244,7 @@ class WebServiceController extends Controller
                 'manualTopic' => $Title,
                 'content' => $Content,
             );
+
             $Message->insert($Params);
 
             $Params = array(
@@ -255,6 +256,7 @@ class WebServiceController extends Controller
                 'audioFile' => $AudioFile,
             );
             $BroadcastStatus->insert($Params);
+            
 
             DB::commit();
             $jo = array(

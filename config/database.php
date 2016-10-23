@@ -1,6 +1,6 @@
 <?php
 $MySqlHost = '192.168.168.86';
-$SqlServerHost = '192.168.168.2';
+$SqlServerHost = '192.168.168.5';
 //$MySqlHost = '192.168.1.252';
 //MySqlHost = 'upgi.ddns.net';
 return [

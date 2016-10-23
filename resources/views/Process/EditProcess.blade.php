@@ -70,6 +70,12 @@
                             </div>
                         </div>
                         <div class="form-group">
+                            <label for="note" class="col-md-4 control-label">備註</label>
+                            <div class="col-md-7">
+                                <textarea class="form-control" name="note" id="note" rows="5" style="resize: none;"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label class="control-label col-md-4">完成品圖片</label>
                             <div class="col-md-6">
                                 <div id="editImgDiv">

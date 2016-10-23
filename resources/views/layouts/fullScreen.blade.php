@@ -44,7 +44,7 @@
 	<script src="{{url('/')}}/script/master.js?x=1"></script>
 </head>
 <body>
-	<div class="container" style="width: 100%;margin: 15px 0px 15px 0px;">
+	<div class="container" style="width: 100%;">
 		<div class="content">
 			@yield('content')
 		</div>

@@ -86,9 +86,10 @@ class ReportController extends Controller
      */
      public function meetingReport()
      {
-         //$meeting = $this->projectRepositories->currentExecuteList();
-         $meeting = "";
+         $product = $this->projectRepositories->getProductExecuteList();
+         $process = $this->projectRepositories->getStartProcess();
          return view('Report.MeetingReport')
-            ->with('meeting', $meeting);
+            ->with('product', $product)
+            ->with('process', $process);
      }
 }

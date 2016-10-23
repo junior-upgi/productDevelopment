@@ -32,6 +32,7 @@
 </head>
 <body style="padding-top:40px;padding-bottom:40px;background-color:#eee;">
     <div class="container">
+		@inject('sys', 'App\Presenters\SystemPresenter')
 		@if (!$check)
 			<form class="form-signin" id="checkForm" role="form" action="checkPersonal" method="POST" style="max-width:330px;padding:15px;margin:auto;">
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
@@ -48,7 +49,7 @@
 		@else
 			<form class="form-signin" id="setadForm" role="form" action="setPassword" method="POST" style="max-width:330px;padding:15px;margin:auto;">
 				<p>員工編號：{{ $account }}</p>
-				<p>姓名：{{ $name }}</p>
+				<p>姓名：{{ $sys->getUTF8($name) }}</p>
 				<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
 				<input type="hidden" id="account" name="account" value="{{ $account }}">
 				<input type="hidden" id="name" name="name" value="{{ $name }}">

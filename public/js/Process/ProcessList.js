@@ -151,6 +151,7 @@ function EditShow(ID) {
                     }
                     $("#EditProcessForm #StaffID option[value=" + result.StaffID + "]").attr('selected', true);
                 }
+                $('#EditProcessForm #note').val(result.note);
                 if (result.processImg != null) {
                     var img = "<img src='" + result.processImg + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
                     $('#EditProcessForm #fileSet').val('true');

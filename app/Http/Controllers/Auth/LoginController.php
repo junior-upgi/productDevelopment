@@ -6,7 +6,7 @@
  * @author spark it@upgi.com.tw
  * @date 16/10/14
  * @since 1.0.0 spark: 於此版本開始編寫註解
-*/
+ */
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
@@ -25,7 +25,7 @@ use App\Models\upgiSystem\User;
  * Class LoginController
  *
  * @package App\Http\Controllers\Auth
-*/
+ */
 class LoginController extends Controller 
 {
     /** @var User 注入User Model */
@@ -39,7 +39,7 @@ class LoginController extends Controller
      * @param User $user
      * @param Common $common
      * @return void
-    */
+     */
     public function __construct(
         User $user,
         Common $common
@@ -49,11 +49,11 @@ class LoginController extends Controller
     }
 
     /**
-    * 顯示登入頁面
-    * 根據不同的權限導向對應的頁面
-    *
-    * @return view 回傳頁面
-    */
+     * 顯示登入頁面
+     * 根據不同的權限導向對應的頁面
+     *
+     * @return view 回傳頁面
+     */
     public function show()
     {
         if (Auth::check()) {
@@ -71,11 +71,11 @@ class LoginController extends Controller
     }
 
     /**
-    * 驗證並登入
-    * 
-    * @param Request $request request物件
-    * @return view 回傳頁面
-    */
+     * 驗證並登入
+     * 
+     * @param Request $request request物件
+     * @return view 回傳頁面
+     */
     public function login(Request $request)
     {
         $input = $request->input();
@@ -114,9 +114,9 @@ class LoginController extends Controller
     }
 
     /**
-    * 登出
-    * @return view 回傳登入頁
-    */
+     * 登出
+     * @return view 回傳登入頁
+     */
     public function logout()
     {
         Auth::logout();

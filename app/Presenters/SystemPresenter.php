@@ -13,6 +13,15 @@ class SystemPresenter
         $this->common = $common;
         $this->project = $project;
     }
+    public function getUTF8($str)
+    {
+        $car = mb_detect_encoding($str);
+        if ($car != "UTF-8") {
+            $newStr = iconv("BIG-5", "UTF-8", $str);
+            return $newStr;
+        }
+        return $str;
+    }
     public function getPic($id, $w, $h)
     {
         if (!isset($id)) return '';

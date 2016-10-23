@@ -69,8 +69,7 @@ class ProcessController extends Controller
                 'staffID' => iconv("UTF-8", "BIG-5", $request->input('StaffID')),
                 'sequentialIndex' => $this->projectRepositories->getMaxSeqIndex($request->input('ProductID')) + 1,
                 'processStartDate' => $request->input('ProcessStartDate'),
-                //'processImg' => $pic,
-                //'created_at' => Carbon::now(),
+                'note' => $request->input('note'),
             );
             if (isset($upload)) $params['processImg'] = $pic;
             $ProjectProcess = new ProjectProcess();
@@ -120,6 +119,7 @@ class ProcessController extends Controller
                 'NodeID' => $processData->nodeID,
                 'StaffList' => $staffList,
                 'processImg' => $pic,
+                'note' => $processData->note,
                 'ProcessStartDate' => date('Y-m-d', strtotime($processData->processStartDate)),
             );
         } else {
@@ -163,6 +163,7 @@ class ProcessController extends Controller
         $timeCost = $request->input('TimeCost');
         $staffID = $request->input('StaffID');
         $processStartDate = $request->input('ProcessStartDate');
+        $note = $request->input('note');
         if (isset($processNumber)) $params['referenceNumber'] = $processNumber;
         if (isset($processName)) $params['referenceName'] = $processName;
         if (isset($phaseID)) $params['projectProcessPhaseID'] = $phaseID;
@@ -170,6 +171,7 @@ class ProcessController extends Controller
         if (isset($staffID)) $params['staffID'] = $staffID;
         if (isset($processStartDate)) $params['processStartDate'] = $processStartDate;
         if (isset($upload)) $params['processImg'] = $pic;
+        if (isset($note)) $params['note'] = $note;
         return $this->projectRepositories->updateProcess($processID, $params);
     }
     //

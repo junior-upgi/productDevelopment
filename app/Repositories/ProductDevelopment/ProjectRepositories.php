@@ -95,6 +95,15 @@ class ProjectRepositories
             ->orderBy('referenceNumber')
             ->get();
     }
+    public function getProductExecuteList()
+    {
+        $list = $this->vProductList
+            ->where('execute', 1)
+            ->orderBy('deadline')
+            ->orderBy('nowEndDate')
+            ->get();
+        return $list;
+    }
     public function getProductList($projectID, $padding = 0)
     {
         $list = $this->vProductList
@@ -533,8 +542,9 @@ class ProjectRepositories
         $process = $this->vProcessList
             ->where('execute', 1)
             ->where('processStartDate', '<=', $now)
-            ->where('processEndDate', '>=', $now)
+            //->where('processEndDate', '>=', $now)
             ->where('complete', 0)
+            ->orderBy('processStartDate')
             ->get();
         return $process;
     }

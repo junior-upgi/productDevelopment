@@ -2,6 +2,7 @@
 @section('sysoption', 'active')
 @section('content')
     <script src="{{url('/')}}/js/Staff/StaffList.js?x=3"></script>
+    @inject('sys', 'App\Presenters\SystemPresenter')
     <ol class="breadcrumb">
         <li class="active">員工資料維護</li>
     </ol>
@@ -42,12 +43,12 @@
                     <td class="text-center">
                         <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list['ID']}}')">編輯</button>
                     </td>
-                    <td>{{$list['nodeName']}}</td>
-                    <td>{{$list['name']}}</td>
-                    <td>{{$list['position']}}</td>
-                    <td>{{$list->mapping['superivisor']['nodeName'] . '_' . $list->mapping['superivisor']['name']}}</td>
-                    <td>{{$list->mapping['primaryDelegate']['nodeName'] . '_' . $list->mapping['primaryDelegate']['name']}}</td>
-                    <td>{{$list->mapping['secondaryDelegate']['nodeName'] . '_' . $list->mapping['secondaryDelegate']['name']}}</td>
+                    <td>{{$sys->getUTF8($list['nodeName'])}}</td>
+                    <td>{{$sys->getUTF8($list['name'])}}</td>
+                    <td>{{$sys->getUTF8($list['position'])}}</td>
+                    <td>{{$sys->getUTF8($list->mapping['superivisor']['nodeName'] . '_' . $list->mapping['superivisor']['name'])}}</td>
+                    <td>{{$sys->getUTF8($list->mapping['primaryDelegate']['nodeName'] . '_' . $list->mapping['primaryDelegate']['name'])}}</td>
+                    <td>{{$sys->getUTF8($list->mapping['secondaryDelegate']['nodeName'] . '_' . $list->mapping['secondaryDelegate']['name'])}}</td>
                     <td></td>
                 </tr>
             @endforeach
