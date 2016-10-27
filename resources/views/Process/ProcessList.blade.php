@@ -53,6 +53,7 @@
                 <td width=50 class="text-center">工時</td>
                 <td width=110 class="text-center">工期</td>
                 <td width=100 class="text-center">完成時間</td>
+                <td width=150>備註</td>
                 <td width=50></td>
             </tr>
         </thead>
@@ -178,6 +179,7 @@
                             @endif
                         @endif
                     </td>
+                    <td>{!! $system->replaceBR($list->note) !!}</td>
                     <td>
                         <button type="button" class="btn btn-sm btn-danger {{$complete}} {{$admin}}" onclick="DoDelete('{{$ProductData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>

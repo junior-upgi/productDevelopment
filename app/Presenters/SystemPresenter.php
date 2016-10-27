@@ -73,4 +73,9 @@ class SystemPresenter
         }
         return '';
     }
+    public function replaceBR($str)
+    {
+        $replace = nl2br($str);
+        return $replace;
+    }
 }

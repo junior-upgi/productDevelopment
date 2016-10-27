@@ -94,20 +94,20 @@ class StaffController extends Controller
 
     public function getStaffData($StaffID)
     {
-        $StaffData = ServerData::getStaffDetail($StaffID)->first();
+        $StaffData = $this->server->getStaffDetail($StaffID)->first();
         $Node = new ERPNode();
         $NodeList = $Node->orderBy('nodeID')->get();
         $SuperivisorList = array();
         $PrimaryDelegateList = array();
         $SecondaryDelegateList = array();
         if ($StaffData->mapping['superivisor'] != null) {
-            $SuperivisorList = ServerData::getStaffList($StaffData->mapping->superivisor->nodeID)->get();
+            $SuperivisorList = $this->server->getStaffList($StaffData->mapping->superivisor->nodeID)->get();
         }
         if ($StaffData->mapping['primaryDelegate'] != null) {
-            $PrimaryDelegateList = ServerData::getStaffList($StaffData->mapping->primaryDelegate->nodeID)->get();
+            $PrimaryDelegateList = $this->server->getStaffList($StaffData->mapping->primaryDelegate->nodeID)->get();
         }
         if ($StaffData->mapping['secondaryDelegate'] != null) {
-            $SecondaryDelegateList = ServerData::getStaffList($StaffData->mapping->secondaryDelegate->nodeID)->get();
+            $SecondaryDelegateList = $this->server->getStaffList($StaffData->mapping->secondaryDelegate->nodeID)->get();
         }
         $jo = array(
             'success' => true,
