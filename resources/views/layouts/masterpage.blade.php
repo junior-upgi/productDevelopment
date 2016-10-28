@@ -6,13 +6,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>開發案管理系統</title>
-	<script>
-		var url = "{{url('/')}}";
-	</script>
+	<script>var url = "{{url('/')}}";</script>
 
 	<!--<link href="/css/app.css" rel="stylesheet">-->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap.css">
+	<link rel="stylesheet" href="{{ url('/css/bootstrap-theme.min.css') }}">
+	<link rel="stylesheet" href="{{ url('/css/bootstrap.css') }}">
 	<!--<link rel="stylesheet" href="{{url('/')}}/css/bootstrap-theme.css">-->
 	
 	<link rel="stylesheet" href="{{url('/')}}/css/bootstrap-datetimepicker.min.css">
@@ -90,6 +88,7 @@
 							<ul class="dropdown-menu" role="menu">
 								<li class="@yield('report.projectExecuteRate')"><a href="{{url('/')}}/Report/ProjectExecuteRate">專案進度表</a></li>
 								<li class="@yield('report.productExecuteRate')"><a href="{{url('/')}}/Report/ProductExecuteRate">產品進度表</a></li>
+								<li class="@yield('report.meetingReport')"><a href="{{url('/')}}/Report/Meeting" target="_blank">週會報表</a></li>
 							</ul>
 						</li>
 					</div>

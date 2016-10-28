@@ -11,7 +11,6 @@
 |
 */
 
-//Route::get('/', 'ProductDevelopment\ProjectController@showProject');
 Route::get('/', function () {
     return redirect('login');
 });
@@ -24,12 +23,6 @@ Route::get('test', 'Service\WebServiceController@test');
 Route::get('phpinfo', function () {
     phpinfo();
 });
-
-/*
-Route::get('csrfToken', function () {
-    return csrf_token();
-});
-*/
 
 Route::get('errorRoute', function () {
     return view('errors.roleError');
@@ -126,6 +119,9 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::post('InsertSide', 'SystemManagement\AuthorizationController@insertSide');
     Route::post('UpdateSide', 'SystemManagement\AuthorizationController@updateSide');
     Route::get('DeleteSide/{SideID}', 'SystemManagement\AuthorizationController@deleteSide');
+
+    Route::get('GroupList', 'SystemManagement\UserController@groupList');
+    Route::post('GroupSave', 'SystemManagement\UserController@groupSave');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'Report'], function() {

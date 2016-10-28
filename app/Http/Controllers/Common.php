@@ -59,31 +59,59 @@ class Common
         
         return $uuid;
     }
+    public function params($input, $addIgnore)
+    {
+        $ignore = array_merge(['_token', 'type', 'id'], $addIgnore);
+        $input = array_except($input, $ignore);
+        $params = array();
+        $countInput = count($input);
+        list($key, $value) = array_divide($input);
+        for ($i = 0; $i < $countInput; $i++) {
+            $big5 = $value[$i];
+            $params[$key[$i]] = $big5;
+        }
+        return $params;
+    }
+    public function where($table, $where = null)
+    {
+        $obj = $table->where(function ($q) use ($where) {
+            if (isset($where)) {
+                foreach ($where as $w) {
+                    $key = $w['key'];
+                    $op = (!isset($w['op'])) ? '=' : $w['op'];
+                    $value = $w['value'];
+                    $or = (!isset($w['or'])) ? false : $w['or'];
+                    if ($or) {
+                        $q->orWhere($key, $op, $value);
+                    } else {
+                        $q->where($key, $op, $value);
+                    }
+                }
+            }
+        });
+        return $obj;
+    }
 
     /**
      * 對Model進行insert的方法
      * 
      * @param Model $table Model物件
      * @param array $params 參數與值
-     * @param string $primaryKey 主鍵欄位名稱
      * @return array 回傳結果
-     * @throw PDOException pdo例外
+     * @throw Exception 例外
      */
-    public function insertData($table, $params, $primaryKey = 'ID')
+    public function insert($table, $params)
     {
         try {
             $table->getConnection()->beginTransaction();
-            $newID = $this->getNewGUID();
-            $params[$primaryKey] = $newID;
             $table->insert($params);
             $table->getConnection()->commit();
             return array(
                 'success' => true,
-                'msg' => '新增成功',
+                'msg' => 'success!',
             );
-        } catch (\PDOException $e) {
+        } catch (\Exception $e) {
             $table->getConnection()->rollback();
-            $this->rollback();
             return array(
                 'success' => false,
                 'msg' => $e['errorInfo'][2],
@@ -96,22 +124,20 @@ class Common
      * 
      * @param Model $table Model物件
      * @param array $params 參數與值
-     * @param string $id 更新的資料的主鍵值
-     * @param string $primaryKey 主鍵欄位名稱
      * @return array 回傳結果
-     * @throw PDOException pdo例外
+     * @throw Exception 例外
      */
-    public function updateData($table, $params, $id, $primaryKey = 'ID')
+    public function update($table, $params)
     {
         try {
             $table->getConnection()->beginTransaction();
-            $table->where($primaryKey, $id)->update($params);
+            $table->update($params);
             $table->getConnection()->commit();
             return array(
                 'success' => true,
-                'msg' => '編輯成功',
+                'msg' => 'success!',
             );
-        } catch (\PDOException $e) {
+        } catch (\Exception $e) {
             $table->getConnection()->rollback();
             return array(
                 'success' => false,
@@ -125,21 +151,20 @@ class Common
      * 
      * @param Model $table Model物件
      * @param string $id 刪除的鍵值
-     * @param string $primaryKey 主鍵欄位名稱
      * @return array 回傳結果
-     * @throw PDOException pdo例外
+     * @throw Exception 例外
      */
-    public function deleteData($table, $id, $primaryKey = 'ID')
+    public function delete($table)
     {
         try {
             $table->getConnection()->beginTransaction();
-            $table->where($primaryKey, $id)->delete();
+            $table->delete();
             $table->getConnection()->commit();
             return array(
                 'success' => true,
-                'msg' => '刪除成功',
+                'msg' => 'success!',
             );
-        } catch (\PDOException $e) {
+        } catch (\Exception $e) {
             $table->getConnection()->rollback();
             return array(
                 'success' => false,

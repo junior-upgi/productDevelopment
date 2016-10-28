@@ -12,4 +12,5 @@ class UserGroupMembership extends Model
     protected $connection = 'DB_upgiSystem';
     protected $table = "userGroupMembership";
     protected $softDelete = true;
+    protected $hidden = ['created', 'deprecated', 'created_at', 'updated_at', 'deleted_at'];
 }

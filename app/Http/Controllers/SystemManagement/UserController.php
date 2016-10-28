@@ -8,29 +8,54 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
-use Illuminate\Support\Str;
 
-use DB;
-use App\Models;
-use App\Models\companyStructure\VStaff;
-use App\Models\companyStructure\Staff;
-use App\Models\companyStructure\Node;
-use App\Models\companyStructure\Relationship;
-use App\Models\sales\Client;
-use App\Models\upgiSystem\User;
-use App\Models\upgiSystem\UserGroup;
-use App\Models\upgiSystem\UserGroupMembership;
-use App\Models\UPGWeb\erpClient;
-use App\Models\UPGWeb\erpNode;
-use App\Models\UPGWeb\erpStaff;
-use App\Models\UPGWeb\ERPStaffNode;
+use App\Repositories\upgiSystem\UpgiSystemrepository;
+
 
 class UserController extends Controller
 {
-    public function sideList()
-    {
+    private $common;
+    private $server;
+    private $upgi;
 
+    public function __construct(
+        Common $common,
+        ServerData $server,
+        UpgiSystemrepository $upgi
+    ) {
+        $this->common = $common;
+        $this->server = $server;
+        $this->upgi = $upgi;
     }
 
+    public function groupList()
+    {
+        $request = request();
+        $search = $request->input('search');
+        $where = null;
+        if (isset($search)) {
+            $params = ['key' => 'reference', 'op' => 'like', 'value' => "%$search%"];
+            $where = array();
+            array_push($where, $params);
+        }
+        $group = $this->upgi->getList('group', $where)
+            ->orderBy('reference')
+            ->get();
+        return view('System.Group.GroupList')
+            ->with('group', $group)
+            ->with('search', $search);
+    }
 
+    public function relationshipList()
+    {
+        
+    }
+
+    public function groupSave()
+    {
+        $request = request();
+        $input = $request->input();
+        $tran = $this->upgi->save('group', $input);
+        return $tran;
+    }   
 }
