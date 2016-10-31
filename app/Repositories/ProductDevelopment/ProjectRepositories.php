@@ -193,13 +193,14 @@ class ProjectRepositories
         }
         return $jo;
     }
-    public function insertData($table, $params, $primaryKey = 'ID')
+    public function insertData($table, $params)
     {
-        return $this->common->insertData($table, $params, $primaryKey);
+        return $this->common->insert($table, $params);
     }
     public function updateData($table, $params, $id, $primaryKey = 'ID')
     {
-        return $this->common->updateData($table, $params, $id, $primaryKey);
+        $table = $table->where($primaryKey, $id);
+        return $this->common->update($table, $params);
     }
     public function deleteData($table, $id, $primaryKey = 'ID')
     {
