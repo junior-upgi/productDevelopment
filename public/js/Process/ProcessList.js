@@ -305,29 +305,6 @@ function DoInsert() {
         },
         success: function (obj) {
             if (obj.success) {
-                //swal("新增資料成功!", obj.msg, "success");
-                //new process
-                /*
-                var msg = '<tr id="' + obj.ProcessID + '">'
-                            + '<td><button type="button" class="btn btn-sm btn-default" onclick="EditShow(\'' + obj.ProcessID + '\')">編輯</button></td>'
-                            + '<td>#</td>'
-                            + '<td class="text-center">' + obj.PhaseName + '</td>'
-                            + '<td>' + obj.ProcessNumber + '</td>'
-                            + '<td>' + obj.ProcessName + '</td>'
-                            + '<td>' + obj.NodeName + '</td>'
-                            + '<td>' + obj.name + '</td>'
-                            + '<td>' + obj.TimeCost + '</td>'
-                            + '<td></td>'
-                            + '<td></td>'
-                            + '<td></td>'
-                            + '<label for="">'
-                            + '<span>' + obj.NodeName + '</span>'
-                            + '<span>' + obj.name + '</span>'
-                            + '<span>' + obj.TimeCost + '</span>'
-                            + '</label>'
-                        + '</tr>';
-                $("#tableSort").append(msg);
-                */
                 $('#AddModal').modal('hide');
                 swal({
                     title: "新增資料成功!",

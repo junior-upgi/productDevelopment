@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 
+use App\Models\companyStructure\VStaff;
+
 class User extends Model implements AuthenticatableContract
 {
     use SoftDeletes;
@@ -28,20 +30,9 @@ class User extends Model implements AuthenticatableContract
         'erpID',
     ];
     protected $hidden = array('password', 'remember_token');
-    /*
-    public function getRememberToken()
+    
+    public function staff()
     {
-        return $this->remember_token;
+        return $this->hasOne(VStaff::class, 'ID', 'mobileSystemAccount');
     }
-
-    public function setRememberToken($value)
-    {
-        $this->remember_token = $value;
-    }
-
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
-    }
-    */
 }

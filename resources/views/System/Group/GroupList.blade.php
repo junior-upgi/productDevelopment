@@ -1,6 +1,6 @@
 @extends('layouts.systemOption')
 @section('content')
-    <script src="{{ url('/js/System/Group/GroupList.js?x=4') }}"></script>
+    <script src="{{ url('/js/System/Group/GroupList.js?x=1') }}"></script>
     <!--tool bar-->
     <nav class="navbar navbar-default" role="navigation">
         <ul class="nav navbar-nav">
@@ -34,7 +34,7 @@
                 @endphp
                 <tr>
                     <td class="text-center">
-                        <button type="button" class="btn btn-sm btn-default" onclick="member('{{ $g->ID }}')">管理</button>
+                        <button type="button" class="btn btn-sm btn-default" onclick="member('{{ $g->ID }}', '{{ $g->reference }}')">管理</button>
                     </td>
                     <td>{{ $g->reference }}</td>
                     <td class="text-center">

@@ -25,6 +25,7 @@
 	<script src="{{ url('/script/jquery.form.min.js') }}"></script>
 	<script src="{{ url('/script/bootstrap-datetimepicker.min.js') }}"></script>
 	<script src="{{ url('/script/bootstrap-datetimepicker.zh-TW.js') }}"></script>
+	<script src="{{ url('/script/bootstrap-suggest.min.js') }}"></script>
 	<script src="{{ url('/script/master.js?x=1') }}"></script>
 </head>
 <body>

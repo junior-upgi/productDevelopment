@@ -30,6 +30,14 @@ $(function() {
     });
 });
 
+function member(id, name) {
+    $('#joinGroup').val(id);
+    $('#JoinTitle').html('加入[' + name + ']群組成員');
+    $('#memberTable').empty();
+    getList(id);
+    $('#JoinModal').modal('show');
+}
+
 function doAdd(json) {
     if (json == '') {
         $('#modalTitle').html('新增群組資料');
@@ -89,7 +97,7 @@ function doDelete(id) {
                                 $("#searchForm").submit();
                             });
                     } else {
-                        swal("刪除資料失敗!", obj.msg, "error");
+                        swal("刪除資料失敗!", result.msg, "error");
                     }
                 }
             })

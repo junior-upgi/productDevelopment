@@ -82,31 +82,41 @@ class UpgiSystemRepository
         return $tran;
     }
 
-    private function insert($table, $params)
+    public function insert($table, $params)
     {
         $obj = $this->common->insert($table, $params);
         return $obj;
     }
 
-    private function update($table, $id, $params, $pk)
+    public function update($table, $id, $params, $pk)
     {
         $table = $table->where('ID', $id);
         $obj = $this->common->update($table, $params);
         return $obj;
     }
 
-    private function delete($table, $id, $pk)
+    public function delete($table, $id, $pk)
     {
         $table = $table->where($pk, $id);
+        $a = $table->get();
         $obj = $this->common->delete($table);
         return $obj;
     }
 
-    private function getTable($table)
+    public function getTable($table)
     {
         switch ($table) {
             case 'group':
                 return $this->group;
+                break;
+            case 'user':
+                return $this->user;
+                break;
+            case 'membership':
+                return $this->membership;
+                break;
+            case 'vUser':
+                return $this->vUser;
                 break;
             default:
                 return null;
