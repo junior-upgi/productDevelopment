@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 
-use App\Repositories\upgiSystem\UpgiSystemrepository;
+use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 
 class UserController extends Controller
