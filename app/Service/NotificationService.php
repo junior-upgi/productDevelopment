@@ -11,7 +11,7 @@ use App\Jobs\SendNotify;
 //use Repositories
 use App\Repositories\mobileMessagingSystem\MobileRepositories;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
-use App\Repositories\upgiSystem\upgiSystemRepository;
+use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 class NotificationService
 {
