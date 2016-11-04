@@ -8,12 +8,12 @@
             </div>
             <input type="hidden" id="joinGroup" name="joinGroup" value="">
             <form class="form-horizontal" style="max-height:600px;overflow: auto;">
-                <div class="modal-body" id="modalBody">
+                <div class="modal-body" id="modalBody" style="min-height: 300px;">
                     <div class="row">
                         <div class="col-lg-10">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="joinID">
-                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu" style="height: 250px;">
                                 </ul>
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary">加入</button>
