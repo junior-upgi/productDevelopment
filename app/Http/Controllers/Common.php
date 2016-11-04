@@ -273,8 +273,8 @@ class Common
      */
     public function connLDAP()
     {
-        $ldaphost = "192.168.168.86";
-        $ldapport = 389; 
+        $ldaphost = env('LDAP_HOST', '192.168.168.86');
+        $ldapport = env('LDAP_PORT', '389');
         $ldapconn = ldap_connect($ldaphost, $ldapport) or die("con't connect LDAP");
         ldap_set_option($ldapconn, LDAP_OPT_PROTOCOL_VERSION, 3);
         return $ldapconn;

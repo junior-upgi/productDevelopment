@@ -125,6 +125,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::get('SearchMember', 'SystemManagement\UserController@searchMember');
     Route::post('UserJoin', 'SystemManagement\UserController@userJoin');
     Route::get('GetMember', 'SystemManagement\UserController@getMember');
+    Route::get('GetMobileUser', 'SystemManagement\UserController@getMobileUser');
     Route::post('RemoveUser', 'SystemManagement\UserController@removeUser');
 });
 

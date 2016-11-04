@@ -113,13 +113,15 @@ function SaveSort() {
 }
 
 //呼叫新增程序視窗
-function AddShow() {
+function AddShow(role) {
     $('#AddProcessForm #ProcessNumber').val('');
     $('#AddProcessForm #ProcessName').val('');
     $("#AddProcessForm #PhaseID")[0].selectedIndex = 0;
     $('#AddProcessForm #TimeCost').val('');
-    $("#AddProcessForm #NodeID")[0].selectedIndex = 0;
-    $("#AddProcessForm #StaffID option").remove();
+    if (role = '') {
+        $("#AddProcessForm #NodeID")[0].selectedIndex = 0;
+        $("#AddProcessForm #StaffID option").remove();
+    }
     $('#BtnAdd').button('reset');
     $('#AddModal').modal('show');
 }
@@ -490,4 +492,9 @@ function Delete(ProductID, ProcessID) {
             }
         }
     })
+}
+
+function Notify() {
+    
+    $('#NotifyModal').modal('show');
 }

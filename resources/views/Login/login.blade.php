@@ -36,9 +36,9 @@
 			<input type="hidden" name="_token" value="{{{ csrf_token() }}}">
             <h2 class="form-signin-heading">請輸入帳號密碼</h2>
 			<label for="account" class="sr-only">帳號</label>
-			<input type="text" id="account" name="account" class="form-control" placeholder="帳號(員工編號)" required="" autofocus="">
+			<input type="text" id="account" name="account" class="form-control" minlength="4" maxlength="20" placeholder="帳號(員工編號)" required="" autofocus="">
 			<label for="password" class="sr-only">密碼</label>
-			<input type="password" id="password" name="password" class="form-control" placeholder="密碼" required="">
+			<input type="password" id="password" name="password" class="form-control" minlength="4" maxlength="20" placeholder="密碼" required="">
             <!--
 			<div class="checkbox">
 				<label>

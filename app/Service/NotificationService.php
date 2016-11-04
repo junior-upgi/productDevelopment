@@ -5,12 +5,13 @@ namespace App\Service;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Illuminate\Foundation\Bus\DispatchesJobs;
-
+use Auth;
 use App\Jobs\SendNotify;
 
 //use Repositories
 use App\Repositories\mobileMessagingSystem\MobileRepositories;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\upgiSystem\upgiSystemRepository;
 
 class NotificationService
 {
@@ -19,15 +20,51 @@ class NotificationService
     public $serverData;
     public $mobile;
     public $project;
+    public $upgi;
 
     public function __construct(
         ServerData $serverData,
         MobileRepositories $mobileRepositories,
-        ProjectRepositories $projectRepositories
+        ProjectRepositories $projectRepositories,
+        upgiSystemRepository $upgi
     ) {
         $this->serverData = $serverData;
         $this->mobile = $mobileRepositories;
         $this->project = $projectRepositories;
+        $this->upgi = $upgi;
+    }
+
+    public function sendNewProduct($id)
+    {
+        $user = Auth::user();
+        define("GENERAL", 3);
+        define("PRODUCTDEVELOPMENT", 0);
+        $product = $this->project->getProductByID($id);
+        $where = [];
+        $params = ['key' => 'groupName', 'value' => "DevelopmentTeam"];
+        array_push($where, $params);
+        $groupList = $this->upgi->getList('vUserGroupList', $where)->get();
+        $title = '新開發案通知';
+        $content = "新增[$product->projectNumber][$product->referenceNumber]產品開發，請同仁上系統新增產品開發工序。";
+        $messageID = constant("GENERAL");
+        $systemID = constant("PRODUCTDEVELOPMENT");
+        $url = ''; /** :TODO: 後續完成RWD頁面*/
+        foreach ($groupList as $g) {
+            $message = array(
+                'title' => $title,
+                'content' => $content,
+                'messageID' => $messageID,
+                'systemID' => $systemID,
+                'uid' => $user->ID,
+                'recipientID' => $g->ID,
+                'url' => $url,
+                'audioFile' => null,
+                'projectID' => $g->projectID,
+                'productID' => $g->ID,
+                'processID' => null,
+            );
+            $this->dispatch(new SendNotify($message));
+        }
     }
 
     public function productExecute($productID,$uid='')
@@ -135,14 +172,18 @@ class NotificationService
     public function sendMessageBase($getData) 
     {
         try {
+            $user = Auth::user();
+            $uid = $user->ID;
+            $sender = $user->staff()->first();
             foreach ($getData as $list) {
                 $recipientID = $this->serverData->getUserByerpID($list['recipientID'])->ID;
+                $title = $list['title'];
                 $message = array(
-                    'title' => $list['title'],
+                    'title' => "[$sender->nodeName]$sender->name: $title",
                     'content' => $list['content'],
                     'messageID' => $list['messageID'],
                     'systemID' => $list['systemID'],
-                    'uid' => $list['uid'],
+                    'uid' => $sender,
                     'recipientID' => $recipientID,
                     'url' => $list['url'],
                     'audioFile' => $list['audioFile'],

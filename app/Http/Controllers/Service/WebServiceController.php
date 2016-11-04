@@ -275,7 +275,6 @@ class WebServiceController extends Controller
 
     public function sendMessage(Request $request)
     {
-        
         $getData = $request->json()->all();
         $result = $this->notify->sendMessageBase($getData);
         return $result;

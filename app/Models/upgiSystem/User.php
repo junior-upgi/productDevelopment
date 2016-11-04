@@ -33,6 +33,6 @@ class User extends Model implements AuthenticatableContract
     
     public function staff()
     {
-        return $this->hasOne(VStaff::class, 'ID', 'mobileSystemAccount');
+        return $this->hasOne(VStaff::class, 'ID', 'erpID');
     }
 }

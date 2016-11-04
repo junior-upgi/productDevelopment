@@ -115,7 +115,8 @@ class ProjectController extends Controller
                'msg' => '您沒有權限使用此功能',
            );
         } 
-        return $this->projectRepositories->deleteData($this->projectRepositories->project, $projectID);
+        $result = $this->projectRepositories->deleteData($this->projectRepositories->project, $projectID);
+        return $result;
     }
     //
     public function showProject()

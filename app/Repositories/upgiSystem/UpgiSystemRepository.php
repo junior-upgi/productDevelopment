@@ -54,9 +54,9 @@ class UpgiSystemRepository
     }
 
     /**
-     * 取得群組清單
+     * 取得清單
      * 
-     * @return UserGroup 回傳UserGroup Model
+     * @return Module 回傳Model
      */
     public function getList($table, $where = null)
     {
@@ -115,7 +115,7 @@ class UpgiSystemRepository
             case 'membership':
                 return $this->membership;
                 break;
-            case 'vUser':
+            case 'vUserGroupList':
                 return $this->vUser;
                 break;
             default:

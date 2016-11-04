@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Repositories\mobileMessagingSystem\MobileRepositories;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
 use App\Repositories\companyStructure\StaffRepositories;
+use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 class ProjectCheckService
 {
@@ -16,6 +17,7 @@ class ProjectCheckService
     public $staff;
     public $mobile;
     public $serverData;
+    public $upgi;
 
     public function __construct(
         Common $common,
@@ -23,7 +25,8 @@ class ProjectCheckService
         ServerData $serverData,
         ProjectRepositories $project,
         StaffRepositories $staff,
-        MobileRepositories $mobile
+        MobileRepositories $mobile,
+        UpgiSystemRepository $upgi
     ) {
         $this->common = $common;
         $this->carbon = $carbon;
@@ -31,6 +34,7 @@ class ProjectCheckService
         $this->project = $project;
         $this->staff = $staff;
         $this->mobile = $mobile;
+        $this->upgi = $upgi;
     }
 
     public function delayProject()
@@ -40,15 +44,45 @@ class ProjectCheckService
 
     public function delayProduct()
     {
-        $productList = $this->project->getOverdueProduct();
+        
+    }
+
+    public function sendOverdue()
+    {
+        /**
+         * 1、取得SendOverdue群組成員清單
+         * 2、發送逾期清單給SendOverdue群組成員
+         */
+        $jo = [];
+        $upgi = $this->upgi;
+        $where = [];
+        $now = date('Y-m-d', strtotime($this->carbon->now()));
+        $params = ['key' => 'groupName', 'value' => "SendOverdue"];
+        array_push($where, $params);
+        $groupList = $upgi->getList('vUserGroupList', $where);
+        foreach ($groupList as $g) {
+            $title = "產品開發案逾期清單";
+            $content = "截至今日 $now 產品開發案逾期清單";
+            $staff = $g->ID;
+            $url = ""; //***********
+            $audioFile = "";
+            $projectID = $list->projectID;
+            $productID = $list->productID;
+            $processID = $list->ID;
+            define("SCHEDULE_ALERT", 1);
+            define("PRODUCTDEVELOPMENT", 0);
+            $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+            array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
+        }
+        return $jo;
     }
 
     public function timeCostReport()
     {
-        /*
-        1、取得目前開始執行的工序
-        2、回報工作剩於天數給負責人
-        */
+        /**
+         * 1、取得目前開始執行的工序
+         * 2、回報工作剩於天數給負責人
+         */
         $jo = array();
         $mobile = $this->mobile;
         $server = $this->serverData;
@@ -66,7 +100,9 @@ class ProjectCheckService
                 $projectID = $list->projectID;
                 $productID = $list->productID;
                 $processID = $list->ID;
-                $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+                define("SCHEDULE_ALERT", 1);
+                define("PRODUCTDEVELOPMENT", 0);
+                $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
                 array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
             }
         }
@@ -75,11 +111,11 @@ class ProjectCheckService
 
     public function everyDay()
     {
-        /*
-        1、更新每日延誤程序之工期延期至今日
-        2、通知個人工期已延誤至今日
-        3、如果最後完成時間已逾期，則通知業務
-        */
+        /**
+         * 1、更新每日延誤程序之工期延期至今日
+         * 2、通知個人工期已延誤至今日
+         * 3、如果最後完成時間已逾期，則通知業務
+         */
 
         //取得現階段執行且延誤之程序 getDelayProcess()
         
@@ -97,6 +133,7 @@ class ProjectCheckService
         }
         return $jo;
     }
+
     public function notifyExtension($list, $jo)
     {
         $mobile = $this->mobile;
@@ -109,7 +146,7 @@ class ProjectCheckService
         );
         $setCost = $this->project->updateProcess($list->ID, $params);
         if (!$setCost['success']) {
-            array_push($jo, $this->setLog(false, 'up cost error', $setCost['msg'], '', $list->projectID, $list->productID, $list->ID));
+            array_push($jo, $this->setLog(false, 'update cost error', $setCost['msg'], '', $list->projectID, $list->productID, $list->ID));
             return $jo;
         }
         //通知個人工期延誤
@@ -122,7 +159,9 @@ class ProjectCheckService
         $projectID = $list->projectID;
         $productID = $list->productID;
         $processID = $list->ID;
-        $result = $mobile->insertNotify($title, $content, 1, 0, '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+        define("SCHEDULE_ALERT", 1);
+        define("PRODUCTDEVELOPMENT", 0);
+        $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
         array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
         return $jo;
     }
@@ -143,7 +182,9 @@ class ProjectCheckService
             $projectID = $list->projectID;
             $productID = $list->productID;
             $processID = $list->ID;
-            $result = $mobile->insertNotify($title, $content, 1, 0, '', $sales->ID, $url, $audioFile, $projectID, $productID, $processID);
+            define("SCHEDULE_ALERT", 1);
+            define("PRODUCTDEVELOPMENT", 0);
+            $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $sales->ID, $url, $audioFile, $projectID, $productID, $processID);
             array_push($jo, $this->setLog($result['success'], 'notify sales', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
         }
         return $jo;

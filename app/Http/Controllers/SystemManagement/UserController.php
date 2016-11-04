@@ -52,7 +52,7 @@ class UserController extends Controller
         $groupID = $request->input('groupID');
         $where = [];
         array_push($where, ['key' => 'groupID', 'value' => $groupID]);
-        $group = $this->upgi->getList('vUser', $where)->with('staff')->orderBy('erpID')->get()->toArray();
+        $group = $this->upgi->getList('vUserGroupList', $where)->with('staff')->orderBy('erpID')->get()->toArray();
         if (isset($group)) {
             $list = [];
             for ($i = 0; $i < count($group); $i++) {
@@ -78,6 +78,32 @@ class UserController extends Controller
         }
     }
 
+    public function getMobileUser()
+    {
+        $where = [];
+        $haveToken = ['key' => 'deviceToken', 'op' => '<>', 'value' => null];
+        $isMember = ['key' => 'erpID', 'op' => '<>', 'value' => null];
+        array_push($where, $haveToken);
+        array_push($where, $isMember);
+        $member = $this->upgi->getList('user', $where);
+        $member = $member->with('staff')->get()->toArray();
+        $list = [];
+        for ($i = 0; $i < count($member); $i++) {
+            $staff = $member[$i]['staff'];
+            if (isset($staff)) {
+                $staff = array_except($staff, 'ID');
+                $base = $member[$i];
+                $base = array_except($base, 'staff');
+                $newMember = array_merge($base, $staff);
+                array_push($list, $newMember);
+            }
+        }
+        $json = [];
+        $json['message'] = '';
+        $json['value'] = $list;
+        return $json;
+    }
+
     public function groupSave()
     {
         $request = request();
@@ -95,7 +121,7 @@ class UserController extends Controller
         $where = [];
         array_push($where, ['key' => 'groupID', 'value' => $groupID]);
         array_push($where, ['key' => 'erpID', 'value' => $erpID]);
-        $member = $this->upgi->getList('vUser', $where)->first();
+        $member = $this->upgi->getList('vUserGroupList', $where)->first();
         if (isset($member)) {
             $set = [
                 'id' => $member->membershipID,

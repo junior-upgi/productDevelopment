@@ -10,27 +10,28 @@
     @inject('system', 'App\Presenters\SystemPresenter')
     <!--project info panel-->
     <p class="bg-info">
+        {{ "[$ProjectData->referenceNumber] [$ProjectData->referenceName] [$ProjectData->clientName] [$ProjectData->salesName]" }}
+        <!--
         <span style="margin-right:20px;">專案代碼：{{$ProjectData->referenceNumber}}</span>
         <span style="margin-right:20px;">專案名稱：{{$ProjectData->referenceName}}</span>
         <span style="margin-right:20px;">客戶名稱：{{$ProjectData->clientName}}</span>
         <span style="margin-right:20px;">業務員：{{$ProjectData->salesName}}</span>   
+        -->
     </p>
     <!--tool bar-->
     @php
         Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole='';
     @endphp
-    <nav class="navbar navbar-default" role="navigation">
-        <ul class="nav navbar-nav">
-            <form action="" class="navbar-form">
-                <a href="{{url('/')}}/Project/ProjectList" class="btn btn-default">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
-            </form>
-        </ul>
-    </nav>
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <a href="{{url('/')}}/Project/ProjectList" class="btn btn-default">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+            </a>
+            <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
+        </div>
+    </div>
     <!--data table-->
-    <table class="table table-bordered" style="margin-top:20px;">
+    <table class="table table-bordered table-condensed">
         <thead>
             <tr>
                 <td width=60></td>

@@ -45,21 +45,25 @@
                             <input type="text" class="form-control" id="TimeCost" name="TimeCost" value="" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="NodeID" class="col-md-4 control-label">負責人</label>
-                        <div class="col-md-3">
-                            <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
-                                <option value="">請選擇單位</option>
-                                @foreach($NodeList as $list)
-                                    <option value="{{$list->ID}}">{{$list->name}}</option>
-                                @endforeach
-                            </select>
+                    @if($UserRole != 'disabled')
+                        <div class="form-group">
+                            <label for="NodeID" class="col-md-4 control-label">負責人</label>
+                            <div class="col-md-3">
+                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
+                                    <option value="">請選擇單位</option>
+                                    @foreach($NodeList as $list)
+                                        <option value="{{$list->ID}}">{{$list->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select class="form-control" id="StaffID" name="StaffID" required>
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <select class="form-control" id="StaffID" name="StaffID" required>
-                            </select>
-                        </div>
-                    </div>
+                    @else
+                        <input type="hidden" name="StaffID" value="{{ $user->erpID }}">
+                    @endif
                     <div class="form-group">
                         <label for="note" class="col-md-4 control-label">備註</label>
                         <div class="col-md-7">

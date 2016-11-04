@@ -56,8 +56,9 @@ class ProductController extends Controller
             }
             $upload = true;
         }
-        
+        $id = $this->common->getNewGUID();
         $params = array(
+            'ID' => $id,
             'projectID' => $request->input('ProjectID'),
             'referenceNumber' => $request->input('ProductNumber'),
             'referenceName' => $request->input('ProductName'),
@@ -69,8 +70,12 @@ class ProductController extends Controller
             'created_at' => Carbon::now(),
         );
         if (isset($upload)) $params['contentImg'] = $pic;
-        return $this->projectRepositories
-            ->insertData($this->projectRepositories->projectContent, $params);
+        $result =  $this->projectRepositories->insertData($this->projectRepositories->projectContent, $params);
+        if ($result['success']) {
+            // 發送通知給所有開發案團隊
+            $this->notification->sendNewProduct($id);
+        }
+        return $result;
     }
     //
     public function editProduct($productID)

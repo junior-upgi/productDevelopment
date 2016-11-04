@@ -195,16 +195,20 @@ class ProjectRepositories
     }
     public function insertData($table, $params)
     {
-        return $this->common->insert($table, $params);
+        $result = $this->common->insert($table, $params);
+        return $result;
     }
     public function updateData($table, $params, $id, $primaryKey = 'ID')
     {
         $table = $table->where($primaryKey, $id);
-        return $this->common->update($table, $params);
+        $result = $this->common->update($table, $params);
+        return $result;
     }
     public function deleteData($table, $id, $primaryKey = 'ID')
     {
-        return $this->common->deleteData($table, $id, $primaryKey);
+        $table = $table->where($primaryKey, $id);
+        $result = $this->common->delete($table);
+        return $result;
     }
     public function setProductExecute($productID)
     {
