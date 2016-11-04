@@ -34,14 +34,14 @@ class NotificationService
         $this->upgi = $upgi;
     }
 
-    public function sendNewProduct($id)
+    public function sendNewProduct($id, $groupID)
     {
         $user = Auth::user();
         define("GENERAL", 3);
         define("PRODUCTDEVELOPMENT", 0);
         $product = $this->project->getProductByID($id);
         $where = [];
-        $params = ['key' => 'groupName', 'value' => "DevelopmentTeam"];
+        $params = ['key' => 'groupID', 'value' => $groupID];
         array_push($where, $params);
         $groupList = $this->upgi->getList('vUserGroupList', $where)->get();
         $title = '新開發案通知';

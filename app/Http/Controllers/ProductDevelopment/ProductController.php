@@ -11,22 +11,27 @@ use App\Http\Controllers\ServerData;
 use App\Service\NotificationService;
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\upgiSystem\UpgiSystemRepository;
 class ProductController extends Controller
 {
     public $common;
     public $serverData;
     public $notification;
     public $projectRepositories;
+    public $upgi;
+
     public function __construct(
         Common $common,
         ServerData $serverData,
         NotificationService $notification,
-        ProjectRepositories $projectRepositories
+        ProjectRepositories $projectRepositories,
+        UpgiSystemRepository $upgi
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
         $this->notification = $notification;
         $this->projectRepositories = $projectRepositories;
+        $this->upgi = $upgi;
     }
     //
     public function productList($projectID)
@@ -38,9 +43,13 @@ class ProductController extends Controller
     //
     public function addProduct($projectID)
     {
+        $priority = $this->projectRepositories->getParaList('priorityLevel');
+        $group = $this->upgi->getList('group')->get();
+
         return view('Product.AddProduct')
             ->with('ProjectID', $projectID)
-            ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
+            ->with('PriorityLevelList', $priority)
+            ->with('group', $group);
     }
     //
     public function insertProduct(Request $request)
@@ -73,7 +82,7 @@ class ProductController extends Controller
         $result =  $this->projectRepositories->insertData($this->projectRepositories->projectContent, $params);
         if ($result['success']) {
             // 發送通知給所有開發案團隊
-            $this->notification->sendNewProduct($id);
+            $this->notification->sendNewProduct($id, $request->input('Group'));
         }
         return $result;
     }

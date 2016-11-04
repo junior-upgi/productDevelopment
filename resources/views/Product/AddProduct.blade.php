@@ -62,6 +62,21 @@
             </div>
         </div>
         <div class="form-group">
+            <label for="Group" class="col-md-2 control-label">發送訊息群組</label>
+            <div class="col-md-2">
+                <select name="Group" id="Group" class="form-control" required>
+                    <option value="">不發送</option>
+                    @foreach($group as $g)
+                        @if($g->reference == 'DevelopmentTeam')
+                            <option value="{{$g->ID}}" selected="selected">{{$g->reference}}</option>
+                        @else
+                            <option value="{{$g->ID}}">{{$g->reference}}</option>
+                        @endif
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label col-md-2">產品圖片</label>
             <div class="col-md-5">
                 <input id="img" name="img" type="file" class="file-loading" data-show-upload="false" accept="image/*">
