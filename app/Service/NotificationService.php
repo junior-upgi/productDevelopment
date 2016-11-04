@@ -59,10 +59,11 @@ class NotificationService
                 'recipientID' => $g->ID,
                 'url' => $url,
                 'audioFile' => null,
-                'projectID' => $g->projectID,
-                'productID' => $g->ID,
+                'projectID' => $product->projectID,
+                'productID' => $product->ID,
                 'processID' => null,
             );
+            //$test = $message;
             $this->dispatch(new SendNotify($message));
         }
     }
