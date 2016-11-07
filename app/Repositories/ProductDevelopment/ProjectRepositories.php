@@ -511,8 +511,8 @@ class ProjectRepositories
         $list = $this->vProductList
             ->where('execute', '1')
             ->where('productStatus', '<>', '2')
-            ->where('endDate', '<', $now)
-            ->orderBy('endDate')
+            ->where('deadline', '<', $now)
+            ->orderBy('deadline')
             ->get();
         return $list;
     }

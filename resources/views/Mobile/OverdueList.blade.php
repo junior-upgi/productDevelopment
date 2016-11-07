@@ -1,6 +1,8 @@
 @extends('layouts.mobileLayout')
 @section('content')
-    <h3>開發案逾期清單</h3>
+    <div class="text-center">
+        <h3>開發案逾期清單</h3>
+    </div>
     <div class="list-group">
         @foreach($overdueList as $list)
             @php
@@ -16,7 +18,7 @@
                     {{ "產品: [$list->referenceNumber]$list->referenceName" }}<br/>
                     {{ "顧客: $list->clientName" }}<br/>
                     {{ "業務: $list->salesName" }}<br/>
-                    {{ "預計完成日: " . date('Y-m-d', strtotime($list->endDate)) }}
+                    {{ "完工期限: " . date('Y-m-d', strtotime($list->deadline)) }}
                 </p>
             </a>
         @endforeach
