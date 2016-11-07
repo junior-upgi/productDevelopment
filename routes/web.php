@@ -142,5 +142,5 @@ Route::group(['prefix' => 'Mobile'], function() {
     Route::get('testSend', 
         function () {return view('Mobile.SendMessage');}
     );
-    Route::get('overdueList/{id}', 'ProductDevelopment\Mobilecontroller@overdueList');
+    Route::get('overdueList/{id}', 'ProductDevelopment\MobileController@overdueList');
 });
