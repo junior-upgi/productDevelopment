@@ -53,10 +53,10 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="{{url('/')}}/" style="padding:5px;">
-						<img alt="UPGI" src="{{url('/')}}/img/upgi.png" style="height:40px;"/>
+					<a class="navbar-brand" href="{{ url('/') }}" style="padding:5px;">
+						<img alt="UPGI" src="{{ url('/img/upgi.png') }}" style="height:40px;"/>
 					</a>
-					<a class="navbar-brand" href="{{url('/')}}/">
+					<a class="navbar-brand" href="{{ url('/') }}">
 						統義玻璃 開發案管理系統
 					</a>
 				</div>
@@ -71,12 +71,12 @@
 							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
 						</li>
 						@if (Auth::check())
-							@if (Auth::user()->authorization === '1')
+							@if (Auth::user()->authorization == '1' or Auth::user()->authorization == '99')
 								<li class="@yield('personal')">
 									<a href="{{url('/')}}/Process/MyProcess">個人工序清單</a>
 								</li>
 							@endif
-							@if (Auth::user()->authorization === '99')
+							@if(false)
 								<li class="@yield('sysoption')">
 									<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>
 								</li>

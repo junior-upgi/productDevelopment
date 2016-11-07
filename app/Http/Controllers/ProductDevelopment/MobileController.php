@@ -16,24 +16,32 @@ use App\Http\Controllers\ServerData;
 
 //use Service
 use App\Service\NotificationService;
+use App\Service\ProjectCheckService;
 
 //use Repositories
 use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 class MobileController extends Controller
 {
     public $project;
     public $common;
     public $server;
+    public $upgi;
+    public $check;
 
     public function __construct(
         Common $common,
         ServerData $server,
-        ProjectRepositories $project
+        ProjectRepositories $project,
+        UpgiSystemRepository $upgi,
+        ProjectCheckService $check
     ) {
         $this->common = $common;
         $this->server = $server;
         $this->project = $project;
+        $this->upgi = $upgi;
+        $this->check = $check;
     }
     public function userSettingCost($processID, $staffID)
     {
@@ -75,5 +83,26 @@ class MobileController extends Controller
         return view('Mobile.OverdueInfo')
             ->with('processData', $processData)
             ->with('productData', $productData);
+    }
+
+    public function overdueList($id)
+    {
+        $where = [];
+        $params = ['key' => 'groupName', 'value' => "SendOverdue"];
+        $user = ['key' => 'ID', 'value' => $id];
+        array_push($where, $params);
+        array_push($where, $user);
+        $groupUser = $this->upgi->getList('vUserGroupList', $where)->get();
+        if (isset($groupUser)) {
+            $overdueList = $this->project->getDelayProduct();
+            return view('Mobile.OverdueList')
+                ->with('overdueList', $overdueList);
+        } else {
+            $title = '';
+            $content = '您目前沒有權限瀏覽此頁面!';
+            return view('errors.mobileError')
+                ->with('title', $title)
+                ->with('content', $content);
+        }
     }
 }

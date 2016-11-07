@@ -229,15 +229,11 @@ class ProcessController extends Controller
     {
         $user = Auth::user();
         $role = $user->authorization;
-        if ($role === '99') {
-            return redirect('Project/ProjectList');
-        } else if ($role === '1') {
-            $userID = $user->erpID;
-            $process = $this->projectRepositories->getPersonalProcess($userID);
-            return view('Process.MyProcess')
-                ->with('process', $process)
-                ->with('NodeList', $this->serverData->getAllNode())
-                ->with('PhaseList', $this->projectRepositories->getParaList('ProcessPhaseID'));
-        }
+        $userID = $user->erpID;
+        $process = $this->projectRepositories->getPersonalProcess($userID);
+        return view('Process.MyProcess')
+            ->with('process', $process)
+            ->with('NodeList', $this->serverData->getAllNode())
+            ->with('PhaseList', $this->projectRepositories->getParaList('ProcessPhaseID'));
     }
 }

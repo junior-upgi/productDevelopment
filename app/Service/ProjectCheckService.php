@@ -59,19 +59,19 @@ class ProjectCheckService
         $now = date('Y-m-d', strtotime($this->carbon->now()));
         $params = ['key' => 'groupName', 'value' => "SendOverdue"];
         array_push($where, $params);
-        $groupList = $upgi->getList('vUserGroupList', $where);
+        $groupList = $upgi->getList('vUserGroupList', $where)->get();
         foreach ($groupList as $g) {
             $title = "產品開發案逾期清單";
             $content = "截至今日 $now 產品開發案逾期清單";
             $staff = $g->ID;
-            $url = ""; //***********
+            $url = "http://upgi.ddns.net/productDevelopment/Mobile/overdueList/$staff";
             $audioFile = "";
-            $projectID = $list->projectID;
-            $productID = $list->productID;
-            $processID = $list->ID;
+            $projectID = $g->projectID;
+            $productID = $g->productID;
+            $processID = $g->ID;
             define("SCHEDULE_ALERT", 1);
             define("PRODUCTDEVELOPMENT", 0);
-            $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
+            $result = $this->mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff, $url, $audioFile, $projectID, $productID, $processID);
             array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
         }
         return $jo;

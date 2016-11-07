@@ -68,10 +68,10 @@
                     $admin = 'disabled';
                     $self = 'disabled';
                     $complete = 'disabled';
-                    if ($user->authorization === '99') {
+                    if ($user->authorization == '99') {
                         $admin = '';
                     }
-                    if ($user->erpID === $list->staffID || $user->authorization === '99') {
+                    if ($user->erpID == $list->staffID || $user->authorization == '99') {
                         $self = '';
                     }
                     if ($list->complete == '0') {
@@ -138,7 +138,7 @@
                     </td>
                     <td class="text-center">
                         @if ($ProductData->execute != "0")
-                            @if ($list->complete == "0")
+                            @if($list->complete == "0")
                                 @if($Now > $Deadline)
                                     <button type="button" class="btn btn-sm btn-danger bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @elseif($Now > $EndDate)

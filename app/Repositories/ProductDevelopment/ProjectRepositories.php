@@ -497,11 +497,24 @@ class ProjectRepositories
     {
         $date = $this->carbon->now();
         $now = date('Y-m-d', strtotime($date));
-        return $delayList = $this->vProcessList
+        $delayList = $this->vProcessList
             ->where('execute', '1')
             ->where('complete', '0' )
-            ->where('processEndDate', '<=', $now)
+            ->where('processEndDate', '<', $now)
             ->get();
+        return $delayList;
+    }
+    public function getDelayProduct()
+    {   
+        $date = $this->carbon->now();
+        $now = date('Y-m-d', strtotime($date));
+        $list = $this->vProductList
+            ->where('execute', '1')
+            ->where('productStatus', '<>', '2')
+            ->where('endDate', '<', $now)
+            ->orderBy('endDate')
+            ->get();
+        return $list;
     }
     public function getProductPic($id)
     {

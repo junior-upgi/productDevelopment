@@ -22,6 +22,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CheckProduct::class,
         \App\Console\Commands\CheckProject::class,
         \App\Console\Commands\CheckEveryDay::class,
+        \App\Console\Commands\OverdueList::class,
     ];
 
     /**
@@ -39,7 +40,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('checkEveryDay')->dailyAt('07:00');
         
 
-        $schedule->command('overdueList')->everyMinute();
+        //$schedule->command('overdueList')->everyMinute();
         //$schedule->command('checkProcess')->everyMinute();
         //$schedule->command('checkProduct')->everyMinute();
         //$schedule->command('checkProject')->everyMinute();
