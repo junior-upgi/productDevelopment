@@ -46,8 +46,16 @@ class MobileController extends Controller
     public function userSettingCost($processID, $staffID)
     {
         $processData = $this->project->getProcessByID($processID);
-        return view('Mobile.SettingCost')
-            ->with('processData', $processData);
+        if (isset($processData)) {
+            return view('Mobile.SettingCost')
+                ->with('processData', $processData);
+        } else {
+            $title = '資料已刪除';
+            $content = '工序資訊已刪除!';
+            return view('errors.mobileError')
+                ->with('title', $title)
+                ->with('content', $content);
+        }
     }
     public function auserSaveCost(Request $request)
     {
