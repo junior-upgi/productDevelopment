@@ -19,11 +19,11 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="joinID" class="control-label">標題</label>
+                        <label for="title" class="control-label">標題</label>
                         <input type="text" class="form-control" id="title" name="title">
                     </div>
                     <div class="form-group">
-                        <label for="joinID" class="control-label">內容</label>
+                        <label for="content" class="control-label">內容</label>
                         <textarea type="text" class="form-control" rows="3" id="content" name="content" style="resize: none;"></textarea>
                     </div>
                 </div>
@@ -36,6 +36,13 @@
 </div><!-- /.modal -->
 <script>
     $(function () {
+        $('#NotifyModal').on('show.bs.modal', function () {
+            $('#notify_recipientID').val('');
+            $('#searchID').val('');
+            $('#joinID').val('');
+            $('#title').val('');
+            $('#content').val('');
+        });
         $('#searchID').bsSuggest('init', {
                 url: url + '/SysOption/GetMobileUser',
                 //url: url + '/js/data.json',
@@ -97,7 +104,7 @@
                                 closeOnConfirm: true
                             },
                             function() {
-
+                                $('#NotifyModal').hide();
                             });
                         } else {
                             swal("推播發送失敗!", result.msg, "error");
