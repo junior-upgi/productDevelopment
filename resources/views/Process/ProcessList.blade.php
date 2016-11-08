@@ -2,7 +2,7 @@
 @section('project', 'active')
 @section('content')
     <link rel="stylesheet" type="" href="{{ url('/') }}/css/Process/ProcessList.css">
-    <script src="{{ url('/') }}/js/Process/ProcessList.js?x=3"></script>
+    <script src="{{ url('/') }}/js/Process/ProcessList.js?x=2"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li><a href="{{ url('/') }}/Project/ProjectList">開發案清單</a></li>
@@ -41,7 +41,8 @@
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <td width=60></td>
+                <td width=50></td>
+                <td width=50></td>
                 <td width=40>#</td>
                 <td width=60 class="text-center">類別</td>
                 <td width=140>代號</td>
@@ -84,6 +85,10 @@
                     <tr id="{{ $list->ID }}" class="sTD">
                 @endif
                     <td>
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="編輯" onclick="EditShow('{{ $list->ID }}')">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <!--
                         <div class="dropdown ">
                             <button type="button" id="SetBtn" class="btn btn-default" {{ $complete }} {{ $self }} data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
                                 <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
@@ -97,6 +102,10 @@
                                 </li>
                             </ul>
                         </div>
+                        -->
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="前置流程" onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-tasks"></button>
                     </td>
                     <td>{{ $list->sequentialIndex }}</td>
                     <td class="text-center">
@@ -169,7 +178,7 @@
                     </td>
                     <td>{!! $system->replaceBR($list->note) !!}</td>
                     <td>
-                        <button type="button" class="btn btn-sm btn-danger {{ $complete }} {{ $self }}" onclick="DoDelete('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button type="button" data-toggle="tooltip" data-placement="top" title="刪除" class="btn btn-sm btn-danger {{ $complete }} {{ $self }}" onclick="DoDelete('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             @endforeach

@@ -1,5 +1,6 @@
 var ChSelect = [];
 $(function () {
+    $("[data-toggle='tooltip']").tooltip();
     //設定時間
     var timeInMs = new Date();
     timInMs = timeInMs.getFullYear() + "-" + (timeInMs.getMonth() + 1) + "-" + timeInMs.getDate();

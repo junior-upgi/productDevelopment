@@ -79,7 +79,16 @@ class MobileController extends Controller
     public function overdueInfo($processID)
     {
         $processData = $this->project->getProcessByID($processID);
-        $productData = $this->project->getProductByID($processData->productID);
+        if (isset($processData)) {
+            $productData = $this->project->getProductByID($processData->productID);
+        } else {
+            $title = '資料已刪除';
+            $content = '工序資訊已刪除!';
+            return view('errors.mobileError')
+                ->with('title', $title)
+                ->with('content', $content);
+        }
+        
         return view('Mobile.OverdueInfo')
             ->with('processData', $processData)
             ->with('productData', $productData);
