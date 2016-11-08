@@ -259,7 +259,7 @@ class Common
     {
         $auth = $this->user->where('mobileSystemAccount', $account)->first();
         if ($auth) {
-            Auth::loginUsingId($auth->ID);
+            Auth::loginUsingId($auth->ID, true);
             return true;
         } else {
             return false;

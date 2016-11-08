@@ -79,6 +79,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $input = $request->input();
+        
         //驗證規則
         $rules = array(
             'account'=>'required',

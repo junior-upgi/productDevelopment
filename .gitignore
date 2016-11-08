@@ -1,2 +1,4 @@
-.svn/
-.svn/wc.db
+/vendor
+Homestead.yaml
+Homestead.json
+.env

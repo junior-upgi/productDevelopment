@@ -62,8 +62,8 @@ class ProcessController extends Controller
             $params = array(
                 'ID' => $processID,
                 'projectContentID' => $request->input('ProductID'),
-                'referenceName' => $request->input('ProcessNumber'),
-                'referenceNumber' => $request->input('ProcessName'),
+                'referenceNumber' => $request->input('ProcessNumber'),
+                'referenceName' => $request->input('ProcessName'),
                 'projectProcessPhaseID' => $request->input('PhaseID'),
                 'timeCost' => $request->input('TimeCost'),
                 'staffID' => iconv("UTF-8", "BIG-5", $request->input('StaffID')),
