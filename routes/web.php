@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('login');
+    return redirect('Project/ProjectList');
 });
 
 Route::get('ldap', 'ProductDevelopment\projectController@ldap');
@@ -52,7 +52,7 @@ Route::group(['prefix' => 'Service'], function() {
     Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
+Route::group(['middleware' => 'sso', 'prefix' => 'Project'], function() {
     Route::get('ProjectList', 'ProductDevelopment\ProjectController@projectList');
 
     Route::get('AddProject', 'ProductDevelopment\ProjectController@addProject');
@@ -70,7 +70,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Project'], function() {
     //Route::get('ShowProcess/{Product}', 'ProductDevelopment\ProjectController@showProcess');
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
+Route::group(['middleware' => 'sso', 'prefix' => 'Product'], function() {
     
     Route::get('ProductList/{projectID}', 'ProductDevelopment\ProductController@productList');
 
@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
     Route::get('Delete/{productID}', 'ProductDevelopment\ProductController@deleteProduct');
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
+Route::group(['middleware' => 'sso', 'prefix' => 'Process'], function() {
     Route::get('ProcessList/{productID}', 'ProductDevelopment\ProcessController@processList');
 
     Route::post('InsertProcess', 'ProductDevelopment\ProcessController@insertProcess');
@@ -104,7 +104,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {
     
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
+Route::group(['middleware' => 'sso', 'prefix' => 'SysOption'], function() {
     Route::get('StaffList', 'SystemManagement\StaffController@staffList');
     Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
     Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
@@ -129,7 +129,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::post('RemoveUser', 'SystemManagement\UserController@removeUser');
 });
 
-Route::group(['middleware' => 'auth', 'prefix' => 'Report'], function() {
+Route::group(['middleware' => 'sso', 'prefix' => 'Report'], function() {
     Route::any('ProjectExecuteRate', 'ProductDevelopment\ReportController@projectExecuteRate');
     Route::any('ProductExecuteRate', 'ProductDevelopment\ReportController@productExecuteRate');
     Route::any('Meeting', 'ProductDevelopment\ReportController@meetingReport');
