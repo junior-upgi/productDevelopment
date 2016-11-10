@@ -340,14 +340,15 @@ class ProjectRepositories
                         }
                     }
                     
+                    //11/10 測試修正，max($maxDate) & max($maxComplete) + 86400
                     if (count($maxComplete) === 0 && count($maxDate) > 0) {
-                        $setDate = max($maxDate);
+                        $setDate = max($maxDate) + 86400;
                     } elseif (count($maxComplete) > 0 && count($maxDate) === 0) {
-                        $setDate = max($maxComplete);
+                        $setDate = max($maxComplete) + 86400;
                     } elseif (count($maxComplete) > 0 && count($maxDate) > 0) {
                         $setDate = max($maxComplete);
                         if ((count($maxComplete) < count($maxDate)) && (max($maxComplete) < max($maxDate))) {
-                            $setDate = max($maxDate);
+                            $setDate = max($maxDate) + 86400;
                         }
                     }
                     if ($subEndDate > $setDate) {
