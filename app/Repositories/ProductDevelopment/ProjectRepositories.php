@@ -551,6 +551,8 @@ class ProjectRepositories
             ->where('execute', '1')
             ->where('complete', '0')
             ->orderBy('processStartDate')
+            ->orderBy('processEndDate')
+            ->orderBy('timeCost')
             ->get();
         return $process;
     }
