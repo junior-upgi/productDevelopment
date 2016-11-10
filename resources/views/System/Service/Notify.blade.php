@@ -34,7 +34,13 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+@php
+    $user = Auth::user();
+@endphp
 <script>
+    function Notify() {
+        $('#NotifyModal').modal('show');
+    }
     $(function () {
         $('#NotifyModal').on('show.bs.modal', function () {
             $('#notify_recipientID').val('');
@@ -104,7 +110,7 @@
                                 closeOnConfirm: true
                             },
                             function() {
-                                $('#NotifyModal').hide();
+                                $('#NotifyModal').modal('hide');
                             });
                         } else {
                             swal("推播發送失敗!", result.msg, "error");

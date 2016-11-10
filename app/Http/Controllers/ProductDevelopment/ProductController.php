@@ -54,17 +54,6 @@ class ProductController extends Controller
     //
     public function insertProduct(Request $request)
     {
-        $file = $request->file('img');
-        if (isset($file)) {
-            $pic = $this->common->saveFile($file);
-            if (!isset($pic)) {
-                return array(
-                    'success' => false,
-                    'msg' => '圖片上傳失敗',
-                );
-            }
-            $upload = true;
-        }
         $id = $this->common->getNewGUID();
         $params = array(
             'ID' => $id,
@@ -78,7 +67,19 @@ class ProductController extends Controller
             //'contentImg' => $pic,
             'created_at' => Carbon::now(),
         );
-        if (isset($upload)) $params['contentImg'] = $pic;
+
+        $file = $request->file('img');
+        if (isset($file)) {
+            $pic = $this->common->saveFile($file);
+            if (!isset($pic)) {
+                return array(
+                    'success' => false,
+                    'msg' => '圖片上傳失敗',
+                );
+            }
+            $params['contentImg'] = $pic;
+        }
+
         $result =  $this->projectRepositories->insertData($this->projectRepositories->projectContent, $params);
         if ($result['success']) {
             // 發送通知給所有開發案團隊

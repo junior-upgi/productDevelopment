@@ -28,6 +28,7 @@
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <a href="{{url('/')}}/Product/AddProduct/{{$ProjectData->ID}}" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
+            <button type="button" class="btn btn-warning" onclick="Notify()"><span class="glyphicon glyphicon-phone">發送推播</button>
         </div>
     </div>
     <!--data table-->
@@ -108,4 +109,5 @@
         {{$ProductList->links()}}
     </div>
     @include('Process.PicModal')
+    @include('System.Service.Notify')
 @endsection

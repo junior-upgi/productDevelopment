@@ -494,8 +494,3 @@ function Delete(ProductID, ProcessID) {
         }
     })
 }
-
-function Notify() {
-    
-    $('#NotifyModal').modal('show');
-}
