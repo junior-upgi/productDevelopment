@@ -43,3 +43,6 @@ function Delete(ProjectID) {
         }
     })
 }
+$(function () {
+    $("[data-toggle='tooltip']").tooltip();
+});

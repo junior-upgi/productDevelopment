@@ -1,7 +1,7 @@
 @extends('layouts.masterpage')
 @section('project', 'active')
 @section('content')
-    <script src="{{url('/')}}/js/Project/ProjectList.js?x=3"></script>
+    <script src="{{url('/')}}/js/Project/ProjectList.js?x=2"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li class="active">開發案清單</li>
@@ -34,7 +34,7 @@
         <tbody>
             @foreach($ProjectList as $list)
                 <tr>
-                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                    <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
                     <td class="text-center"><a href="{{url('/')}}/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
                     <td>{{$list->referenceNumber}}</td>
                     <td>{{$list->referenceName}}</td>
@@ -78,7 +78,7 @@
                     </td>
                     -->
                     <td class="text-center">
-                        <button class="btn btn-sm btn-danger {{$UserRole}}" onclick="DoDelete('{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
+                        <button class="btn btn-sm btn-danger {{$UserRole}}" data-toggle="tooltip" data-placement="top" title="刪除" onclick="DoDelete('{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                     </td>
                 </tr>
             @endforeach
