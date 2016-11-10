@@ -33,13 +33,7 @@
                 <div class="form-group from-group-sm">
                     <label for="" class="control-label col-xs-6">預計完成時間</label>
                     <div class="col-xs-6">
-                        <p class="">{{ $mobile->getDate($pc->deadline) }}</p>
-                    </div>
-                </div>
-                <div class="form-group from-group-sm">
-                    <label for="" class="control-label col-xs-6">預計完成時間</label>
-                    <div class="col-xs-6">
-                        <p class="">{{ $mobile->getDate($pd->endDate) }}</p>
+                        <p class="">{{ $mobile->getDate($pc->processEndDate) }}</p>
                     </div>
                 </div>
                 <div class="form-group from-group-sm">
