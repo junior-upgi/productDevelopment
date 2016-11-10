@@ -23,10 +23,10 @@ Route::get('/', function () {
     }
 })->middleware('sso');
 
-Route::get('ldap', 'ProductDevelopment\projectController@ldap');
-
-Route::get('test', 'Service\WebServiceController@test');
-//Route::get('UserSettingCost/{processID}/{staffID}', 'ProductDevelopment\ProcessController@userSettingCost');
+Route::get('logout', function () {
+    Auth::logout();
+    return Redirect::to('/');
+});
 
 Route::get('phpinfo', function () {
     phpinfo();
