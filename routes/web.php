@@ -21,8 +21,7 @@ Route::get('/', function () {
             return redirect('Process/MyProcess');
         }
     }
-    return redirect('Project/ProjectList');
-});
+})->middleware('sso');
 
 Route::get('ldap', 'ProductDevelopment\projectController@ldap');
 
