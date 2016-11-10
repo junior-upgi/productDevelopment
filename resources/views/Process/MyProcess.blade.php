@@ -2,7 +2,7 @@
 @section('personal', 'active')
 @section('content')
     <link rel="stylesheet" type="" href="{{url('/')}}/css/Process/ProcessList.css">
-    <script src="{{url('/')}}/js/Process/MyProcess.js?x=3"></script>
+    <script src="{{url('/')}}/js/Process/MyProcess.js?x=2"></script>
     @inject('system', 'App\Presenters\SystemPresenter')
     <table class="table table-bordered">
         <thead>
@@ -43,7 +43,7 @@
                 @endphp
                 <tr id="{{$list->ID}}" class="sTD">
                     <td>
-                        <button type="button" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')"><span class="glyphicon glyphicon-edit"></span></button>
+                        <button type="button" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default" onclick="EditShow('{{$list->ID}}')"><span class="glyphicon glyphicon-edit"></span></button>
                     </td>
                     <td class="text-center">
                         <span>{{$list->PhaseName}}</span>

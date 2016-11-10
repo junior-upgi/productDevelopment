@@ -128,3 +128,6 @@ function Complete($ProcessID) {
         }
     });
 }
+$(function () {
+    $("[data-toggle='tooltip']").tooltip();
+});

@@ -149,11 +149,11 @@
                         @if ($ProductData->execute != "0")
                             @if($list->complete == "0")
                                 @if($Now > $Deadline)
-                                    <button type="button" class="btn btn-sm btn-danger bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="點擊完成工序" class="btn btn-sm btn-danger bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @elseif($Now > $EndDate)
-                                    <button type="button" class="btn btn-sm btn-warning bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="點擊完成工序" class="btn btn-sm btn-warning bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @else
-                                    <button type="button" class="btn btn-sm btn-success bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="點擊完成工序" class="btn btn-sm btn-success bCom {{ $self }}" onclick="Complete('{{ $list->ID }}')"><span class="glyphicon glyphicon-ok"></span></button>
                                 @endif
                             @else
                                 @php 
