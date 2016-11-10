@@ -83,6 +83,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'Product'], function() {
     Route::get('ProductExecute/{processID}', 'ProductDevelopment\ProductController@productExecute');
 
     Route::get('Delete/{productID}', 'ProductDevelopment\ProductController@deleteProduct');
+
+    Route::get('GetAttach/{id}', 'ProductDevelopment\ProductController@getAttach');
 });
 
 Route::group(['middleware' => 'auth', 'prefix' => 'Process'], function() {

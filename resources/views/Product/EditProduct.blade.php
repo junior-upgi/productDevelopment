@@ -68,6 +68,7 @@
                 </select>
             </div>
         </div>
+        <!--
         <div class="form-group">
             <label class="control-label col-md-2">產品圖片</label>
             <div class="col-md-5">
@@ -99,6 +100,31 @@
                         zoomTitle: "",
                     },
                     initialPreview: [img]
+                });
+            </script>
+        </div>
+        -->
+        <div class="form-group">
+            <label class="control-label col-md-2">產品附件</label>
+            <div class="col-md-5">
+                <input id="attach" name="attach" type="file" class="file-loading" data-show-upload="false" data-show-preview="false">
+            </div>
+            <script>
+                $("#attach").fileinput({
+                    language: 'zh-TW',
+                    previewClass: "bg-warning",
+                    browseClass: "btn btn-success",
+                    browseLabel: "選擇檔案",
+                    browseIcon: "<i class=\"glyphicon glyphicon-picture\"></i> ",
+                    removeClass: "btn btn-danger",
+                    removeLabel: "移除",
+                    removeIcon: "<i class=\"glyphicon glyphicon-trash\"></i> ",
+                    fileActionSettings: {
+                        showZoom: false,
+                        zoomIcon: "",
+                        zoomClass: "",
+                        zoomTitle: "",
+                    }
                 });
             </script>
         </div>

@@ -409,6 +409,18 @@ class Common
     }
 
     /**
+     * 取得檔案資訊
+     * 
+     * @param string $id 檔案id
+     * @return File Module
+     */
+    public function getFileInfo($id)
+    {
+        $file = $this->file;
+        return $file->getFile($id);
+    }
+    
+    /**
      * 將檔案進行base64轉碼存入資料庫中，並回傳對應id
      * 
      * @param object $data 檔案物件

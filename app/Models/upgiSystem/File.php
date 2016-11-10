@@ -50,6 +50,23 @@ class File extends Model
     }
 
     /**
+    * 取得檔案資訊
+    * 
+    * @param string $id 檔案id
+    * @return string string 回傳Model
+    * @throw Exception 所有例外
+    */
+    public function getFile($id)
+    {
+        try{
+            $data = $this->where('ID', $id)->first();
+            return $data; 
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
     * 將檔案以base64進行轉碼並存入，回傳編碼
     * 
     * @param object $file 檔案物件

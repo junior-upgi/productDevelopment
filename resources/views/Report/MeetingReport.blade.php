@@ -46,6 +46,7 @@
                     <td>
                         {{ $list->referenceName }}
                         {!! $system->getProductPic($list->ID) !!}
+                        {!! $system->getAttach($list->contentAttach) !!}
                     </td>
                     <td>{{ $mobile->getDate($list->deadline) }}</td>
                     <td>{{ $mobile->getDate($list->startDate) . ' ~ ' . $mobile->getDate($list->endDate) }}</td>

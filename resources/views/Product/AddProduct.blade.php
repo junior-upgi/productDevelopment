@@ -64,7 +64,7 @@
         <div class="form-group">
             <label for="Group" class="col-md-2 control-label">發送訊息群組</label>
             <div class="col-md-2">
-                <select name="Group" id="Group" class="form-control" required>
+                <select name="Group" id="Group" class="form-control">
                     <option value="">不發送</option>
                     @foreach($group as $g)
                         @if($g->reference == 'DevelopmentTeam')

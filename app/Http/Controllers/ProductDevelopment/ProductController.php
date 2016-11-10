@@ -3,6 +3,7 @@ namespace App\Http\Controllers\ProductDevelopment;
 //use Class
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Carbon\Carbon;
 //use Custom Class
 use App\Http\Controllers\Common;
@@ -74,10 +75,22 @@ class ProductController extends Controller
             if (!isset($pic)) {
                 return array(
                     'success' => false,
-                    'msg' => '圖片上傳失敗',
+                    'msg' => '檔案上傳失敗',
                 );
             }
             $params['contentImg'] = $pic;
+        }
+
+        $attach = $request->file('attach');
+        if (isset($attach)) {
+            $att = $this->common->saveFile($attach);
+            if (!isset($att)) {
+                return array(
+                    'success' => false,
+                    'msg' => '檔案上傳失敗',
+                );
+            }
+            $params['contentAttach'] = $att;
         }
 
         $result =  $this->projectRepositories->insertData($this->projectRepositories->projectContent, $params);
@@ -141,5 +154,19 @@ class ProductController extends Controller
     public function deleteProduct($productID)
     {
         return $this->projectRepositories->deleteData($this->projectRepositories->projectContent, $productID);
+    }
+
+    public function getAttach($id)
+    {
+        $file = $this->common->getFileInfo($id);
+        $filename = date('Ymdhis', strtotime(Carbon::now())) . "_$file->name";
+        $base64 = base64_decode($file->code);
+        file_put_contents($filename, $file);
+        header("Content-type: $file->type");
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        if (file_exists($filename)) {
+            unlink($filename);
+        }
+        return $base64;
     }
 }

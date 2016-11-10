@@ -78,4 +78,14 @@ class SystemPresenter
         $replace = nl2br($str);
         return $replace;
     }
+
+    public function getAttach($id)
+    {
+        if (isset($id)) {
+            $url = url("/Product/GetAttach/$id");
+            $flag = "<a href=\"$url\" target=\"_blank\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"下載附件\"><span class=\"glyphicon glyphicon-file\"></span></a>";
+            return $flag;
+        }
+        return '';
+    }
 }

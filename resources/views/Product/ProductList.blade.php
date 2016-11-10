@@ -35,7 +35,7 @@
     <table class="table table-bordered table-condensed">
         <thead>
             <tr>
-                <td width=60></td>
+                <td width=50></td>
                 <td width=60></td>
                 <td width=140>產品代號</td>
                 <td>產品名稱</td>
@@ -59,7 +59,8 @@
                     <td>{{$list->referenceNumber}}</td>
                     <td>
                         {{$list->referenceName}}
-                        {!! $system->getProductPic($list->ID) !!}
+                        <!--{!! $system->getProductPic($list->ID) !!}-->
+                        {!! $system->getAttach($list->contentAttach) !!}
                     </td>
                     <td class="text-right">{{$list->requiredQuantity}}</td>
                     <td class="text-right">{{$list->deliveredQuantity}}</td>
