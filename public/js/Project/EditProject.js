@@ -12,6 +12,29 @@ $(document).ready(function () {
         language: 'zh-TW'
     });
 });
+$(function () {
+    $('#searchID').bsSuggest('init', {
+        url: url + '/SysOption/SearchClient',
+        //url: url + '/js/data.json',
+        effectiveFields: ['name'],
+        searchFields: ['name', 'sname'],
+        effectiveFieldsAlias:{name: '顧客名稱'},
+        ignorecase: true,
+        showHeader: true,
+        showBtn: false,
+        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        idField: 'ID',
+        keyField: 'name'
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword, data) {
+        //console.log('onSetSelectValue: ', keyword, data);
+        $('#ClientID').val(keyword['id']);
+    }).on('onUnsetSelectValue', function () {
+        //console.log('onUnsetSelectValue');
+        $('#ClientID').val(null);
+    });
+});
 function DoUpdate() {
     $("#EditProjectForm").ajaxForm({
         url: url + '/Project/UpdateProject',

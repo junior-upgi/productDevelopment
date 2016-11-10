@@ -10,22 +10,25 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 
 use App\Repositories\upgiSystem\UpgiSystemRepository;
-
+use App\Repositories\sales\ClientRepositories;
 
 class UserController extends Controller
 {
     private $common;
     private $server;
     private $upgi;
+    private $client;
 
     public function __construct(
         Common $common,
         ServerData $server,
-        UpgiSystemrepository $upgi
+        UpgiSystemrepository $upgi,
+        ClientRepositories $client
     ) {
         $this->common = $common;
         $this->server = $server;
         $this->upgi = $upgi;
+        $this->client = $client;
     }
 
     public function groupList()
@@ -155,6 +158,15 @@ class UserController extends Controller
         $json = [];
         $json['message'] = '';
         $json['value'] = $list;
+        return $json;
+    }
+
+    public function searchClient()
+    {
+        $client = $this->client->getAllClient()->toArray();
+        $json = [];
+        $json['message'] = '';
+        $json['value'] = $client;
         return $json;
     }
 

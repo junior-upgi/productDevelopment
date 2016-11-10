@@ -1,7 +1,7 @@
 @extends('layouts.masterpage')
 @section('project', 'active')
 @section('content')
-    <script src="{{url('/')}}/js/Project/EditProject.js?x=2"></script>
+    <script src="{{url('/')}}/js/Project/EditProject.js?x=3"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
         <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
@@ -24,18 +24,14 @@
             </div>
         </div>
         <div class="form-group">
-            <label for="ClientID" class="col-md-2 control-label">顧客名稱</label>
+            <label for="searchID" class="col-md-2 control-label">顧客名稱</label>
             <div class="col-md-5">
-                <select class="form-control" id="ClientID" name="ClientID" required>
-                    <option value="">請選擇顧客</option>
-                    @foreach($ClientList as $list)
-                        @if($list->ID == $ProjectData->clientID)
-                            <option value="{{$list->ID}}" selected="selected">{{$list->name}}</option>
-                        @else
-                            <option value="{{$list->ID}}">{{$list->name}}</option>
-                        @endif
-                    @endforeach
-                </select>
+                <div class="input-group">
+                    <input type="hidden" id="ClientID" name="ClientID" value="{{$ProjectData->clientID}}">
+                    <input type="text" class="form-control col-md-5" id="searchID" value="{{$ProjectData->clientName}}">
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" style="height: 350px;">
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="form-group">

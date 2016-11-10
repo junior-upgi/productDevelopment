@@ -18,8 +18,6 @@ $(function () {
         }).on('onUnsetSelectValue', function () {
             console.log('onUnsetSelectValue');
     });
-
-
 });
 
 function getList(id) {

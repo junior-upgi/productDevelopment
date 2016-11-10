@@ -123,6 +123,7 @@ Route::group(['middleware' => 'auth', 'prefix' => 'SysOption'], function() {
     Route::get('GroupList', 'SystemManagement\UserController@groupList');
     Route::post('GroupSave', 'SystemManagement\UserController@groupSave');
     Route::get('SearchMember', 'SystemManagement\UserController@searchMember');
+    Route::get('SearchClient', 'SystemManagement\UserController@searchClient');
     Route::post('UserJoin', 'SystemManagement\UserController@userJoin');
     Route::get('GetMember', 'SystemManagement\UserController@getMember');
     Route::get('GetMobileUser', 'SystemManagement\UserController@getMobileUser');
