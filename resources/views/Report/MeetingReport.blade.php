@@ -44,8 +44,8 @@
                     <td>{{ $list->salesName }}</td>
                     <td>{{ $list->referenceNumber }}</td>
                     <td>
-                        {!! $system->getProductPic($list->ID) !!}
                         {{ $list->referenceName }}
+                        {!! $system->getProductPic($list->ID) !!}
                     </td>
                     <td>{{ $mobile->getDate($list->deadline) }}</td>
                     <td>{{ $mobile->getDate($list->startDate) . ' ~ ' . $mobile->getDate($list->endDate) }}</td>
