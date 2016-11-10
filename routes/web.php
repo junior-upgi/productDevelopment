@@ -12,6 +12,15 @@
 */
 
 Route::get('/', function () {
+    if (Auth::check()) {
+        define("MANAGER", '99');
+        $user = Auth::user();
+        if ($user->authorization == MANAGER) {
+            return redirect('Project/ProjectList');
+        } else {
+            return redirect('Process/MyProcess');
+        }
+    }
     return redirect('Project/ProjectList');
 });
 
@@ -27,12 +36,12 @@ Route::get('phpinfo', function () {
 Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
-
+/*
 Route::get('login', 'Auth\LoginController@show');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout');
 Route::get('hashPassword', 'Auth\LoginController@hashPassword');
-
+*/
 Route::get('reset', 'Auth\ResetPasswordController@resetPassword');
 Route::post('checkPersonal', 'Auth\ResetPasswordController@checkPersonal');
 Route::post('setPassword', 'Auth\ResetPasswordController@setPassword');
