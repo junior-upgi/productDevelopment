@@ -47,7 +47,7 @@
 		<div class="container">
 			<div class="container-fluid">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
 						<span class="sr-only"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
@@ -57,7 +57,7 @@
 						<img alt="UPGI" src="{{ url('/img/upgi.png') }}" style="height:40px;"/>
 					</a>
 					<a class="navbar-brand" href="{{ url('/') }}">
-						統義玻璃 開發案管理系統
+						開發案管理系統
 					</a>
 				</div>
 				@php
@@ -65,8 +65,8 @@
 						Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole = '';
 					}
 				@endphp
-				<div class="collapse navbar-collapse navbar-left">
-					<div class="nav navbar-nav">
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
 						<li class="@yield('project')">
 							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
 						</li>
@@ -92,10 +92,8 @@
 								<li class="@yield('report.meetingReport')"><a href="{{url('/')}}/Report/Meeting" target="_blank">週會報表</a></li>
 							</ul>
 						</li>
-					</div>
-				</div>
-				<div class="collapse navbar-collapse navbar-right">
-					<div class="nav navbar-nav">
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
 						<li class="dropdown">
 							@if(Auth::check())
 								<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
@@ -110,7 +108,7 @@
 								<a href="{{url('/')}}/login">登入</a>
 							@endif
 						</li>
-					</div>
+					</ul>
 				</div>
 			</div>
 		</div>

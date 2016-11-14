@@ -204,6 +204,7 @@ function SetPreparationShow(ProductID,ProcessID) {
             if (result.success) {
                 var List = result.PreparationList;
                 var ReSelect = result.SelectList;
+                ChSelect = [];
                 $("#PreparationList").empty();
                 $("#SetPreparationForm #ProductID").val(ProductID);
                 $("#SetPreparationForm #ProcessID").val(ProcessID);

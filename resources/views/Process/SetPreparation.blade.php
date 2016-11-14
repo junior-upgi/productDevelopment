@@ -11,20 +11,22 @@
                     <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
                     <input type="hidden" id="ProductID" value="">
                     <input type="hidden" id="ProcessID" value="">
-                    <table class="table table-bordered">
-                        <thead>
-                            <td width=40></td>
-                            <td width=40>#</td>
-                            <td width=60 class="text-center">類別</td>
-                            <td width=120>代號</td>
-                            <td>名稱</td>
-                            <td width=120>負責人</td>
-                            <td width=50 class="text-center">工時</td>
-                            <td width=110 class="text-center">工期</td>
-                        </thead>
-                        <tbody id="PreparationList">
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <td width=40></td>
+                                <td width=40>#</td>
+                                <td width=60 class="text-center">類別</td>
+                                <td width=120>代號</td>
+                                <td>名稱</td>
+                                <td width=120>負責人</td>
+                                <td width=50 class="text-center">工時</td>
+                                <td width=110 class="text-center">工期</td>
+                            </thead>
+                            <tbody id="PreparationList">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>

@@ -13,7 +13,7 @@
                     <div class="form-group">
                         <label for="ProcessNumber" class="col-md-4 control-label">開發程序代號</label>
                         <div class="col-md-5">
-                            <input type="text" class="form-control" id="ProcessNumber" name="ProcessNumber" value="" required>
+                            <input type="text" class="form-control" id="ProcessNumber" name="ProcessNumber" value="">
                         </div>
                     </div>
                     <div class="form-group">
@@ -49,7 +49,7 @@
                         <div class="form-group">
                             <label for="NodeID" class="col-md-4 control-label">負責人</label>
                             <div class="col-md-3">
-                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" required>
+                                <select class="form-control" id="NodeID" name="NodeID" onchange="GetStaff('Add')" >
                                     <option value="">請選擇單位</option>
                                     @foreach($NodeList as $list)
                                         <option value="{{$list->ID}}">{{$list->name}}</option>
@@ -57,7 +57,7 @@
                                 </select>
                             </div>
                             <div class="col-md-3">
-                                <select class="form-control" id="StaffID" name="StaffID" required>
+                                <select class="form-control" id="StaffID" name="StaffID">
                                 </select>
                             </div>
                         </div>
