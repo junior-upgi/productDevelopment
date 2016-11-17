@@ -25,7 +25,8 @@ Route::get('/', function () {
 
 Route::get('logout', function () {
     Auth::logout();
-    return Redirect::to('/');
+    $host = env('SSO_HOST', 'http://sso.app');
+    return redirect()->to($host.'/logout');
 });
 
 Route::get('phpinfo', function () {

@@ -121,6 +121,7 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return Redirect::to('login');
+        $host = env('SSO_HOST', 'http://sso.app');
+        return redirect()->to($host.'/logout');
     }
 }

@@ -25,9 +25,9 @@ class SSOAuthenticate
             return $next($request);
         } else {
             $url = urlencode(request()->url());
-            $id = $request->session()->getId();
+            //$id = $request->session()->getId();
             $host = env('SSO_HOST', 'http://sso.app');
-            return redirect()->to($host.'?url='.$url.'&id='.$id);
+            return redirect()->to($host.'?url='.$url);
         }
     }
 }
