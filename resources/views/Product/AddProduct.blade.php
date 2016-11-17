@@ -39,7 +39,11 @@
         <div class="form-group">
             <label for="Deadline" class="col-md-2 control-label date">完工期限</label>
             <div class="col-md-2">
-                <input type="text" class="form-control date form_datetime" readonly id="Deadline" name="Deadline" value="" required>
+                @php
+                    $date = Carbon\Carbon::now();
+                    $date = date('Y-m-d', strtotime($date));
+                @endphp
+                <input type="text" class="form-control date form_datetime" readonly id="Deadline" name="Deadline" value="{{ $date }}" required>
             </div>
         </div>
         <!--

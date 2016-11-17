@@ -36,7 +36,11 @@
                     <div class="form-group">
                         <label for="ProcessStartDate" class="col-md-4 control-label date">開始時間</label>
                         <div class="col-md-3">
-                            <input type="text" class="form-control date form_datetime" readonly id="ProcessStartDate" name="ProcessStartDate" value="" required>
+                            @php
+                                $date = Carbon\Carbon::now();
+                                $date = date('Y-m-d', strtotime($date));
+                            @endphp
+                            <input type="text" class="form-control date form_datetime" readonly id="ProcessStartDate" name="ProcessStartDate" value="{{ $date }}" required>
                         </div>
                     </div>
                     <div class="form-group">
