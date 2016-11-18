@@ -35,25 +35,45 @@ class TelegramService
         //$bot = $this->telegram->getBotByName('productDevelopmentBot');
         $bot = $this->telegram->getBotByName('testBot');
         $token = $bot->first()->token;
+        //define("PRODUCTTEAM", -164742782);
         define("PRODUCTTEAM", -162201704);
         $chat = $this->telegram->getChatByTitle(constant("PRODUCTTEAM"));
         $chat_id = $chat->first()->id;
-        if ($queue) {
-            $this->dispatch(new SendTelegram($token, $chat_id, $message));
-            return true;
-        }
-        $send = $this->botSendMessage($token, $chat_id, $message);
+
+        $send = $this->botSendMessage($token, $chat_id, $message, $queue);
         return $send;
     }
 
-    public function botSendMessage($token, $chat_id, $message)
+    public function productDevelopmentBotSendToUser($erp_id, $message, $queue = false)
     {
-        $url = 'https://api.telegram.org/bot' . $token . '/sendMessage?chat_id=' . $chat_id . '&text=' . urlencode($message);
-        //$encodeUrl = urlencode($url);
-        $file_get = file_get_contents($url);
-        $send = json_decode($file_get);
-        if ($send->ok) {
-            return true;
+        //$bot = $this->telegram->getBotByName('productDevelopmentBot');
+        $bot = $this->telegram->getBotByName('testBot');
+        $token = $bot->first()->token;
+        $send = $this->sendMessageToUser($token, $erp_id, $message, $queue);
+        return $send;
+    }
+
+    public function sendMessageToUser($token, $erp_id, $message, $queue = false)
+    {
+        $user_id = $this->server->getuserByerpID($erp_id)->telegramID;
+        $send = $this->botSendMessage($token, $user_id, $message);
+        return $send;
+    }
+
+    public function botSendMessage($token, $chat_id, $message, $queue = false)
+    {
+        if (isset($chat_id)) {
+            if ($queue) {
+                $this->dispatch(new SendTelegram($token, $chat_id, $message));
+                return true;
+            }
+
+            $url = 'https://api.telegram.org/bot' . $token . '/sendMessage?chat_id=' . $chat_id . '&text=' . urlencode($message);
+            $file_get = file_get_contents($url);
+            $send = json_decode($file_get);
+            if ($send->ok) {
+                return true;
+            }
         }
         return false;
     }

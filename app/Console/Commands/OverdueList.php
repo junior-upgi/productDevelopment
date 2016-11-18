@@ -51,16 +51,10 @@ class OverdueList extends Command
         $log_file_path = storage_path('logs/check.log');
 
         //執行排程檢查
-        $process = $this->check->sendOverdue();
-        $success = 0;
-        $fail = 0;
-        $total = count($process);
-        foreach ($process as $list) {
-            $list['success'] ? $success++ : $fail++;
-        }
+        $this->check->sendOverdue();
 
         //寫入log
-        $log_info = 'sendOverdue# ' .  date('Y-m-d H:i:s') . ",total=$total,success=$success,fail=$fail" . "\r\n";
+        $log_info = 'sendOverdue# ' .  date('Y-m-d H:i:s') . "\r\n";
         File::append($log_file_path, $log_info);
     }
 }

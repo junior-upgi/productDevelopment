@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DB;
+use Auth;
 use App\Models\productDevelopment\ProjectProcess;
 use App\Models\productDevelopment\ProcessTree;
 
@@ -102,15 +103,9 @@ class MobileController extends Controller
             ->with('productData', $productData);
     }
 
-    public function overdueList($id)
+    public function overdueList()
     {
-        $where = [];
-        $params = ['key' => 'groupName', 'value' => "SendOverdue"];
-        $user = ['key' => 'ID', 'value' => $id];
-        array_push($where, $params);
-        array_push($where, $user);
-        $groupUser = $this->upgi->getList('vUserGroupList', $where)->get();
-        if (isset($groupUser)) {
+        if (Auth::check()) {
             $overdueList = $this->project->getDelayProduct();
             return view('Mobile.OverdueList')
                 ->with('overdueList', $overdueList);

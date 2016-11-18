@@ -46,94 +46,12 @@ class NotificationService
         $this->telegram->sendProductTeam($message);
     }
 
-    public function sendNewProduct_old($id, $groupID)
-    {
-        $user = Auth::user();
-        define("GENERAL", 3);
-        define("PRODUCTDEVELOPMENT", 0);
-        $product = $this->project->getProductByID($id);
-        $where = [];
-        $params = ['key' => 'groupID', 'value' => $groupID];
-        array_push($where, $params);
-        $groupList = $this->upgi->getList('vUserGroupList', $where)->get();
-        $title = '新開發案通知';
-        $content = "新增[$product->projectNumber][$product->referenceNumber]產品開發，請同仁上系統新增產品開發工序。";
-        $messageID = constant("GENERAL");
-        $systemID = constant("PRODUCTDEVELOPMENT");
-        $url = ''; /** :TODO: 後續完成RWD頁面*/
-        foreach ($groupList as $g) {
-            $message = array(
-                'title' => $title,
-                'content' => $content,
-                'messageID' => $messageID,
-                'systemID' => $systemID,
-                'uid' => $user->ID,
-                'recipientID' => $g->ID,
-                'url' => $url,
-                'audioFile' => null,
-                'projectID' => $product->projectID,
-                'productID' => $product->ID,
-                'processID' => null,
-            );
-            //$test = $message;
-            $this->dispatch(new SendNotify($message));
-        }
-    }
-
     public function productExecute($productID)
     {
         $project = $this->project->getNonCompleteProcessList($productID)->first();
         $message = '[' . $project->projectNumber . ']' . $project->projectName . ' [' . $project->productNumber . ']' . 
             $project->productName . ' 開始執行開發';
         $this->telegram->sendProductTeam($message, true);
-    }
-
-    public function productExecute_old($productID,$uid='')
-    {
-        $project = $this->project;
-        $mobile = $this->mobile;
-        $server = $this->serverData;
-
-        $list = $project->getNonCompleteProcessList($productID);
-        $projectID = $list->first()->projectID;
-        $projectNumber = $list->first()->projectNumber;
-        $projectName = $list->first()->projectName;
-        $productID = $list->first()->productID;
-        $productNumber = $list->first()->productNumber;
-        $productName = $list->first()->productName;
-        //$salesID = $list->first()->salesID;
-        //$salesName = $server->getUserByerpID($salesID)->name;
-        $salesID = $server->getUserByerpID($list->first()->salesID)->ID;
-        //to sales
-        $title = "開始執行開發";
-        $content = "[$projectNumber]$projectName [$productNumber]$productName 開始執行開發";
-        $url = '';
-        $audioFile = '';
-        //$sendSales = $mobile->insertNotify($title, $content, 3, 0, $uid, $salesID, $url, $audioFile, $projectID, $productID);
-        $message = array(
-            'title' => $title,
-            'content' => $content,
-            'messageID' => 3,
-            'systemID' => 0,
-            'uid' => $uid,
-            'recipientID' => $salesID,
-            'url' => $url,
-            'audioFile' => $audioFile,
-            'projectID' => $projectID,
-            'productID' => $productID,
-            'processID' => '',
-        );
-        $this->dispatch(new SendNotify($message));
-        //to all process staff
-        $sendStaff = array();
-        foreach($list as $process) {
-            $result = $this->sendProcessMessage($process, $title, 3, 0, $uid, $url, $audioFile);
-            array_push($sendStaff, array(
-                'processID' => $process->ID,
-                'success' => $result['success'],
-                'msg' => $result['msg'],
-            ));
-        }
     }
 
     public function changeTimeCost($processID, $send = array())
@@ -148,7 +66,7 @@ class NotificationService
                 $url = '';
                 $audioFile = '';
                 if (!array_search($thisID, $send, true)) {
-                    $this->sendProcessMessage($process, $title, 3, 0, $process->staffID, $url, $audioFile);
+                    $this->sendProcessMessage($process);
                     array_push($send, $thisID);
                 }
                 $this->changeTimeCost($thisID,$send);
@@ -164,65 +82,17 @@ class NotificationService
             );
         }        
     }
-    public function sendProcessMessage($process, $title, $messageID, $systemID, $uid, $url, $audioFile)
+
+    public function sendProcessMessage($process)
     {
-        $server = $this->serverData;
         $processNumber = $process->referenceNumber;
         $processName = $process->referenceName;
         $phaseName = $process->PhaseName;
         $startDate = date('Y-m-d', strtotime($process->processStartDate));
         $cost = $process->timeCost;
-        $content = "[$phaseName][$processNumber]$processName,開始時間$startDate,工時：$cost 天";
-        $recipientID = $server->getuserByerpID($process->staffID)->ID;
-        //return $mobile->insertNotify($title, $content, 3, 0, $uid, $recipientID, $url, $audioFile, $projectID, $productID, $processID);
-        $message = array(
-            'title' => $title,
-            'content' => $content,
-            'messageID' => $messageID,
-            'systemID' => $systemID,
-            'uid' => $uid,
-            'recipientID' => $recipientID,
-            'url' => $url,
-            'audioFile' => $audioFile,
-            'projectID' => $process->projectID,
-            'productID' => $process->productID,
-            'processID' => $process->processID,
-        );
-        $this->dispatch(new SendNotify($message));
-    }
-    public function sendMessageBase($getData) 
-    {
-        try {
-            $user = Auth::user();
-            $uid = $user->ID;
-            $sender = $user->staff()->first();
-            foreach ($getData as $list) {
-                $recipientID = $this->serverData->getUserByerpID($list['recipientID'])->ID;
-                $title = $list['title'];
-                $message = array(
-                    'title' => "[$sender->nodeName]$sender->name: $title",
-                    'content' => $list['content'],
-                    'messageID' => $list['messageID'],
-                    'systemID' => $list['systemID'],
-                    'uid' => $sender,
-                    'recipientID' => $recipientID,
-                    'url' => $list['url'],
-                    'audioFile' => $list['audioFile'],
-                    'projectID' => '',
-                    'productID' => '',
-                    'processID' => '',
-                );
-                $this->dispatch(new SendNotify($message));
-            }
-            return array(
-                'success' => true,
-                'msg' => '訊息送出成功!',
-            );
-        } catch (\Exception $e) {
-            return array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
+        $message = '[' . $phaseName . '][' . $processNumber . ']' . $processName . 
+            ',開始時間' . $startDate . ',工時：' . $cost . ' 天';
+        $erp_id = $process->staffID;
+        $this->telegram->productDevelopmentBotSendToUser($erp_id, $message, true);
     }
 }

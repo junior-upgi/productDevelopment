@@ -9,6 +9,8 @@ use App\Repositories\ProductDevelopment\ProjectRepositories;
 use App\Repositories\companyStructure\StaffRepositories;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 
+use App\Service\TelegramService;
+
 class ProjectCheckService
 {
     public $common;
@@ -18,6 +20,7 @@ class ProjectCheckService
     public $mobile;
     public $serverData;
     public $upgi;
+    public $telegram;
 
     public function __construct(
         Common $common,
@@ -26,7 +29,8 @@ class ProjectCheckService
         ProjectRepositories $project,
         StaffRepositories $staff,
         MobileRepositories $mobile,
-        UpgiSystemRepository $upgi
+        UpgiSystemRepository $upgi,
+        TelegramService $telegram
     ) {
         $this->common = $common;
         $this->carbon = $carbon;
@@ -35,6 +39,7 @@ class ProjectCheckService
         $this->staff = $staff;
         $this->mobile = $mobile;
         $this->upgi = $upgi;
+        $this->telegram = $telegram;
     }
 
     public function delayProject()
@@ -53,28 +58,10 @@ class ProjectCheckService
          * 1、取得SendOverdue群組成員清單
          * 2、發送逾期清單給SendOverdue群組成員
          */
-        $jo = [];
-        $upgi = $this->upgi;
-        $where = [];
-        $now = date('Y-m-d', strtotime($this->carbon->now()));
-        $params = ['key' => 'groupName', 'value' => "SendOverdue"];
-        array_push($where, $params);
-        $groupList = $upgi->getList('vUserGroupList', $where)->get();
-        foreach ($groupList as $g) {
-            $title = "產品開發案逾期清單";
-            $content = "截至今日 $now 產品開發案逾期清單";
-            $staff = $g->ID;
-            $url = "http://upgi.ddns.net/productDevelopment/Mobile/overdueList/$staff";
-            $audioFile = "";
-            $projectID = $g->projectID;
-            $productID = $g->productID;
-            $processID = $g->ID;
-            define("SCHEDULE_ALERT", 1);
-            define("PRODUCTDEVELOPMENT", 0);
-            $result = $this->mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff, $url, $audioFile, $projectID, $productID, $processID);
-            array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
-        }
-        return $jo;
+
+        $url = "http://upgi.ddns.net/productDevelopment/Mobile/overdueList";
+        $message = '產品開發案逾期清單 ' . $url ;
+        $this->telegram->sendProductTeam($message);
     }
 
     public function timeCostReport()
@@ -92,21 +79,12 @@ class ProjectCheckService
             $endDate = date('Y-m-d', strtotime($list->processEndDate));
             $reciprocal = (strtotime($endDate) - strtotime($now)) / (60*60*24);
             if ($reciprocal >= 0) {
-                $title = "工序完工期限通知";
-                $content = "[$list->referenceNumber]$list->referenceName 完工日： $endDate ，剩餘 $reciprocal 日";
-                $staff = $server->getUserByerpID($list->staffID);
-                $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
-                $audioFile = "";
-                $projectID = $list->projectID;
-                $productID = $list->productID;
-                $processID = $list->ID;
-                define("SCHEDULE_ALERT", 1);
-                define("PRODUCTDEVELOPMENT", 0);
-                $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
-                array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
+                $erp_id = $list->staffID;
+                $url = 'http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/' . $list->ID . '/' . $list->staffID;
+                $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 完工日： ' . $endDate . ' ，剩餘 ' . $reciprocal . ' 日';
+                $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
             }
         }
-        return $jo;
     }
 
     public function everyDay()
@@ -120,21 +98,17 @@ class ProjectCheckService
         //取得現階段執行且延誤之程序 getDelayProcess()
         
         $processList = $this->project->getDelayProcess();
-        
-        $jo = array();
 
         foreach ($processList as $list) {
             //通知負責人修正程序工期延至今日
-            $extension = $this->notifyExtension($list, $jo);
-            $jo = $extension;
+            $this->notifyExtension($list);
             //檢查是否最後完成時間己逾期
-            $overdue = $this->notifyOverdue($list, $jo);
-            $jo = $overdue;
+            $this->notifyOverdue($list);
         }
-        return $jo;
+        return true;
     }
 
-    public function notifyExtension($list, $jo)
+    public function notifyExtension($list)
     {
         $mobile = $this->mobile;
         $server = $this->serverData;
@@ -145,27 +119,14 @@ class ProjectCheckService
             'timeCost' => $newCost,
         );
         $setCost = $this->project->updateProcess($list->ID, $params);
-        if (!$setCost['success']) {
-            array_push($jo, $this->setLog(false, 'update cost error', $setCost['msg'], '', $list->projectID, $list->productID, $list->ID));
-            return $jo;
+        if ($setCost['success']) {
+            $url = 'http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/' . $list->ID . '/' . $list->staffID;
+            $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，完成時間延至今日，詳細資訊請點連結：' . $url;
+            $erp_id = $list->staffID;
+            $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
         }
-        //通知個人工期延誤
-        $title = "專案開發工序已延誤";
-        $content = "[$list->referenceNumber]$list->referenceName 已延誤，完成時間延至今日";
-        $staff = $server->getUserByerpID($list->staffID);
-        //$url = route('userSettingCost', ['processID' => $list->ID, 'staffID' => $list->staffID]);
-        $url = "http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/$list->ID/$list->staffID";
-        $audioFile = "alarm.mp3";
-        $projectID = $list->projectID;
-        $productID = $list->productID;
-        $processID = $list->ID;
-        define("SCHEDULE_ALERT", 1);
-        define("PRODUCTDEVELOPMENT", 0);
-        $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $staff->ID, $url, $audioFile, $projectID, $productID, $processID);
-        array_push($jo, $this->setLog($result['success'], 'notify staff', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
-        return $jo;
     }
-    public function notifyOverdue($list, $jo)
+    public function notifyOverdue($list)
     {
         $project = $this->project;
         $mobile = $this->mobile;
@@ -173,34 +134,10 @@ class ProjectCheckService
         $overdue = $project->checkOverdue($list->productID);
         if ($overdue) {
             //通知業務
-            $sales = $server->getUserByerpID($list->salesID); 
-            $title = "專案開發逾期警訊"; 
-            $content = "[$list->referenceNumber]$list->referenceName 已延誤，負責人: $list->name";
-            //$url = route('overdueInfo', ['processID' => $list->ID]);
-            $url = "http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/$list->ID";
-            $audioFile = "alarm.mp3";
-            $projectID = $list->projectID;
-            $productID = $list->productID;
-            $processID = $list->ID;
-            define("SCHEDULE_ALERT", 1);
-            define("PRODUCTDEVELOPMENT", 0);
-            $result = $mobile->insertNotify($title, $content, constant("SCHEDULE_ALERT"), constant("PRODUCTDEVELOPMENT"), '', $sales->ID, $url, $audioFile, $projectID, $productID, $processID);
-            array_push($jo, $this->setLog($result['success'], 'notify sales', $result['msg'], $result['broadcastID'], $projectID, $productID, $processID));
+            $erp_id = $list->salesID;
+            $url = 'http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/' . $list->ID;
+            $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，負責人: ' . $list->name;
+            $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
         }
-        return $jo;
-    }
-    public function setLog($success, $type, $msg, $broadcastID, $projectID, $productID, $processID)
-    {
-        $log = array(
-            'success' => $success,
-            'type' => $type,
-            'msg' => $msg,
-            'time' => $this->carbon->now(),
-            'broadcastID' => $broadcastID,
-            'projectID' => $projectID,
-            'productID' => $productID,
-            'processID' => $processID,
-        );
-        return $log;
     }
 }

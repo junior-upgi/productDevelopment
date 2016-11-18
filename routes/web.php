@@ -33,6 +33,10 @@ Route::get('phpinfo', function () {
     phpinfo();
 });
 
+Route::get('test', function () {
+    return redirect()->action('App\Service\ProjectCheckService@timeCostReport()');
+});
+
 Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
@@ -154,5 +158,5 @@ Route::group(['prefix' => 'Mobile'], function() {
     Route::get('testSend', 
         function () {return view('Mobile.SendMessage');}
     );
-    Route::get('overdueList/{id}', 'ProductDevelopment\MobileController@overdueList');
+    Route::get('overdueList', 'ProductDevelopment\MobileController@overdueList')->middleware('sso');
 });
