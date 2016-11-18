@@ -32,11 +32,11 @@ class TelegramService
 
     public function sendProductTeam($message, $queue = false)
     {
-        //$bot = $this->telegram->getBotByName('productDevelopmentBot');
-        $bot = $this->telegram->getBotByName('testBot');
+        $bot = $this->telegram->getBotByName('productDevelopmentBot');
+        //$bot = $this->telegram->getBotByName('testBot');
         $token = $bot->first()->token;
-        //define("PRODUCTTEAM", -164742782);
-        define("PRODUCTTEAM", -162201704);
+        define("PRODUCTTEAM", -164742782);
+        //define("PRODUCTTEAM", -162201704);
         $chat = $this->telegram->getChatByTitle(constant("PRODUCTTEAM"));
         $chat_id = $chat->first()->id;
 
@@ -46,8 +46,8 @@ class TelegramService
 
     public function productDevelopmentBotSendToUser($erp_id, $message, $queue = false)
     {
-        //$bot = $this->telegram->getBotByName('productDevelopmentBot');
-        $bot = $this->telegram->getBotByName('testBot');
+        $bot = $this->telegram->getBotByName('productDevelopmentBot');
+        //$bot = $this->telegram->getBotByName('testBot');
         $token = $bot->first()->token;
         $send = $this->sendMessageToUser($token, $erp_id, $message, $queue);
         return $send;
