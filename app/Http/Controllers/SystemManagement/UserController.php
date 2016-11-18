@@ -84,7 +84,7 @@ class UserController extends Controller
     public function getMobileUser()
     {
         $where = [];
-        $haveToken = ['key' => 'deviceToken', 'op' => '<>', 'value' => null];
+        $haveToken = ['key' => 'telegramID', 'op' => '<>', 'value' => null];
         $isMember = ['key' => 'erpID', 'op' => '<>', 'value' => null];
         array_push($where, $haveToken);
         array_push($where, $isMember);

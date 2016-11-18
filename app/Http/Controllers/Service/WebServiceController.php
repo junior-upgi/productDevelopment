@@ -35,6 +35,7 @@ use App\Models;
 
 use App\Service\ProjectCheckService;
 use App\Service\NotificationService;
+use App\Service\TelegramService;
 
 
 /*
@@ -49,19 +50,22 @@ class WebServiceController extends Controller
     public $projectCheck;
     public $notify;
     public $user;
+    public $telegram;
 
     public function __construct(
         Common $common,
         ServerData $server,
         ProjectCheckService $projectCheck,
         NotificationService $notify,
-        User $user
+        User $user,
+        TelegramService $telegram
     ) {
         $this->common = $common;
         $this->server = $server;
         $this->projectCheck = $projectCheck;
         $this->notify = $notify;
         $this->user = $user;
+        $this->telegram = $telegram;
     }
 
     private function checkUser($account, $password, $type)
@@ -276,13 +280,9 @@ class WebServiceController extends Controller
     public function sendMessage(Request $request)
     {
         $getData = $request->json()->all();
-        $result = $this->notify->sendMessageBase($getData);
-        return $result;
-    }
-
-    public function test()
-    {
-        $process = $this->projectCheck->timeCostReport();
-        return $process;
+        $result = $this->telegram->productDevelopmentBotSendToUser($getData['erpID'], $getData['message']);
+        if ($result) {
+            return ['success' => true];
+        }
     }
 }

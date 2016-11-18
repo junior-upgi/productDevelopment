@@ -18,10 +18,12 @@
                             </ul>
                         </div>
                     </div>
+                    <!--
                     <div class="form-group">
                         <label for="title" class="control-label">標題</label>
                         <input type="text" class="form-control" id="title" name="title">
                     </div>
+                    -->
                     <div class="form-group">
                         <label for="content" class="control-label">內容</label>
                         <textarea type="text" class="form-control" rows="3" id="content" name="content" style="resize: none;"></textarea>
@@ -46,7 +48,7 @@
             $('#notify_recipientID').val('');
             $('#searchID').val('');
             $('#joinID').val('');
-            $('#title').val('');
+            //$('#title').val('');
             $('#content').val('');
         });
         $('#searchID').bsSuggest('init', {
@@ -71,23 +73,16 @@
                 $('#notify_recipientID').val(null);
         });
         $('#notifySend').on('click', function () {
-            var recipientID = $('#notify_recipientID').val();
-            var title = $('#title').val();
-            var content = $('#content').val();
+            //var recipientID = $('#notify_recipientID').val();
+            //var title = $('#title').val();
+            var erpID = $('#notify_recipientID').val();
+            var message = $('#content').val();
             var send = {
-                "title": title,
-                "content": content,
-                "messageID": 2,
-                "systemID": 0,
-                "uid": '{{ $user->ID }}',
-                "recipientID": recipientID,
-                "url": "",
-                "audioFile": ""
+                "erpID": erpID,
+                "message": message
             };
-            var message = new Array();
-            message.push(send);
-            var data = JSON.stringify(message);
-            if (recipientID != null) {
+            var data = JSON.stringify(send);
+            if (erpID != null) {
                 $.ajax({
                     url: url + '/Service/SendMessage',
                     type: 'POST',
@@ -102,7 +97,7 @@
                         if (result.success) {
                             swal({
                                 title: "推播發送成功!",
-                                text: result.msg,
+                                text: "",
                                 type: "success",
                                 showCancelButton: false,
                                 confirmButtonClass: "btn-success",
@@ -113,7 +108,7 @@
                                 $('#NotifyModal').modal('hide');
                             });
                         } else {
-                            swal("推播發送失敗!", result.msg, "error");
+                            swal("推播發送失敗!", "無法傳送訊息給該人員", "error");
                         }
                     }
                 })
