@@ -13,6 +13,8 @@ use App\Repositories\mobileMessagingSystem\MobileRepositories;
 use App\Repositories\ProductDevelopment\ProjectRepositories;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 
+use App\Service\TelegramService;
+
 class NotificationService
 {
     use DispatchesJobs;
@@ -21,20 +23,30 @@ class NotificationService
     public $mobile;
     public $project;
     public $upgi;
+    public $telegram;
 
     public function __construct(
         ServerData $serverData,
         MobileRepositories $mobileRepositories,
         ProjectRepositories $projectRepositories,
-        upgiSystemRepository $upgi
+        upgiSystemRepository $upgi,
+        TelegramService $telegram
     ) {
         $this->serverData = $serverData;
         $this->mobile = $mobileRepositories;
         $this->project = $projectRepositories;
         $this->upgi = $upgi;
+        $this->telegram = $telegram;
+    }
+    public function sendNewProduct($id, $groupID)
+    {
+        $user = Auth::user();
+        $product = $this->project->getProductByID($id);
+        $message = '新增[' . $product->projectNumber . '][' . $product->referenceNumber . ']產品開發，請同仁上系統新增產品開發工序';
+        $this->telegram->sendProductTeam($message);
     }
 
-    public function sendNewProduct($id, $groupID)
+    public function sendNewProduct_old($id, $groupID)
     {
         $user = Auth::user();
         define("GENERAL", 3);
@@ -68,7 +80,15 @@ class NotificationService
         }
     }
 
-    public function productExecute($productID,$uid='')
+    public function productExecute($productID)
+    {
+        $project = $this->project->getNonCompleteProcessList($productID)->first();
+        $message = '[' . $project->projectNumber . ']' . $project->projectName . ' [' . $project->productNumber . ']' . 
+            $project->productName . ' 開始執行開發';
+        $this->telegram->sendProductTeam($message, true);
+    }
+
+    public function productExecute_old($productID,$uid='')
     {
         $project = $this->project;
         $mobile = $this->mobile;

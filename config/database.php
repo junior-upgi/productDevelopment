@@ -153,6 +153,20 @@ return [
             'engine' => null,
         ],
 
+        'telegram' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_SqlServer', $SqlServerHost),
+            'port' => '1433',
+            'database' => 'telegram',
+            'username' => 'sa',
+            'password' => 'attn@3100',
+            'charset' => 'big5',
+            'collation' => 'big5_chinese_ci',
+            'prefix' => '',
+            'strict' => false,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),
