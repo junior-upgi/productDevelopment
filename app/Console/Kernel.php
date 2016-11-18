@@ -33,18 +33,18 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('overdueList')->weekly()->mondays()->dailyAt('06:00');
-        //$schedule->command('checkProcess')->dailyAt('07:00');
+        $schedule->command('overdueList')->weekly()->mondays()->dailyAt('06:00');
+        $schedule->command('checkProcess')->dailyAt('07:00');
         //$schedule->command('checkProduct')->dailyAt('07:00');
         //$schedule->command('checkProject')->dailyAt('07:00');
-        //$schedule->command('checkEveryDay')->dailyAt('07:00');
+        $schedule->command('checkEveryDay')->dailyAt('07:00');
         
 
-        $schedule->command('overdueList')->everyMinute();
-        $schedule->command('checkProcess')->everyMinute();
+        //$schedule->command('overdueList')->everyMinute();
+        //$schedule->command('checkProcess')->everyMinute();
         //$schedule->command('checkProduct')->everyMinute();
         //$schedule->command('checkProject')->everyMinute();
-        $schedule->command('checkEveryDay')->everyMinute();
+        //$schedule->command('checkEveryDay')->everyMinute();
     }
     /**
      * Register the Closure based commands for the application.
