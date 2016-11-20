@@ -34,7 +34,7 @@
     <div class="container text-center">
         <div style="margin-top:180px;">
             <h1 class="">帳號申請/修改成功</h2>
-            <a href="{{ url('/login') }}">點擊此連結至登入頁面</a>
+            <a href="http://upgi.ddns.net">點擊此連結至登入頁面</a>
         </div>
     </div>
 </body>
