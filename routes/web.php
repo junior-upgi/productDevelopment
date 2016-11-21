@@ -45,12 +45,11 @@ Route::get('login', 'Auth\LoginController@show');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout');
 Route::get('hashPassword', 'Auth\LoginController@hashPassword');
-*/
 Route::get('reset', 'Auth\ResetPasswordController@resetPassword');
 Route::post('checkPersonal', 'Auth\ResetPasswordController@checkPersonal');
 Route::post('setPassword', 'Auth\ResetPasswordController@setPassword');
 Route::get('testad', 'Auth\ResetPasswordController@testAD');
-
+*/
 Route::get('test', 'Service\WebServiceController@test');
 
 Route::group(['prefix' => 'git'], function() {

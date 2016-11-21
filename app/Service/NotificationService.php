@@ -9,8 +9,8 @@ use Auth;
 use App\Jobs\SendNotify;
 
 //use Repositories
-use App\Repositories\mobileMessagingSystem\MobileRepositories;
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\mobileMessagingSystem\MobileRepository;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 use App\Service\TelegramService;
@@ -27,14 +27,14 @@ class NotificationService
 
     public function __construct(
         ServerData $serverData,
-        MobileRepositories $mobileRepositories,
-        ProjectRepositories $projectRepositories,
+        MobileRepository $mobileRepositories,
+        ProjectRepository $projectRepository,
         upgiSystemRepository $upgi,
         TelegramService $telegram
     ) {
         $this->serverData = $serverData;
         $this->mobile = $mobileRepositories;
-        $this->project = $projectRepositories;
+        $this->project = $projectRepository;
         $this->upgi = $upgi;
         $this->telegram = $telegram;
     }

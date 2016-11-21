@@ -15,28 +15,28 @@ use App\Http\Controllers\ServerData;
 use App\Http\Controllers\Role;
 
 //use Repositories
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 
 class ProjectController extends Controller
 {
     public $common;
     public $serverData;
-    public $projectRepositories;
+    public $projectRepository;
 
     public function __construct(
         Common $common,
         ServerData $serverData,
-        ProjectRepositories $projectRepositories
+        ProjectRepository $projectRepository
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
-        $this->projectRepositories = $projectRepositories;
+        $this->projectRepository = $projectRepository;
     }
     
     //
     public function projectList()
     {
-        $ProjectList = $this->projectRepositories
+        $ProjectList = $this->projectRepository
             ->getNonCompleteProject(15);
 
         return view('Project.ProjectList')
@@ -62,8 +62,8 @@ class ProjectController extends Controller
             'salesID' => $request->input('SalesID'),
             'projectDeadline' => $request->input('ProjectDeadline'),
         );
-        return $this->projectRepositories
-            ->insertData($this->projectRepositories->project, $params);
+        return $this->projectRepository
+            ->insertData($this->projectRepository->project, $params);
     }
     //
     public function editProject($projectID)
@@ -72,8 +72,8 @@ class ProjectController extends Controller
            return Redirect::route('errorRoute');
         } 
         
-        $project = $this->projectRepositories->getProjectByID($projectID);
-        $projectContent = $this->projectRepositories->getProjectContent($projectID);
+        $project = $this->projectRepository->getProjectByID($projectID);
+        $projectContent = $this->projectRepository->getProjectContent($projectID);
         $client = $this->serverData->getAllClient();
         $node = $this->serverData->getAllNode();
         $nodeID = $project->nodeID;
@@ -98,8 +98,8 @@ class ProjectController extends Controller
             'projectDeadline' => $request->input('ProjectDeadline'),
         );
 
-        return $this->projectRepositories
-            ->updateData($this->projectRepositories->project, $params, $projectID);
+        return $this->projectRepository
+            ->updateData($this->projectRepository->project, $params, $projectID);
     }
     //
     public function getStaffByNodeID($nodeID)
@@ -115,15 +115,15 @@ class ProjectController extends Controller
                'msg' => '您沒有權限使用此功能',
            );
         } 
-        $result = $this->projectRepositories->deleteData($this->projectRepositories->project, $projectID);
+        $result = $this->projectRepository->deleteData($this->projectRepository->project, $projectID);
         return $result;
     }
     //
     public function showProject()
     {
         return view('Project.ShowProject')
-            ->with('Project', $this->projectRepositories->showProjectExecute())
-            ->with('Product', $this->projectRepositories->vShowProduct)
-            ->with('Process', $this->projectRepositories->vShowProcess);
+            ->with('Project', $this->projectRepository->showProjectExecute())
+            ->with('Product', $this->projectRepository->vShowProduct)
+            ->with('Process', $this->projectRepository->vShowProcess);
     }
 }

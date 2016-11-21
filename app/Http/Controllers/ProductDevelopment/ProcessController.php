@@ -14,32 +14,32 @@ use App\Http\Controllers\ServerData;
 //use Service
 use App\Service\NotificationService;
 //use Repositories
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 class ProcessController extends Controller
 {
     public $common;
     public $serverData;
     public $notification;
-    public $projectRepositories;
+    public $projectRepository;
     public function __construct(
         Common $common,
         ServerData $serverData,
         NotificationService $notification,
-        ProjectRepositories $projectRepositories
+        ProjectRepository $projectRepository
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
         $this->notification = $notification;
-        $this->projectRepositories = $projectRepositories;
+        $this->projectRepository = $projectRepository;
     }
     //
     public function processList($productID)
     {
         return view('Process.ProcessList')
-            ->with('ProductData', $this->projectRepositories->getProductByID($productID))
-            ->with('ProcessList', $this->projectRepositories->getProcessList($productID))
+            ->with('ProductData', $this->projectRepository->getProductByID($productID))
+            ->with('ProcessList', $this->projectRepository->getProcessList($productID))
             ->with('NodeList', $this->serverData->getAllNode())
-            ->with('PhaseList', $this->projectRepositories->getParaList('ProcessPhaseID'));
+            ->with('PhaseList', $this->projectRepository->getParaList('ProcessPhaseID'));
     }
     //暫時無解!!
     public function insertProcess(Request $request)
@@ -67,7 +67,7 @@ class ProcessController extends Controller
                 'projectProcessPhaseID' => $request->input('PhaseID'),
                 'timeCost' => $request->input('TimeCost'),
                 'staffID' => iconv("UTF-8", "BIG-5", $request->input('StaffID')),
-                'sequentialIndex' => $this->projectRepositories->getMaxSeqIndex($request->input('ProductID')) + 1,
+                'sequentialIndex' => $this->projectRepository->getMaxSeqIndex($request->input('ProductID')) + 1,
                 'processStartDate' => $request->input('ProcessStartDate'),
                 'note' => $request->input('note'),
             );
@@ -103,7 +103,7 @@ class ProcessController extends Controller
     //
     public function getProcessData($processID)
     {
-        $processData = $this->projectRepositories->getProcessByID($processID);
+        $processData = $this->projectRepository->getProcessByID($processID);
         $staffList = $this->serverData->getStaffByNodeID($processData->nodeID);
         $jo = array();
         if ($processData && $staffList) {
@@ -134,7 +134,7 @@ class ProcessController extends Controller
     public function saveProcessSort(Request $request)
     {
         $sort = $request->json()->all();
-        return $this->projectRepositories->saveProcessSort($sort);
+        return $this->projectRepository->saveProcessSort($sort);
     }
     //
     public function updateProcess(Request $request)
@@ -172,22 +172,22 @@ class ProcessController extends Controller
         if (isset($processStartDate)) $params['processStartDate'] = $processStartDate;
         if (isset($upload)) $params['processImg'] = $pic;
         if (isset($note)) $params['note'] = $note;
-        return $this->projectRepositories->updateProcess($processID, $params);
+        return $this->projectRepository->updateProcess($processID, $params);
     }
     //
     public function processComplete($processID)
     {
-        $completeStatus = $this->projectRepositories->getProcessByID($processID)->complete;
+        $completeStatus = $this->projectRepository->getProcessByID($processID)->complete;
         if ($completeStatus === '1') {
             $params = array('complete' => '0');
-            $result = $this->projectRepositories->updateData($this->projectRepositories->projectProcess, $params, $processID);
+            $result = $this->projectRepository->updateData($this->projectRepository->projectProcess, $params, $processID);
         } elseif ($completeStatus === '0') {
             $now = date('Y-m-d H:i:s', strtotime(carbon::now()));
             $params = array(
                 'complete' => '1',
                 'completeTime' => $now,
             );
-            $result = $this->projectRepositories->setProcessComplete($processID, $params);
+            $result = $this->projectRepository->setProcessComplete($processID, $params);
         } else {
             return $jo = array('success' => false, 'msg' => '資料異常!');
         }
@@ -202,13 +202,13 @@ class ProcessController extends Controller
     //
     public function deleteProcess($processID)
     {
-        return $this->projectRepositories->deleteProcess($processID);
+        return $this->projectRepository->deleteProcess($processID);
     }
     //
     public function getPreparationList($productID, $processID)
     {
-        $preparationList = $this->projectRepositories->getPreparationList($productID, $processID);
-        $selectList = $this->projectRepositories->getPreparationSelectList($processID);
+        $preparationList = $this->projectRepository->getPreparationList($productID, $processID);
+        $selectList = $this->projectRepository->getPreparationSelectList($processID);
         $s = array();
         foreach ($selectList as $list) {
             $cc = (string)$list->parentProcessID;
@@ -223,17 +223,17 @@ class ProcessController extends Controller
     //
     public function setPreparation($productID, $processID, $select)
     {
-        return $this->projectRepositories->setPreparation($productID, $processID, $select);
+        return $this->projectRepository->setPreparation($productID, $processID, $select);
     }
     public function myProcess()
     {
         $user = Auth::user();
         $role = $user->authorization;
         $userID = $user->erpID;
-        $process = $this->projectRepositories->getPersonalProcess($userID);
+        $process = $this->projectRepository->getPersonalProcess($userID);
         return view('Process.MyProcess')
             ->with('process', $process)
             ->with('NodeList', $this->serverData->getAllNode())
-            ->with('PhaseList', $this->projectRepositories->getParaList('ProcessPhaseID'));
+            ->with('PhaseList', $this->projectRepository->getParaList('ProcessPhaseID'));
     }
 }

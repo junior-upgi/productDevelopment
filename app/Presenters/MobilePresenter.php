@@ -1,14 +1,14 @@
 <?php
 namespace App\Presenters;
 
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 
 class MobilePresenter
 {
     public $project;
 
     public function __construct(
-        ProjectRepositories $project
+        ProjectRepository $project
     ) {
         $this->project = $project;
     }

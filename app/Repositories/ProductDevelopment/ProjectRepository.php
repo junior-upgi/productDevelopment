@@ -20,7 +20,7 @@ use App\Models\productDevelopment\VShowProject;
 use App\Models\productDevelopment\VShowProduct;
 use App\Models\productDevelopment\VShowProcess;
 
-class ProjectRepositories
+class ProjectRepository
 {
     public $common;
     public $carbon;

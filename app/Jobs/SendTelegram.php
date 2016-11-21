@@ -7,8 +7,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Repositories\mobileMessagingSystem\MobileRepositories;
-
 class SendTelegram implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;

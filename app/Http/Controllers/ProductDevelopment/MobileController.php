@@ -20,7 +20,7 @@ use App\Service\NotificationService;
 use App\Service\ProjectCheckService;
 
 //use Repositories
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 class MobileController extends Controller
@@ -34,7 +34,7 @@ class MobileController extends Controller
     public function __construct(
         Common $common,
         ServerData $server,
-        ProjectRepositories $project,
+        ProjectRepository $project,
         UpgiSystemRepository $upgi,
         ProjectCheckService $check
     ) {

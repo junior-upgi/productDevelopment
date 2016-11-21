@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 use Validator;
 use Redirect;
 
-use App\Repositories\companyStructure\StaffRepositories;
+use App\Repositories\companyStructure\StaffRepository;
 
 /**
  * Class ResetpasswordController
@@ -28,7 +28,7 @@ class ResetPasswordController
     private $common;
     /** @var ServerData 注入ServerData */
     private $server;
-    /** @var StaffRepositories 注入StaffRepositories */
+    /** @var StaffRepository 注入StaffRepository */
     private $staff;
 
     /**
@@ -36,13 +36,13 @@ class ResetPasswordController
      *
      * @param Common $common
      * @param ServerData $server
-     * @param StaffRepositories $staff
+     * @param StaffRepository $staff
      * @return void
      */
     public function __construct(
         Common $common,
         ServerData $server,
-        StaffRepositories $staff
+        StaffRepository $staff
     ) {
         $this->common = $common;
         $this->server = $server;

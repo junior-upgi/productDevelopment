@@ -3,7 +3,7 @@ namespace App\Repositories\UPGWeb;
 
 use App\Models\UPGWeb\ERPStaff;
 
-class MemberRepositories
+class MemberRepository
 {
     public $staff;
 

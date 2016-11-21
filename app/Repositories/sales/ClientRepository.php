@@ -16,7 +16,7 @@ use App\Models\sales\Client;
  *
  * @package App\Http\Controllers
  */
-class ClientRepositories
+class ClientRepository
 {
     /** @var Client 注入Client */
     private $client;

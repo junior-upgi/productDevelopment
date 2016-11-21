@@ -24,7 +24,7 @@ use App\Models\upgiSystem\User;
  *
  * @package App\Http\Controllers
  */
-class StaffRepositories
+class StaffRepository
 {
     /** @var Common 注入Common */
     private $common;

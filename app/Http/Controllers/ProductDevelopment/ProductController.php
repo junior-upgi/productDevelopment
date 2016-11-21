@@ -11,40 +11,40 @@ use App\Http\Controllers\ServerData;
 //use Service
 use App\Service\NotificationService;
 //use Repositories
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+use App\Repositories\ProductDevelopment\ProjectRepository;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 class ProductController extends Controller
 {
     public $common;
     public $serverData;
     public $notification;
-    public $projectRepositories;
+    public $projectRepository;
     public $upgi;
 
     public function __construct(
         Common $common,
         ServerData $serverData,
         NotificationService $notification,
-        ProjectRepositories $projectRepositories,
+        ProjectRepository $projectRepository,
         UpgiSystemRepository $upgi
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
         $this->notification = $notification;
-        $this->projectRepositories = $projectRepositories;
+        $this->projectRepository = $projectRepository;
         $this->upgi = $upgi;
     }
     //
     public function productList($projectID)
     {
         return view('Product.ProductList')
-            ->with('ProductList', $this->projectRepositories->getProductList($projectID, 15))
-            ->with('ProjectData', $this->projectRepositories->getProjectByID($projectID));
+            ->with('ProductList', $this->projectRepository->getProductList($projectID, 15))
+            ->with('ProjectData', $this->projectRepository->getProjectByID($projectID));
     }
     //
     public function addProduct($projectID)
     {
-        $priority = $this->projectRepositories->getParaList('priorityLevel');
+        $priority = $this->projectRepository->getParaList('priorityLevel');
         $group = $this->upgi->getList('group')->get();
 
         return view('Product.AddProduct')
@@ -93,7 +93,7 @@ class ProductController extends Controller
             $params['contentAttach'] = $att;
         }
 
-        $result =  $this->projectRepositories->insertData($this->projectRepositories->projectContent, $params);
+        $result =  $this->projectRepository->insertData($this->projectRepository->projectContent, $params);
         if ($result['success']) {
             // 發送通知給所有開發案團隊
             $this->notification->sendNewProduct($id, $request->input('Group'));
@@ -104,8 +104,8 @@ class ProductController extends Controller
     public function editProduct($productID)
     {
         return view('Product.EditProduct')
-            ->with('ProductData', $this->projectRepositories->getProductByID($productID))
-            ->with('PriorityLevelList', $this->projectRepositories->getParaList('priorityLevel'));
+            ->with('ProductData', $this->projectRepository->getProductByID($productID))
+            ->with('PriorityLevelList', $this->projectRepository->getParaList('priorityLevel'));
     }
     //
     public function updateProduct(Request $request)
@@ -138,13 +138,13 @@ class ProductController extends Controller
             //'contentImg' => $pic,
         );
         if (isset($upload)) $params['contentImg'] = $pic;
-        return $this->projectRepositories
-            ->updateData($this->projectRepositories->projectContent, $params, $productID);
+        return $this->projectRepository
+            ->updateData($this->projectRepository->projectContent, $params, $productID);
     }
     //
     public function productExecute($productID)
     {
-        $exe = $this->projectRepositories->setProductExecute($productID);
+        $exe = $this->projectRepository->setProductExecute($productID);
         if ($exe['toNotify']) {
             $this->notification->productExecute($productID);
         }
@@ -153,7 +153,7 @@ class ProductController extends Controller
     //
     public function deleteProduct($productID)
     {
-        return $this->projectRepositories->deleteData($this->projectRepositories->projectContent, $productID);
+        return $this->projectRepository->deleteData($this->projectRepository->projectContent, $productID);
     }
 
     public function getAttach($id)

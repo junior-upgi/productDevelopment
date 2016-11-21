@@ -19,7 +19,7 @@ use App\Models\mobileMessagingSystem\MessageCategory;
 use App\Models\mobileMessagingSystem\SystemCategory;
 use App\Models\mobileMessagingSystem\VBroadcastList;
 
-class MobileRepositories
+class MobileRepository
 {
     public $common;
     public $relationship;

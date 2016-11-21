@@ -10,7 +10,7 @@ use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 
 use App\Repositories\upgiSystem\UpgiSystemRepository;
-use App\Repositories\sales\ClientRepositories;
+use App\Repositories\sales\ClientRepository;
 
 class UserController extends Controller
 {
@@ -23,7 +23,7 @@ class UserController extends Controller
         Common $common,
         ServerData $server,
         UpgiSystemrepository $upgi,
-        ClientRepositories $client
+        ClientRepository $client
     ) {
         $this->common = $common;
         $this->server = $server;

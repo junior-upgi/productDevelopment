@@ -18,8 +18,8 @@ use Carbon\Carbon;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 
-//use Repositories
-use App\Repositories\ProductDevelopment\ProjectRepositories;
+//use Repository
+use App\Repositories\ProductDevelopment\ProjectRepository;
 
 /**
  * Class ReportController
@@ -32,25 +32,25 @@ class ReportController extends Controller
     private $common;
     /** @var ServerData 注入ServerData */
     private $serverData;
-    /** @var ProjectRepositories 注入ProjectRepositories */
-    private $projectRepositories;
+    /** @var ProjectRepository 注入ProjectRepository */
+    private $projectRepository;
 
     /**
      * Common 建構式
      *
      * @param Common $common
      * @param ServerData $serverData
-     * @param ProjectRepositories $projectRepositories
+     * @param ProjectRepository $projectRepository
      * @return void
      */
     public function __construct(
         Common $common,
         ServerData $serverData,
-        ProjectRepositories $projectRepositories
+        ProjectRepository $projectRepository
     ) {
         $this->common = $common;
         $this->serverData = $serverData;
-        $this->projectRepositories = $projectRepositories;
+        $this->projectRepository = $projectRepository;
     }
 
     /**
@@ -60,7 +60,7 @@ class ReportController extends Controller
      */
     public function projectExecuteRate()
     {
-        $project = $this->projectRepositories->getProjectReport();
+        $project = $this->projectRepository->getProjectReport();
         return view('Report.ProjectReport')
             ->with('Project', $project);
     }
@@ -72,8 +72,8 @@ class ReportController extends Controller
      */
     public function productExecuteRate()
     {
-        $project = $this->projectRepositories->getProjectExecuteList();
-        $detail = $this->projectRepositories->getProductReport();
+        $project = $this->projectRepository->getProjectExecuteList();
+        $detail = $this->projectRepository->getProductReport();
         return view('Report.ProductReport')
             ->with('Project', $project)
             ->with('Detail', $detail);
@@ -86,8 +86,8 @@ class ReportController extends Controller
      */
      public function meetingReport()
      {
-         $product = $this->projectRepositories->getProductExecuteList();
-         $process = $this->projectRepositories->getStartProcess();
+         $product = $this->projectRepository->getProductExecuteList();
+         $process = $this->projectRepository->getStartProcess();
          return view('Report.MeetingReport')
             ->with('product', $product)
             ->with('process', $process);

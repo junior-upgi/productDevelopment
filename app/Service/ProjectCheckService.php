@@ -4,9 +4,9 @@ namespace App\Service;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Carbon\Carbon;
-use App\Repositories\mobileMessagingSystem\MobileRepositories;
-use App\Repositories\ProductDevelopment\ProjectRepositories;
-use App\Repositories\companyStructure\StaffRepositories;
+use App\Repositories\mobileMessagingSystem\MobileRepository;
+use App\Repositories\ProductDevelopment\ProjectRepository;
+use App\Repositories\companyStructure\StaffRepository;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
 
 use App\Service\TelegramService;
@@ -26,9 +26,9 @@ class ProjectCheckService
         Common $common,
         Carbon $carbon,
         ServerData $serverData,
-        ProjectRepositories $project,
-        StaffRepositories $staff,
-        MobileRepositories $mobile,
+        ProjectRepository $project,
+        StaffRepository $staff,
+        MobileRepository $mobile,
         UpgiSystemRepository $upgi,
         TelegramService $telegram
     ) {
@@ -40,16 +40,6 @@ class ProjectCheckService
         $this->mobile = $mobile;
         $this->upgi = $upgi;
         $this->telegram = $telegram;
-    }
-
-    public function delayProject()
-    {
-
-    }
-
-    public function delayProduct()
-    {
-        
     }
 
     public function sendOverdue()

@@ -7,7 +7,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Repositories\mobileMessagingSystem\MobileRepositories;
+use App\Repositories\mobileMessagingSystem\MobileRepository;
 
 class SendNotify implements ShouldQueue
 {
@@ -33,7 +33,7 @@ class SendNotify implements ShouldQueue
      *
      * @return void
      */
-    public function handle(MobileRepositories $mobile)
+    public function handle(MobileRepository $mobile)
     {
         //
         $this->mobile = $mobile;

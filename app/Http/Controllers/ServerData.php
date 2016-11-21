@@ -9,9 +9,9 @@
  */
 namespace App\Http\Controllers;
 
-use App\Repositories\sales\ClientRepositories;
-use App\Repositories\companyStructure\StaffRepositories;
-use App\Repositories\UPGWeb\MemberRepositories;
+use App\Repositories\sales\ClientRepository;
+use App\Repositories\companyStructure\StaffRepository;
+use App\Repositories\UPGWeb\MemberRepository;
 
 use DB;
 use App\Models\companyStructure\Relationship;
@@ -34,12 +34,12 @@ use App\Models\productDevelopment\Para;
  */
 class ServerData
 {
-    /** @var ClientRepositories 注入ClientRepositories */
-    private $clientRepositories;
-    /** @var StaffRepositories 注入StaffRepositories */
-    private $staffRepositories;
-    /** @var MemberRepositories 注入MemberRepositories */
-    private $memberRepositories;
+    /** @var ClientRepository 注入ClientRepository */
+    private $clientRepository;
+    /** @var StaffRepository 注入StaffRepository */
+    private $staffRepository;
+    /** @var MemberRepository 注入MemberRepository */
+    private $memberRepository;
     /** @var ERPStaff 注入ERPStaff */
     private $erpStaff;
     /** @var ERPStaffNode 注入ERPStaffNode */
@@ -48,23 +48,23 @@ class ServerData
     /**
      * 建構式
      *
-     * @param MemberRepositories $memberRepositories
-     * @param ClientRepositories $clientRepositories
-     * @param StaffRepositories $staffRepositories
+     * @param MemberRepository $memberRepository
+     * @param ClientRepository $clientRepository
+     * @param StaffRepository $staffRepository
      * @param ERPStaff $erpStaff
      * @param ERPStaffNode $erpStaffNode
      * @return void
      */
     public function __construct(
-        MemberRepositories $memberRepositories,
-        ClientRepositories $clientRepositories,
-        StaffRepositories $staffRepositories,
+        MemberRepository $memberRepository,
+        ClientRepository $clientRepository,
+        StaffRepository $staffRepository,
         ERPStaff $erpStaff,
         ERPStaffNode $erpStaffNode
     ) {
-        $this->clientRepositories = $clientRepositories;
-        $this->staffRepositories = $staffRepositories;
-        $this->memberRepositories = $memberRepositories;
+        $this->clientRepository = $clientRepository;
+        $this->staffRepository = $staffRepository;
+        $this->memberRepository = $memberRepository;
         $this->erpStaff = $erpStaff;
         $this->erpStaffNode = $erpStaffNode;
     }
@@ -117,7 +117,7 @@ class ServerData
      */
     public function getAllNode()
     {
-        return $this->staffRepositories->getAllNode();
+        return $this->staffRepository->getAllNode();
     }
     
     /**
@@ -127,7 +127,7 @@ class ServerData
      */
     public function getAllClient()
     {   
-        return $this->clientRepositories->getAllClient();
+        return $this->clientRepository->getAllClient();
     }
     
     /**
@@ -137,7 +137,7 @@ class ServerData
      */
     public function getStaffByNodeID($nodeID)
     {
-        return $this->staffRepositories->getStaffByNodeID($nodeID);
+        return $this->staffRepository->getStaffByNodeID($nodeID);
     }
     
     /**
@@ -147,7 +147,7 @@ class ServerData
      */
     public function getUserByerpID($erpID)
     {
-        return $this->staffRepositories->getUser($erpID);
+        return $this->staffRepository->getUser($erpID);
     }
 
     /**
@@ -159,6 +159,6 @@ class ServerData
      */
     public function checkPersonal($ID, $personalID)
     {
-        return $this->memberRepositories->checkPersonal($ID, $personalID);
+        return $this->memberRepository->checkPersonal($ID, $personalID);
     }
 }
