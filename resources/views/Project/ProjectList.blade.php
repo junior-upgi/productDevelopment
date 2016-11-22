@@ -20,7 +20,7 @@
     @endphp
     <div class="panel panel-default">
         <div class="panel-body">
-            <a href="{{ url('/Project/AddProject') }}'" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
+            <a href="{{ url('/Project/AddProject') }}" class="btn btn-primary {{$UserRole}}"><span class="glyphicon glyphicon-plus">新增</span></a>
             <button type="button" class="btn btn-warning" onclick="Notify()"><span class="glyphicon glyphicon-phone">發送推播</button>
         </div>
     </div>
