@@ -30,6 +30,12 @@ class TelegramService
         $this->upgi = $upgi;
     }
 
+    public function getBotToken($name)
+    {
+        $bot = $this->telegram->getBotByName($name)->first();
+        return $bot->token;
+    }
+
     public function sendProductTeam($message, $queue = false)
     {
         $bot = $this->telegram->getBotByName('productDevelopmentBot');

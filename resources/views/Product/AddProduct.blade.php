@@ -70,13 +70,8 @@
             <div class="col-md-2">
                 <select name="Group" id="Group" class="form-control">
                     <option value="">不發送</option>
-                    @foreach($group as $g)
-                        @if($g->reference == 'DevelopmentTeam')
-                            <option value="{{$g->ID}}" selected="selected">{{$g->reference}}</option>
-                        @else
-                            <option value="{{$g->ID}}">{{$g->reference}}</option>
-                        @endif
-                    @endforeach
+                    <option value="-164742782" selected="selected">產品開發群組</option>
+                    <option value="-162201704">測試群組</option>
                 </select>
             </div>
         </div>

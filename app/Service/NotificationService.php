@@ -43,7 +43,9 @@ class NotificationService
         $user = Auth::user();
         $product = $this->project->getProductByID($id);
         $message = '新增[' . $product->projectNumber . '][' . $product->referenceNumber . ']產品開發，請同仁上系統新增產品開發工序';
-        $this->telegram->sendProductTeam($message);
+        //$this->telegram->sendProductTeam($message);
+        $token = $this->telegram->getBotToken('productDevelopmentBot');
+        $this->telegram->botSendMessage($token, $groupID, $message, true);
     }
 
     public function productExecute($productID)

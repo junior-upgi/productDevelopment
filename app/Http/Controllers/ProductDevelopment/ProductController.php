@@ -45,12 +45,10 @@ class ProductController extends Controller
     public function addProduct($projectID)
     {
         $priority = $this->projectRepository->getParaList('priorityLevel');
-        $group = $this->upgi->getList('group')->get();
 
         return view('Product.AddProduct')
             ->with('ProjectID', $projectID)
-            ->with('PriorityLevelList', $priority)
-            ->with('group', $group);
+            ->with('PriorityLevelList', $priority);
     }
     //
     public function insertProduct(Request $request)
@@ -94,9 +92,10 @@ class ProductController extends Controller
         }
 
         $result =  $this->projectRepository->insertData($this->projectRepository->projectContent, $params);
-        if ($result['success']) {
+        $group = $request->input('Group');
+        if ($result['success'] && $group != '') {
             // 發送通知給所有開發案團隊
-            $this->notification->sendNewProduct($id, $request->input('Group'));
+            $this->notification->sendNewProduct($id, $group);
         }
         return $result;
     }
