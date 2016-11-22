@@ -32,7 +32,7 @@
 	<script src="{{url('/')}}/script/master.js"></script>
 </head>
 <body>
-    <div class="container">
+    <div class="container" style="margin-top:10px;">
         @yield('content')
     </div>
 </body>

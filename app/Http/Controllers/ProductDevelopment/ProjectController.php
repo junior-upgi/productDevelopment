@@ -47,10 +47,11 @@ class ProjectController extends Controller
     public function addProject()
     {
         if (!Role::allowRole('99')) return Redirect::route('errorRoute'); 
-
+        $client = $this->serverData->getAllClient(); 
+        $node = $this->serverData->getAllNode();
         return view('Project.AddProject')
-            ->with('ClientList', $this->serverData->getAllClient())
-            ->with('NodeList', $this->serverData->getAllNode());
+            ->with('ClientList', $client)
+            ->with('NodeList', $node);
     }
     //
     public function insertProject(Request $request)

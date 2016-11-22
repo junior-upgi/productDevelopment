@@ -63,7 +63,7 @@ function DoInsert() {
             }
         },
         error: function (obj) {
-            swal("發生異常錯誤!", xhr.statusText, "error");
+            swal("發生異常錯誤!", obj.statusText, "error");
             $('#BtnSave').button('reset');
         }
     });

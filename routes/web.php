@@ -33,10 +33,6 @@ Route::get('phpinfo', function () {
     phpinfo();
 });
 
-Route::get('test', function () {
-    return redirect()->action('App\Service\ProjectCheckService@timeCostReport()');
-});
-
 Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');

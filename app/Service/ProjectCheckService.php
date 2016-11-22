@@ -82,7 +82,8 @@ class ProjectCheckService
         /**
          * 1、更新每日延誤程序之工期延期至今日
          * 2、通知個人工期已延誤至今日
-         * 3、如果最後完成時間已逾期，則通知業務
+         * 3、如果最後完成時間已逾期，則通知開發案負責人
+         * 4、通知開發案負責人，尚有未開始執行之開發案
          */
 
         //取得現階段執行且延誤之程序 getDelayProcess()
@@ -92,8 +93,10 @@ class ProjectCheckService
         foreach ($processList as $list) {
             //通知負責人修正程序工期延至今日
             $this->notifyExtension($list);
-            //檢查是否最後完成時間己逾期
+            //檢查是否最後完成時間己逾期，並通知開發案負責人
             $this->notifyOverdue($list);
+            //發送尚未開始執行之開發案清單至開發案群組
+            $this->notYetExecute();
         }
         return true;
     }
@@ -126,8 +129,25 @@ class ProjectCheckService
             //通知業務
             $erp_id = $list->salesID;
             $url = 'http://upgi.ddns.net/productDevelopment/Mobile/OverdueInfo/' . $list->ID;
-            $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，負責人: ' . $list->name;
+            $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，負責人: ' . $list->name . '，詳細資訊請點連結：' . $url;
             $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+        }
+    }
+
+    public function notYetExecute()
+    {
+        $obj = $this->project->getNotYetExecuteList();
+        if ($obj->count() > 0) {
+            $notYetList = $obj->get();
+            foreach ($notYetList as $list) {
+                $erp_id = $list->salesID;
+                $projectNumber = $list->projectNumber;
+                $projectName = $list->projectName;
+                $productNumber = $list->referenceNumber;
+                $productName = $list->referenceName;
+                $message = "[$projectNumber]$projectName [$productNumber]$productName 尚未開始執行!";
+                $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+            }
         }
     }
 }

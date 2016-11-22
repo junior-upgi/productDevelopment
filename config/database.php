@@ -1,8 +1,4 @@
 <?php
-$MySqlHost = '192.168.168.86';
-$SqlServerHost = '192.168.168.5';
-//$MySqlHost = '192.168.1.252';
-//MySqlHost = 'upgi.ddns.net';
 return [
 
     /*
@@ -29,7 +25,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -55,55 +51,13 @@ return [
             'prefix' => '',
         ],
 
-        'mysql' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost),
-            'port' => '3306',
-            'database' => 'productDevelopment',
-            'username' => 'spark',
-            'password' => 'pa676579',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
-        ],
-
         'DB_productDevelopment' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost),
-            'port' => '3306',
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
             'database' => 'productDevelopment',
-            'username' => 'spark',
-            'password' => 'pa676579',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
-        ],
-
-        'DB_companyStructure' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost),
-            'port' => '3306',
-            'database' => 'companyStructure',
-            'username' => 'spark',
-            'password' => 'pa676579',
-            'charset' => 'utf8',
-            'collation' => 'utf8_unicode_ci',
-            'prefix' => '',
-            'strict' => false,
-            'engine' => null,
-        ],
-
-        'DB_sales' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost), 
-            'port' => '3306',
-            'database' => 'sales',
-            'username' => 'spark',
-            'password' => 'pa676579',
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
@@ -112,12 +66,12 @@ return [
         ],
 
         'DB_upgiSystem' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost),
-            'port' => '3306',
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
             'database' => 'upgiSystem',
-            'username' => 'spark',
-            'password' => 'pa676579',
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
@@ -126,12 +80,12 @@ return [
         ],
 
         'DB_mobileMessagingSystem' => [
-            'driver' => 'mysql',
-            'host' => env('DB_MySql', $MySqlHost),
-            'port' => '3306',
+            'driver' => 'sqlsrv',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
             'database' => 'mobileMessagingSystem',
-            'username' => 'spark',
-            'password' => 'pa676579',
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
@@ -141,11 +95,11 @@ return [
 
         'DB_UPGWeb' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_SqlServer', $SqlServerHost),
-            'port' => '1433',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
             'database' => 'UPGWeb',
-            'username' => 'sa',
-            'password' => 'attn@3100',
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
             'prefix' => '',
@@ -155,13 +109,13 @@ return [
 
         'telegram' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_SqlServer', $SqlServerHost),
-            'port' => '1433',
+            'host' => env('DB_HOST'),
+            'port' => env('DB_PORT'),
             'database' => 'telegram',
-            'username' => 'sa',
-            'password' => 'attn@3100',
-            'charset' => 'big5',
-            'collation' => 'big5_chinese_ci',
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
             'prefix' => '',
             'strict' => false,
             'engine' => null,
@@ -173,7 +127,7 @@ return [
             'port' => env('DB_PORT', '5432'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

@@ -6,7 +6,8 @@
 		$pc = $processData
 	@endphp
 	@if($processData)
-		<form id="SetCostForm" class="form-horizontal" action role="form" method="POST">
+	<div class="row">
+		<form id="SetCostForm" class="form-horizontal col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3" action role="form" method="POST">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h4>{{ "[$pc->projectNumber] $pc->projectName" }}</h4>
@@ -71,6 +72,8 @@
 				</div>
 			</div>
 		</form>
+	</div>
+		
 	@else
 		{!! $mobile->error() !!}
 	@endif

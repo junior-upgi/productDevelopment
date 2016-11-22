@@ -13,7 +13,7 @@ class Relationship extends Model
 {
     use SoftDeletes;
 
-    protected $connection = "DB_companyStructure";
+    protected $connection = "DB_upgiSystem";
     protected $table = "relationship";
     protected $softDelete = true;
 

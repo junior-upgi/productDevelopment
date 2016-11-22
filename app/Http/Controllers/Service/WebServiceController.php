@@ -285,4 +285,10 @@ class WebServiceController extends Controller
             return ['success' => true];
         }
     }
+
+    public function test()
+    {
+        $a = $this->projectCheck->notYetExecute();
+        return $a;
+    }
 }
