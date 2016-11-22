@@ -96,6 +96,12 @@
                                     showDrag: false,
                                 }
                             });
+                            $('#img').on('filebatchselected', function(event) {
+                                resetModal('Add');
+                            });
+                            $('#img').on('filecleared', function(event) {
+                                resetModal('Add');
+                            });
                         </script>
                     </div>
                 </div>

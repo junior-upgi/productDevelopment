@@ -181,7 +181,12 @@ function EditShow(ID) {
                     initialPreview: 
                         [img]
                 });
-
+                $('#editImg').on('filebatchselected', function(event) {
+                    resetModal('Edit');
+                });
+                $('#editImg').on('filecleared', function(event) {
+                    resetModal('Edit');
+                });
                 $("#editPreview").attr("src", img);
                 $('#BtnEdit').button('reset');
                 $('#EditModal').modal('show');
@@ -494,4 +499,14 @@ function Delete(ProductID, ProcessID) {
             }
         }
     })
+}
+
+function resetModal(type) {
+    var modal = '#' + type + 'Modal';
+    var modalHeight = $(modal + ' .modal-dialog').height() + 30;
+    if ($(modal).height() > modalHeight) {
+        $(modal + ' .modal-backdrop').height($(modal).height());
+    } else {
+        $(modal + ' .modal-backdrop').height(modalHeight);
+    }
 }
