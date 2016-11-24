@@ -97,7 +97,7 @@ class ProjectRepository
     }
     public function getNotYetExecuteList()
     {   
-        $list = $this->vProductList->where('execute', 0)
+        $list = $this->vProductList->where('execute', '0')
             ->orderBy('startDate')->orderBy('endDate')->orderBy('referenceNumber');
         return $list;
     }

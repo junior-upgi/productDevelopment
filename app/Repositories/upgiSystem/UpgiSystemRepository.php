@@ -90,7 +90,7 @@ class UpgiSystemRepository
 
     public function update($table, $id, $params, $pk)
     {
-        $table = $table->where('ID', $id);
+        $table = $table->where($pk, $id);
         $obj = $this->common->update($table, $params);
         return $obj;
     }

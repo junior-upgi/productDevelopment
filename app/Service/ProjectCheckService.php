@@ -96,8 +96,8 @@ class ProjectCheckService
             //檢查是否最後完成時間己逾期，並通知開發案負責人
             $this->notifyOverdue($list);
             //發送尚未開始執行之開發案清單至開發案群組
-            $this->notYetExecute();
         }
+        $this->notYetExecute();
         return true;
     }
 
@@ -137,7 +137,7 @@ class ProjectCheckService
     public function notYetExecute()
     {
         $obj = $this->project->getNotYetExecuteList();
-        if ($obj->count() > 0) {
+        if ($obj->get()->count() > 0) {
             $notYetList = $obj->get();
             foreach ($notYetList as $list) {
                 $erp_id = $list->salesID;
