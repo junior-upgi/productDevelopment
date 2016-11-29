@@ -4,7 +4,7 @@ namespace App\Service;
 use App\Http\Controllers\Common;
 use App\Http\Controllers\ServerData;
 use Carbon\Carbon;
-use App\Repositories\mobileMessagingSystem\MobileRepository;
+//use App\Repositories\mobileMessagingSystem\MobileRepository;
 use App\Repositories\ProductDevelopment\ProjectRepository;
 use App\Repositories\companyStructure\StaffRepository;
 use App\Repositories\upgiSystem\UpgiSystemRepository;
@@ -17,7 +17,7 @@ class ProjectCheckService
     public $carbon;
     public $project;
     public $staff;
-    public $mobile;
+    //public $mobile;
     public $serverData;
     public $upgi;
     public $telegram;
@@ -28,7 +28,7 @@ class ProjectCheckService
         ServerData $serverData,
         ProjectRepository $project,
         StaffRepository $staff,
-        MobileRepository $mobile,
+        //MobileRepository $mobile,
         UpgiSystemRepository $upgi,
         TelegramService $telegram
     ) {
@@ -37,7 +37,7 @@ class ProjectCheckService
         $this->serverData = $serverData;
         $this->project = $project;
         $this->staff = $staff;
-        $this->mobile = $mobile;
+        //$this->mobile = $mobile;
         $this->upgi = $upgi;
         $this->telegram = $telegram;
     }
@@ -61,7 +61,7 @@ class ProjectCheckService
          * 2、回報工作剩於天數給負責人
          */
         $jo = array();
-        $mobile = $this->mobile;
+        //$mobile = $this->mobile;
         $server = $this->serverData;
         $processList = $this->project->getStartProcess();
         $now = date('Y-m-d', strtotime($this->carbon->now()));
@@ -103,7 +103,7 @@ class ProjectCheckService
 
     public function notifyExtension($list)
     {
-        $mobile = $this->mobile;
+        //$mobile = $this->mobile;
         $server = $this->serverData;
         $startDate = date('Y-m-d', strtotime($list->processStartDate));
         $now = date('Y-m-d', strtotime($this->carbon->now()));
@@ -122,7 +122,7 @@ class ProjectCheckService
     public function notifyOverdue($list)
     {
         $project = $this->project;
-        $mobile = $this->mobile;
+        //$mobile = $this->mobile;
         $server = $this->serverData;
         $overdue = $project->checkOverdue($list->productID);
         if ($overdue) {
