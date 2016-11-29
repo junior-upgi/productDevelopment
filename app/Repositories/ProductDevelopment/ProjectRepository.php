@@ -263,6 +263,8 @@ class ProjectRepository
             $this->projectProcess->getConnection()->beginTransaction();
             $process = $this->projectProcess->where('ID', $processID);
 
+            $params = $this->common->convBig5($params);
+
             $process->update($params);
 
             $this->updateChildsDate($processID);
@@ -300,6 +302,7 @@ class ProjectRepository
                     'projectProcessID' => $processID,
                     'parentProcessID' => $list,
                 );
+                $params = $this->common->convBig5($params);
                 $this->processTree->insert($params);
             }
             //調整流程開始時間
@@ -322,6 +325,7 @@ class ProjectRepository
     {
         try {
             $this->projectProcess->getConnection()->beginTransaction();
+            $params = $this->common->convBig5($params);
             $this->projectProcess->where('ID', $processID)->update($params);
             $parent = $this->processTree->where('parentProcessID', $processID)->get();
             foreach ($parent as $list) {
@@ -462,15 +466,6 @@ class ProjectRepository
             $update = $mainProcess->where('ID', $processID);
             $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
             $update->update($params);
-            /*
-            if (strtotime($update->first()->processStartDate) < max($maxDate)) {
-                $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
-                $update->update($params);
-            } else {
-                $params = array('processStartDate' => date('Y-m-d H:i:s', max($maxDate)));
-                $update->update($params);
-            }
-            */
             $callTree = $processTree->where('parentProcessID', $update->first()->ID)->get();
             foreach ($callTree as $list) {
                 $this->updateStartDate($list->projectProcessID);

@@ -67,11 +67,22 @@ class Common
         $countInput = count($input);
         list($key, $value) = array_divide($input);
         for ($i = 0; $i < $countInput; $i++) {
-            $big5 = $value[$i];
+            $big5 = iconv('utf8', 'big5', $value[$i]);
             $params[$key[$i]] = $big5;
         }
         return $params;
     }
+
+    public function convBig5($params)
+    {
+        $new = [];
+        list($key, $value) = array_divide($params);
+        for ($i = 0; $i < count($params); $i++) {
+            $new[$key[$i]]  = iconv('utf8', 'big5', $value[$i]);
+        }
+        return $new;
+    }
+
     public function where($table, $where = null)
     {
         $obj = $table->where(function ($q) use ($where) {
@@ -103,6 +114,7 @@ class Common
     public function insert($table, $params)
     {
         try {
+            $params = $this->convBig5($params);
             $table->getConnection()->beginTransaction();
             $table->insert($params);
             $table->getConnection()->commit();
@@ -130,6 +142,7 @@ class Common
     public function update($table, $params)
     {
         try {
+            $params = $this->convBig5($params);
             $table->getConnection()->beginTransaction();
             $table->update($params);
             $table->getConnection()->commit();

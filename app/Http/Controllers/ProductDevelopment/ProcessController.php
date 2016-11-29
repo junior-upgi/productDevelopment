@@ -73,6 +73,7 @@ class ProcessController extends Controller
             );
             if (isset($upload)) $params['processImg'] = $pic;
             $ProjectProcess = new ProjectProcess();
+            $params = $this->common->convBig5($params);
             $ProjectProcess->insert($params);
             
             $Params = array(
@@ -83,6 +84,7 @@ class ProcessController extends Controller
             );
             
             $ProcessTree = new ProcessTree();
+            $params = $this->common->convBig5($params);
             $ProcessTree->insert($Params);
             
             DB::commit();

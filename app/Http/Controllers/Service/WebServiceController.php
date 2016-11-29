@@ -173,10 +173,6 @@ class WebServiceController extends Controller
     }
     /*
     插入推播訊息動作時間
-    test = 83e0b733-62a9-11e6-a882-1cb72cdefcf9
-    
-    [{"broadcastID": "56CC0758-E012-1DBB-83FD-211E65CCF3F4","action": "retracted"},
-    {"broadcastID": "0F80058D-ECA1-7F9B-9A89-99A617DED0A1","action": "acknowledged"}]
 
     */
     public function messageTime($time)
@@ -221,74 +217,5 @@ class WebServiceController extends Controller
             );
         }
         return $jo;
-    }
-    public function testMessage($Account, $Title, $Content, $Url, $AudioFile)
-    {
-        $BroadcastID = Common::getNewGUID();
-        $MessageID = Common::getNewGUID();
-        $MessageCategoryID = 999;
-        $User = new User();
-        $User = $User->where('mobileSystemAccount', $Account)->first();
-        $Message = new Message();
-        $BroadcastStatus = new BroadcastStatus();
-        if (!$User) {
-            $jo = array(
-                'success' => false,
-                'msg' => '找不到帳號資訊!',
-            );
-            return $jo;
-        }
-        try {
-            //寫入測䛫訊息
-            DB::beginTransaction();
-            $Params = array(
-                'ID' => $MessageID,
-                'messageCategoryID' => 999,
-                'systemCategoryID' => 0,
-                'manualTopic' => $Title,
-                'content' => $Content,
-            );
-
-            $Message->insert($Params);
-
-            $Params = array(
-                'ID' => $BroadcastID,
-                'messageID' => $MessageID,
-                'recipientID' => $User->ID,
-                'primaryRecipient' => 0,
-                'url' => $Url,
-                'audioFile' => $AudioFile,
-            );
-            $BroadcastStatus->insert($Params);
-            
-
-            DB::commit();
-            $jo = array(
-                'success' => true,
-                'msg' => '推播訊息已寫入!',
-            );
-        } catch (\PDOException $e) {
-            DB::rollback();
-            $jo = array(
-                'success' => false,
-                'msg' => $e['errorInfo'][2],
-            );
-        }
-        return $jo;
-    }
-
-    public function sendMessage(Request $request)
-    {
-        $getData = $request->json()->all();
-        $result = $this->telegram->productDevelopmentBotSendToUser($getData['erpID'], $getData['message']);
-        if ($result) {
-            return ['success' => true];
-        }
-    }
-
-    public function test()
-    {
-        $a = $this->projectCheck->notYetExecute();
-        return $a;
     }
 }

@@ -68,17 +68,17 @@
 				<div id="navbar" class="collapse navbar-collapse">
 					<ul class="nav navbar-nav">
 						<li class="@yield('project')">
-							<a href="{{url('/')}}/Project/ProjectList">專案管理</a>
+							<a href="{{ url('/Project/ProjectList') }}">專案管理</a>
 						</li>
 						@if (Auth::check())
 							@if (Auth::user()->authorization == '1' or Auth::user()->authorization == '99')
 								<li class="@yield('personal')">
-									<a href="{{url('/')}}/Process/MyProcess">個人工序清單</a>
+									<a href="{{ url('/Process/MyProcess') }}">個人工序清單</a>
 								</li>
 							@endif
 							@if(false)
 								<li class="@yield('sysoption')">
-									<a href="{{url('/')}}/SysOption/StaffList">人員資料維護</a>
+									<a href="{{ url('/SysOption/StaffList') }}">人員資料維護</a>
 								</li>
 							@endif
 						@endif
@@ -87,9 +87,9 @@
 								報表<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu" role="menu">
-								<li class="@yield('report.projectExecuteRate')"><a href="{{url('/')}}/Report/ProjectExecuteRate">專案進度表</a></li>
-								<li class="@yield('report.productExecuteRate')"><a href="{{url('/')}}/Report/ProductExecuteRate">產品進度表</a></li>
-								<li class="@yield('report.meetingReport')"><a href="{{url('/')}}/Report/Meeting" target="_blank">週會報表</a></li>
+								<li class="@yield('report.projectExecuteRate')"><a href="{{ url('/Report/ProjectExecuteRate') }}">專案進度表</a></li>
+								<li class="@yield('report.productExecuteRate')"><a href="{{ url('/Report/ProductExecuteRate') }}">產品進度表</a></li>
+								<li class="@yield('report.meetingReport')"><a href="{{ url('/Report/Meeting') }}" target="_blank">週會報表</a></li>
 							</ul>
 						</li>
 					</ul>
@@ -102,10 +102,10 @@
 								<ul class="dropdown-menu" role+"menu">
 									<!--<span style="margin-left:20px;">{{ Auth::user()->mobileSystemAccount}}您好</span>
 									<li class="divider"></li>-->
-									<li><a href="{{url('/')}}/logout"><span class="glyphicon glyphicon-log-out">登出</span></a></li>
+									<li><a href="{{ url('/logout') }}"><span class="glyphicon glyphicon-log-out">登出</span></a></li>
 								</ul>
 							@else
-								<a href="{{url('/')}}/login">登入</a>
+								<a href="{{ url('/login') }}">登入</a>
 							@endif
 						</li>
 					</ul>

@@ -110,13 +110,14 @@ class ProductController extends Controller
     public function updateProduct(Request $request)
     {
         $productID = $request->input('ProductID');
-        $file = $request->file('img');
-        if (isset($file)) {
-            $pic = $this->common->saveFile($file);
-            if (!isset($pic)) {
+
+        $attach = $request->file('attach');
+        if (isset($attach)) {
+            $att = $this->common->saveFile($attach);
+            if (!isset($att)) {
                 return array(
                     'success' => false,
-                    'msg' => '圖片上傳失敗',
+                    'msg' => '檔案上傳失敗',
                 );
             }
             $upload = true;
@@ -136,7 +137,8 @@ class ProductController extends Controller
             'priorityLevel' => $request->input('PriorityLevel'),
             //'contentImg' => $pic,
         );
-        if (isset($upload)) $params['contentImg'] = $pic;
+        
+        if (isset($upload)) $params['contentAttach'] = $att;
         return $this->projectRepository
             ->updateData($this->projectRepository->projectContent, $params, $productID);
     }

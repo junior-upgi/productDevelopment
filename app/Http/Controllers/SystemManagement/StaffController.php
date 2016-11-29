@@ -150,6 +150,7 @@ class StaffController extends Controller
             $Staff->secondaryDelegateID = $SecondaryDelegateID;
             $Staff->save();
             */
+            
             if ($Staff->where('staffID', $StaffID)->count() > 0) {
                 $Staff->where('staffID', $StaffID)->update($Params);
             } else {

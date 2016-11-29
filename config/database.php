@@ -55,7 +55,7 @@ return [
             'driver' => 'sqlsrv',
             'host' => env('DB_HOST'),
             'port' => env('DB_PORT'),
-            'database' => 'productDevelopment',
+            'database' => 'productdevelopment',
             'username' => env('DB_USERNAME'),
             'password' => env('DB_PASSWORD'),
             'charset' => 'utf8',

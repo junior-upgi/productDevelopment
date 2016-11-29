@@ -87,7 +87,7 @@ class File extends Model
             $params =  array(
                 'id' => $id,
                 'type' => $type,
-                'name' => $name,
+                'name' => iconv('utf8', 'big5', $name),
                 'fe' => $fe,
                 'code' => $code,
             );
