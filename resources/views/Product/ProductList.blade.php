@@ -19,12 +19,6 @@
     <!--project info panel-->
     <p class="bg-info">
         {{ "[$ProjectData->referenceNumber] [$ProjectData->referenceName] [$ProjectData->clientName] [$ProjectData->salesName]" }}
-        <!--
-        <span style="margin-right:20px;">專案代碼：{{$ProjectData->referenceNumber}}</span>
-        <span style="margin-right:20px;">專案名稱：{{$ProjectData->referenceName}}</span>
-        <span style="margin-right:20px;">客戶名稱：{{$ProjectData->clientName}}</span>
-        <span style="margin-right:20px;">業務員：{{$ProjectData->salesName}}</span>   
-        -->
     </p>
     <!--tool bar-->
     @php

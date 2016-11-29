@@ -94,27 +94,12 @@
                         <tr id="{{ $list->ID }}" class="sTD">
                     @endif
                         <td>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="編輯" onclick="EditShow('{{ $list->ID }}')">
+                            <button type="button" class="btn btn-default {{ $complete }} {{ $self }}" data-toggle="tooltip" data-placement="top" title="編輯" onclick="EditShow('{{ $list->ID }}')">
                                 <span class="glyphicon glyphicon-edit"></span>
                             </button>
-                            <!--
-                            <div class="dropdown ">
-                                <button type="button" id="SetBtn" class="btn btn-default" {{ $complete }} {{ $self }} data-toggle="dropdown" aria-haspopup="true" role="button" aria-expanded="flase">
-                                    <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                                </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="SetBtn">
-                                    <li role="presentation">
-                                        <a role="menuitem" onclick="EditShow('{{ $list->ID }}')" href="#{{ $list->ID }}"><span class="glyphicon glyphicon-edit">編輯</span></a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a role="menuitem" onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')" href="#{{ $list->ID }}"><span class="glyphicon glyphicon-tasks">前置流程</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            -->
                         </td>
                         <td>
-                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top" title="前置流程" onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-tasks"></button>
+                            <button type="button" class="btn btn-default {{ $complete }} {{ $self }}" data-toggle="tooltip" data-placement="top" title="前置流程" onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-tasks"></button>
                         </td>
                         <td>{{ $list->sequentialIndex }}</td>
                         <td class="text-center">

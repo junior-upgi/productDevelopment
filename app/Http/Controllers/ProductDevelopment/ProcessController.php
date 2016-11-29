@@ -76,7 +76,7 @@ class ProcessController extends Controller
             $params = $this->common->convBig5($params);
             $ProjectProcess->insert($params);
             
-            $Params = array(
+            $params = array(
                 'projectContentID' => $request->input('ProductID'),
                 'projectProcessID' => $processID,
                 'treeLevel' => 0,
@@ -85,7 +85,7 @@ class ProcessController extends Controller
             
             $ProcessTree = new ProcessTree();
             $params = $this->common->convBig5($params);
-            $ProcessTree->insert($Params);
+            $ProcessTree->insert($params);
             
             DB::commit();
             
