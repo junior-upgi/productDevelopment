@@ -1,8 +1,8 @@
 @extends('layouts.masterpage')
 @section('project', 'active')
 @section('content')
-    <link rel="stylesheet" type="" href="{{ url('/') }}/css/Process/ProcessList.css">
-    <script src="{{ url('/') }}/js/Process/ProcessList.js?x=5"></script>
+    <link rel="stylesheet" type="" href="{{ url('/css/Process/ProcessList.css') }}">
+    <script src="{{ url('/js/Process/ProcessList.js?x=6') }}"></script>
     <style>
         .panel-body .btn {
             margin-bottom: 10px;

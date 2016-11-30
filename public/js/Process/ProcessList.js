@@ -18,35 +18,7 @@ $(function () {
     $("#tableSort").sortable({
         helper: fixWidthHelper,
         update: function(event, ui) {
-            /*
-            //排序後，更新時間
-            var CostCount=0;
-            var i = 1;
-            var Now = new Date();
-            Now = Now.setDate(Now.getDate - 1);
-            $("#tableSort .sTD").each(function (index, element) {
-                var Deadline = new Date($('#Deadline').val().replace(/-/g,'/'));
-                var sDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
-                var eDate = new Date(($('#StartDate').val()).replace(/-/g,'/'));
-                var Cost = parseInt($(this).children(6).children('.sCost').html());
-                var StartDays = CostCount;
-                var EndDays = (CostCount += Cost) - 1;
-                var StartDate = new Date(sDate.setDate(sDate.getDate() + StartDays));
-                var EndDate = new Date(eDate.setDate(eDate.getDate() + EndDays));
-                $(this).children(7).children('.sStart').html($.datepicker.formatDate('yy-mm-dd', StartDate));
-                $(this).children(7).children('.sEnd').html($.datepicker.formatDate('yy-mm-dd', EndDate));
-                if (StartDate > Deadline) {
-                    $(this).children(7).children('.sStart').removeClass().addClass('label').addClass('label-danger').addClass('sStart');
-                } else {
-                    $(this).children(7).children('.sStart').removeClass().addClass('sStart');
-                }
-                if (EndDate > Deadline) {
-                    $(this).children(7).children('.sEnd').removeClass().addClass('label').addClass('label-danger').addClass('sEnd');
-                } else {
-                    $(this).children(7).children('.sEnd').removeClass().addClass('sEnd');
-                }
-            });
-            */
+            
         }
     }).disableSelection();
     //防止表格托拽後縮小修正程序
@@ -59,6 +31,113 @@ $(function () {
     //設定 ajax token
     $.ajaxSetup({
         headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
+    });
+
+    $("#AddProcessForm").ajaxForm({
+        url: url + '/Process/InsertProcess',
+        beforeSubmit: function () {
+            $('#BtnAdd').button('loading');
+        },
+        success: function (obj) {
+            if (obj.success) {
+                $('#AddModal').modal('hide');
+                swal({
+                    title: "新增資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function () {
+                    document.location.href = url + '/Process/ProcessList/' + $('#ProductID').val();
+                });
+            } else {
+                swal("新增資料失敗!", obj.msg, "error");
+                $('#BtnAdd').button('reset');
+            }
+        },
+        error: function (xhr) {
+            swal("發生異常錯誤!", xhr.statusText, "error");
+            $('#BtnAdd').button('reset');
+        }
+    });
+
+    $("#EditProcessForm").ajaxForm({
+        url: url + '/Process/UpdateProcess',
+        beforeSubmit: function () {
+            $('#BtnEdit').button('loading');
+        },
+        success: function (obj) {
+            if (obj.success) {
+                $('#EditModal').modal('hide');
+                swal({
+                    title: "更新資料成功!",
+                    text: obj.msg,
+                    type: "success",
+                    showCancelButton: false,
+                    confirmButtonClass: "btn-success",
+                    confirmButtonText: "OK",
+                    closeOnConfirm: false
+                },
+                function () {
+                    var ProductID = $('#ProductID').val();
+                    document.location.href = url + '/Process/ProcessList/' + ProductID;
+                });
+            } else {
+                swal("更新資料失敗!", obj.msg, "error");
+                $('#BtnEdit').button('reset');
+            }
+        },
+        error: function (xhr) {
+            swal("發生異常錯誤!", xhr.statusText, "error");
+            $('#BtnEdit').button('reset');
+        }
+    });
+
+    $('#searchAddUser').bsSuggest('init', {
+        url: url + '/SysOption/GetMobileUser',
+        //url: url + '/js/data.json',
+        effectiveFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        searchFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        effectiveFieldsAlias:{mobileSystemAccount: '員工編號', nodeName: '單位', name: '姓名'},
+        ignorecase: true,
+        showHeader: true,
+        showBtn: false,
+        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        idField: 'mobileSystemAccount',
+        keyField: 'name'
+    }).on('onDataRequestSuccess', function (e, result) {
+        //console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword, data) {
+        //console.log('onSetSelectValue: ', keyword, data);
+        $('#AddModal #StaffID').val(keyword['id']);
+    }).on('onUnsetSelectValue', function () {
+        //console.log('onUnsetSelectValue');
+        $('#AddModal #StaffID').val('');
+    });
+
+    $('#searchEditUser').bsSuggest('init', {
+        url: url + '/SysOption/GetMobileUser',
+        //url: url + '/js/data.json',
+        effectiveFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        searchFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        effectiveFieldsAlias:{mobileSystemAccount: '員工編號', nodeName: '單位', name: '姓名'},
+        ignorecase: true,
+        showHeader: true,
+        showBtn: false,
+        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        idField: 'mobileSystemAccount',
+        keyField: 'name'
+    }).on('onDataRequestSuccess', function (e, result) {
+        //console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword, data) {
+        //console.log('onSetSelectValue: ', keyword, data);
+        $('#EditModal #StaffID').val(keyword['id']);
+    }).on('onUnsetSelectValue', function () {
+        //console.log('onUnsetSelectValue');
+        $('#EditModal #StaffID').val('');
     });
 })
 function showimage(source) {
@@ -119,10 +198,8 @@ function AddShow(role) {
     $('#AddProcessForm #ProcessName').val('');
     $("#AddProcessForm #PhaseID")[0].selectedIndex = 0;
     $('#AddProcessForm #TimeCost').val('');
-    if (role = '') {
-        $("#AddProcessForm #NodeID")[0].selectedIndex = 0;
-        $("#AddProcessForm #StaffID option").remove();
-    }
+    $("#AddProcessForm #searchAddUser").val();
+    $("#AddProcessForm #StaffID").val()
     $('#BtnAdd').button('reset');
     $('#AddModal').modal('show');
 }
@@ -138,22 +215,14 @@ function EditShow(ID) {
         },
         success: function (result) {
             if (result.success) {
-                var StaffList = result.StaffList;
                 $('#EditProcessForm #ProcessID').val(result.ID);
                 $('#EditProcessForm #ProcessNumber').val(result.ProcessNumber);
                 $('#EditProcessForm #ProcessName').val(result.ProcessName);
                 $("#EditProcessForm #PhaseID option[value=" + result.PhaseID + "]").attr('selected', true);
                 $('#EditProcessForm #ProcessStartDate').val(result.ProcessStartDate);
                 $('#EditProcessForm #TimeCost').val(result.TimeCost);
-                $("#EditProcessForm #NodeID option[value=" + result.NodeID + "]").attr('selected', true);
-                if (StaffList.length > 0) {
-                    $("#EditProcessForm #StaffID").empty();
-                    $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", "").text("請選擇"));
-                    for (i = 0; i < StaffList.length; i++) {
-                        $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", StaffList[i].ID).text(StaffList[i].name));
-                    }
-                    $("#EditProcessForm #StaffID option[value=" + result.StaffID + "]").attr('selected', true);
-                }
+                $("#EditProcessForm #searchEditUser").val(result.StaffName);
+                $("#EditProcessForm #StaffID").val(result.StaffID)
                 $('#EditProcessForm #note').val(result.note);
                 if (result.processImg != null) {
                     var img = "<img src='" + result.processImg + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
@@ -306,71 +375,38 @@ function GetStaff(type) {
     });
 }
 function DoInsert() {
-    //var ProductID = $('#ProductID').val()
-    $("#AddProcessForm").ajaxForm({
-        url: url + '/Process/InsertProcess',
-        beforeSubmit: function () {
-            $('#BtnAdd').button('loading');
-        },
-        success: function (obj) {
-            if (obj.success) {
-                $('#AddModal').modal('hide');
-                swal({
-                    title: "新增資料成功!",
-                    text: obj.msg,
-                    type: "success",
-                    showCancelButton: false,
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "OK",
-                    closeOnConfirm: false
-                },
-                function () {
-                    document.location.href = url + '/Process/ProcessList/' + $('#ProductID').val();
-                });
-            } else {
-                swal("新增資料失敗!", obj.msg, "error");
-                $('#BtnAdd').button('reset');
-            }
-        },
-        error: function (xhr) {
-            swal("發生異常錯誤!", xhr.statusText, "error");
-            $('#BtnAdd').button('reset');
-        }
-    });
+    var staff = $('#AddModal #StaffID').val();
+    if (staff == '') {
+        swal({
+            title: "請選擇正確的負責人名稱",
+            text: "",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "確定",
+            closeOnConfirm: true
+        });
+        return;
+    } else {
+        $("#AddProcessForm").submit();
+    }
 }
 function DoUpdate(ProcessID) {
-    var ProductID = $('#ProductID').val();
-    var ProcessID = $('#ProcessID').val();
-    $("#EditProcessForm").ajaxForm({
-        url: url + '/Process/UpdateProcess',
-        beforeSubmit: function () {
-            $('#BtnEdit').button('loading');
-        },
-        success: function (obj) {
-            if (obj.success) {
-                $('#EditModal').modal('hide');
-                swal({
-                    title: "更新資料成功!",
-                    text: obj.msg,
-                    type: "success",
-                    showCancelButton: false,
-                    confirmButtonClass: "btn-success",
-                    confirmButtonText: "OK",
-                    closeOnConfirm: false
-                },
-                function () {
-                    document.location.href = url + '/Process/ProcessList/' + ProductID;
-                });
-            } else {
-                swal("更新資料失敗!", obj.msg, "error");
-                $('#BtnEdit').button('reset');
-            }
-        },
-        error: function (xhr) {
-            swal("發生異常錯誤!", xhr.statusText, "error");
-            $('#BtnEdit').button('reset');
-        }
-    });
+    var staff = $('#EditModal #StaffID').val();
+    if (staff == '') {
+        swal({
+            title: "請選擇正確的業務名稱",
+            text: "",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "確定",
+            closeOnConfirm: true
+        });
+        return;
+    } else {
+        $("#EditProcessForm").submit();
+    }
 }
 function Complete($ProcessID) {
     var ProductID = $('#ProductID').val();

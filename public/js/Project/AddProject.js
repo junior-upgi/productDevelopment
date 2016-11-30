@@ -13,16 +13,16 @@ $(document).ready(function () {
     });
 });
 $(function () {
-    $('#searchID').bsSuggest('init', {
+    $('#searchClient').bsSuggest('init', {
         url: url + '/SysOption/SearchClient',
-        //url: url + '/js/data.json',
+        getDataMethod: 'firstByUrl',
         effectiveFields: ['name'],
         searchFields: ['name', 'sname'],
         effectiveFieldsAlias:{name: '顧客名稱'},
         ignorecase: true,
         showHeader: true,
         showBtn: false,
-        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        delayUntilKeyup: false, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
         idField: 'ID',
         keyField: 'name'
     }).on('onDataRequestSuccess', function (e, result) {
@@ -32,16 +32,36 @@ $(function () {
         $('#ClientID').val(keyword['id']);
     }).on('onUnsetSelectValue', function () {
         //console.log('onUnsetSelectValue');
-        $('#ClientID').val(null);
+        $('#ClientID').val('');
     });
-});
-function DoInsert() {
+
+    $('#searchUser').bsSuggest('init', {
+        url: url + '/SysOption/GetMobileUser',
+        //url: url + '/js/data.json',
+        effectiveFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        searchFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        effectiveFieldsAlias:{mobileSystemAccount: '員工編號', nodeName: '單位', name: '姓名'},
+        ignorecase: true,
+        showHeader: true,
+        showBtn: false,
+        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        idField: 'mobileSystemAccount',
+        keyField: 'name'
+    }).on('onDataRequestSuccess', function (e, result) {
+        //console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword, data) {
+        //console.log('onSetSelectValue: ', keyword, data);
+        $('#SalesID').val(keyword['id']);
+    }).on('onUnsetSelectValue', function () {
+        //console.log('onUnsetSelectValue');
+        $('#SalesID').val('');
+    });
+
     $("#AddProjectForm").ajaxForm({
         url: url + '/Project/InsertProject',
         beforeSubmit: function () {
             //$('#BtnSave').attr('disabled', 'disabled');
             $('#BtnSave').button('loading');
-            //$.blockUI({ message: '<div>送出資料中請稍候...</div>' });
         },
         success: function (obj) {
             if (obj.success) {
@@ -67,7 +87,25 @@ function DoInsert() {
             $('#BtnSave').button('reset');
         }
     });
+});
+
+function DoInsert() {
+    var client = $('#ClientID').val();
+    if ( client == '') {
+        swal({
+            title: "請選擇正確的廠商名稱",
+            text: "",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "確定",
+            closeOnConfirm: true
+        });
+    } else {
+        $("#AddProjectForm").submit();
+    }
 }
+
 function GetSales() {
     var NodeID = $("#NodeID").find(":selected").val();
     $.ajax({

@@ -34,8 +34,29 @@ $(function () {
         //console.log('onUnsetSelectValue');
         $('#ClientID').val(null);
     });
-});
-function DoUpdate() {
+
+    $('#searchUser').bsSuggest('init', {
+        url: url + '/SysOption/GetMobileUser',
+        //url: url + '/js/data.json',
+        effectiveFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        searchFields: ['mobileSystemAccount', 'nodeName', 'name'],
+        effectiveFieldsAlias:{mobileSystemAccount: '員工編號', nodeName: '單位', name: '姓名'},
+        ignorecase: true,
+        showHeader: true,
+        showBtn: false,
+        delayUntilKeyup: true, //获取数据的方式为 firstByUrl 时，延迟到有输入/获取到焦点时才请求数据
+        idField: 'mobileSystemAccount',
+        keyField: 'name'
+    }).on('onDataRequestSuccess', function (e, result) {
+        //console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword, data) {
+        //console.log('onSetSelectValue: ', keyword, data);
+        $('#SalesID').val(keyword['id']);
+    }).on('onUnsetSelectValue', function () {
+        //console.log('onUnsetSelectValue');
+        $('#SalesID').val('');
+    });
+
     $("#EditProjectForm").ajaxForm({
         url: url + '/Project/UpdateProject',
         beforeSubmit: function () {
@@ -67,6 +88,35 @@ function DoUpdate() {
             $('#BtnSave').button('reset');
         }
     });
+});
+function DoUpdate() {
+    var client = $('#ClientID').val();
+    var sales = $('#SalesID').val();
+    if ( client == '') {
+        swal({
+            title: "請選擇正確的廠商名稱",
+            text: "",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "確定",
+            closeOnConfirm: true
+        });
+        return;
+    } else if (sales == '') {
+        swal({
+            title: "請選擇正確的業務名稱",
+            text: "",
+            type: "warning",
+            showCancelButton: false,
+            confirmButtonClass: "btn-warning",
+            confirmButtonText: "確定",
+            closeOnConfirm: true
+        });
+        return;
+    } else {
+        $("#EditProjectForm").submit();
+    }
 }
 function GetSales() {
     var NodeID = $("#NodeID").find(":selected").val();

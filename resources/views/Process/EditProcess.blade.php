@@ -56,6 +56,18 @@
                         </div>
                         @if($UserRole != 'disabled')
                             <div class="form-group">
+                                <label for="searchEditUser" class="col-md-4 control-label">負責人</label>
+                                <div class="col-md-7">
+                                    <div class="input-group">
+                                        <input type="hidden" id="StaffID" name="StaffID" value="">
+                                        <input type="text" class="form-control" id="searchEditUser" value="">
+                                        <ul class="dropdown-menu dropdown-menu-right" role="menu" style="height: 350px;">
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--
+                            <div class="form-group">
                                 <label for="NodeID" class="col-md-4 control-label">負責人</label>
                                 <div class="col-md-3">
                                     <select class="form-control" {{$disabled}} id="NodeID" name="NodeID" onchange="GetStaff('Edit')" required>
@@ -70,6 +82,7 @@
                                     </select>
                                 </div>
                             </div>
+                            -->
                         @else
                             <input type="hidden" name="StaffID" value="{{ $user->erpID }}">
                         @endif
@@ -89,7 +102,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
-                        <button type="submit" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
+                        <button type="button" class="btn btn-primary" data-loading-text="資料送出中..." autocomplete="off" 
                             id="BtnEdit" name="BtnEdit" onclick="DoUpdate()">更新</button>
                     </div>
                 </div>

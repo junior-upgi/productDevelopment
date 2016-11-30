@@ -48,7 +48,7 @@ class UserController extends Controller
             ->with('group', $group)
             ->with('search', $search);
     }
-
+    
     public function getMember()
     {
         $request = request();

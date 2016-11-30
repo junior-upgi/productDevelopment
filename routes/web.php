@@ -36,28 +36,15 @@ Route::get('phpinfo', function () {
 Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
-/*
-Route::get('login', 'Auth\LoginController@show');
-Route::post('login', 'Auth\LoginController@login');
-Route::get('logout', 'Auth\LoginController@logout');
-Route::get('hashPassword', 'Auth\LoginController@hashPassword');
-Route::get('reset', 'Auth\ResetPasswordController@resetPassword');
-Route::post('checkPersonal', 'Auth\ResetPasswordController@checkPersonal');
-Route::post('setPassword', 'Auth\ResetPasswordController@setPassword');
-Route::get('testad', 'Auth\ResetPasswordController@testAD');
-*/
-Route::get('test', 'Service\WebServiceController@test');
 
-Route::group(['prefix' => 'git'], function() {
-    Route::get('test', 'Service\GitApiController@test');
-});
+//Route::get('test', 'Service\WebServiceController@test');
 
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');
     Route::get('CheckDevice/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@checkDevice');
     Route::get('MessageTime/{time}', 'Service\WebServiceController@messageTime');
-    Route::post('SendMessage', 'Service\WebServiceController@sendMessage');
-    Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
+    //Route::post('SendMessage', 'Service\WebServiceController@sendMessage');
+    //Route::get('TestMessage/{Account}/{Title}/{Content}/{Url}/{AudioFile}', 'Service\WebServiceController@testMessage');
 });
 
 Route::group(['middleware' => 'sso', 'prefix' => 'Project'], function() {
@@ -115,29 +102,29 @@ Route::group(['middleware' => 'sso', 'prefix' => 'Process'], function() {
 });
 
 Route::group(['middleware' => 'sso', 'prefix' => 'SysOption'], function() {
-    Route::get('StaffList', 'SystemManagement\StaffController@staffList');
-    Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
-    Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
-    Route::get('GetStaffList/{NodeID}', 'SystemManagement\StaffController@getStaffList');
-    Route::get('InsertUser/{account}/{password}', 'SystemManagement\StaffController@insertUser');
+    //Route::get('StaffList', 'SystemManagement\StaffController@staffList');
+    //Route::post('UpdateStaff', 'SystemManagement\StaffController@updateStaff');
+    //Route::get('GetStaffData/{StaffID}', 'SystemManagement\StaffController@getStaffData');
+    //Route::get('GetStaffList/{NodeID}', 'SystemManagement\StaffController@getStaffList');
+    //Route::get('InsertUser/{account}/{password}', 'SystemManagement\StaffController@insertUser');
 
-    Route::get('MoveData', 'SystemManagement\StaffController@moveData');
+    //Route::get('MoveData', 'SystemManagement\StaffController@moveData');
 
-    Route::get('SideList', 'SystemManagement\AuthorizationController@sideList');
-    Route::get('GetParentList/{SystemID}/{SideID?}', 'SystemManagement\AuthorizationController@getParentList');
-    Route::get('GetSideData/{SideID}', 'SystemManagement\AuthorizationController@getSideData');
-    Route::post('InsertSide', 'SystemManagement\AuthorizationController@insertSide');
-    Route::post('UpdateSide', 'SystemManagement\AuthorizationController@updateSide');
-    Route::get('DeleteSide/{SideID}', 'SystemManagement\AuthorizationController@deleteSide');
+    //Route::get('SideList', 'SystemManagement\AuthorizationController@sideList');
+    //Route::get('GetParentList/{SystemID}/{SideID?}', 'SystemManagement\AuthorizationController@getParentList');
+    //Route::get('GetSideData/{SideID}', 'SystemManagement\AuthorizationController@getSideData');
+    //Route::post('InsertSide', 'SystemManagement\AuthorizationController@insertSide');
+    //Route::post('UpdateSide', 'SystemManagement\AuthorizationController@updateSide');
+    //Route::get('DeleteSide/{SideID}', 'SystemManagement\AuthorizationController@deleteSide');
 
-    Route::get('GroupList', 'SystemManagement\UserController@groupList');
-    Route::post('GroupSave', 'SystemManagement\UserController@groupSave');
-    Route::get('SearchMember', 'SystemManagement\UserController@searchMember');
+    //Route::get('GroupList', 'SystemManagement\UserController@groupList');
+    //Route::post('GroupSave', 'SystemManagement\UserController@groupSave');
+    //Route::get('SearchMember', 'SystemManagement\UserController@searchMember');
     Route::get('SearchClient', 'SystemManagement\UserController@searchClient');
-    Route::post('UserJoin', 'SystemManagement\UserController@userJoin');
-    Route::get('GetMember', 'SystemManagement\UserController@getMember');
+    //Route::post('UserJoin', 'SystemManagement\UserController@userJoin');
+    //Route::get('GetMember', 'SystemManagement\UserController@getMember');
     Route::get('GetMobileUser', 'SystemManagement\UserController@getMobileUser');
-    Route::post('RemoveUser', 'SystemManagement\UserController@removeUser');
+    //Route::post('RemoveUser', 'SystemManagement\UserController@removeUser');
 });
 
 Route::group(['middleware' => 'sso', 'prefix' => 'Report'], function() {

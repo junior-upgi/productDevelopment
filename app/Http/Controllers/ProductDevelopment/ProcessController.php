@@ -106,9 +106,8 @@ class ProcessController extends Controller
     public function getProcessData($processID)
     {
         $processData = $this->projectRepository->getProcessByID($processID);
-        $staffList = $this->serverData->getStaffByNodeID($processData->nodeID);
         $jo = array();
-        if ($processData && $staffList) {
+        if ($processData) {
             $pic = $this->common->getFile($processData->processImg);
             $jo = array(
                 'success' => true,
@@ -118,8 +117,7 @@ class ProcessController extends Controller
                 'PhaseID' => $processData->projectProcessPhaseID,
                 'TimeCost' => $processData->timeCost,
                 'StaffID' => $processData->staffID,
-                'NodeID' => $processData->nodeID,
-                'StaffList' => $staffList,
+                'StaffName' => $processData->name,
                 'processImg' => $pic,
                 'note' => $processData->note,
                 'ProcessStartDate' => date('Y-m-d', strtotime($processData->processStartDate)),
