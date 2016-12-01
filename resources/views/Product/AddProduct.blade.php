@@ -1,21 +1,21 @@
 @extends('layouts.masterpage')
 @section('project', 'active')
 @section('content')
-    <script src="{{url('/')}}/js/Product/AddProduct.js?x=1"></script>
+    <script src="{{ url('/js/Product/AddProduct.js?x=1') }}"></script>
     <!--breadcrumb-->
     <ol class="breadcrumb">
-        <li><a href="{{url('/')}}/Project/ProjectList">開發案清單</a></li>
-        <li><a href="{{url('/')}}/Product/ProductList/{{$ProjectID}}">開發產品清單</a></li>
+        <li><a href="{{ url('/Project/ProjectList') }}">開發案清單</a></li>
+        <li><a href="{{ url('/Product/ProductList/') }}{{ $ProjectID }}">開發產品清單</a></li>
         <li class="active">新增開發產品</li>
     </ol>
     <!--add project form-->
     <form id="AddProductForm" class="form-horizontal" action method="POST">
         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
-        <input type="hidden" id="ProjectID" name="ProjectID" value="{{$ProjectID}}">
+        <input type="hidden" id="ProjectID" name="ProjectID" value="{{ $ProjectID }}">
         <div class="form-group">
             <label for="ProductNumber" class="col-md-2 control-label">開發產品代號</label>
             <div class="col-md-5">
-                <input type="text" class="form-control" name="ProductNumber" value="" required>
+                <input type="text" class="form-control" name="ProductNumber" value="{{ $ProjectNumber }}-" required>
             </div>
         </div>
         <div class="form-group">

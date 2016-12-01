@@ -40,7 +40,7 @@
                 <tr>
                     <td width=50></td>
                     <td width=60></td>
-                    <td width=140>產品代號</td>
+                    <td>產品代號</td>
                     <td>產品名稱</td>
                     <td width=80>需求數量</td>
                     <td width=80>交貨數量</td>
@@ -69,9 +69,22 @@
                         <td class="text-right">{{$list->deliveredQuantity}}</td>
                         <td>
                             @if(isset($list->startDate))
-                                {{date('Y-m-d', strtotime($list->startDate))}}
-                                ~
-                                {{date('Y-m-d', strtotime($list->endDate))}}
+                                @if(strtotime($list->startDate) > strtotime($list->deadline))
+                                    <span class="label label-danger">
+                                        {{ date('Y-m-d', strtotime($list->startDate)) }}
+                                    </span>
+                                @else
+                                    {{ date('Y-m-d', strtotime($list->startDate)) }}
+                                @endif
+                            @endif
+                            @if(isset($list->endDate))
+                                @if(strtotime($list->endDate) > strtotime($list->deadline))
+                                    <span class="label label-danger">
+                                        ~{{ date('Y-m-d', strtotime($list->endDate)) }}
+                                    </span>
+                                @else
+                                    ~{{ date('Y-m-d', strtotime($list->endDate)) }}
+                                @endif
                             @endif
                         </td>
                         <td>{{date('Y-m-d', strtotime($list->deadline))}}</td>

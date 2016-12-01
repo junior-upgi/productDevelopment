@@ -35,11 +35,13 @@ class ProcessController extends Controller
     //
     public function processList($productID)
     {
+        $Preparation = $this->projectRepository->getPreparationInfo($productID)->get();
         return view('Process.ProcessList')
             ->with('ProductData', $this->projectRepository->getProductByID($productID))
             ->with('ProcessList', $this->projectRepository->getProcessList($productID))
             ->with('NodeList', $this->serverData->getAllNode())
-            ->with('PhaseList', $this->projectRepository->getParaList('ProcessPhaseID'));
+            ->with('PhaseList', $this->projectRepository->getParaList('ProcessPhaseID'))
+            ->with('Preparation', $Preparation);
     }
     //暫時無解!!
     public function insertProcess(Request $request)
@@ -223,7 +225,8 @@ class ProcessController extends Controller
     //
     public function setPreparation($productID, $processID, $select)
     {
-        return $this->projectRepository->setPreparation($productID, $processID, $select);
+        $set = $this->projectRepository->setPreparation($productID, $processID, $select);
+        return $set;
     }
     public function myProcess()
     {
@@ -235,5 +238,11 @@ class ProcessController extends Controller
             ->with('process', $process)
             ->with('NodeList', $this->serverData->getAllNode())
             ->with('PhaseList', $this->projectRepository->getParaList('ProcessPhaseID'));
+    }
+
+    public function resetSort()
+    {
+        $test = $this->projectRepository->resetSort('76B22E3A-BC16-C55B-E708-1C0F55AF090F');
+        return $test;
     }
 }

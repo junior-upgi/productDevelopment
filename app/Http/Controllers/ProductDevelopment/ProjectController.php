@@ -56,8 +56,10 @@ class ProjectController extends Controller
     //
     public function insertProject(Request $request)
     {
+        $number = $this->projectRepository->getProjectNumber();
         $params = array(
-            'referenceNumber' => $request->input('referenceNumber'),
+            //'referenceNumber' => $request->input('referenceNumber'),
+            'referenceNumber' => $number,
             'referenceName' => $request->input('ProjectName'),
             'clientID' => $request->input('ClientID'),
             'salesID' => $request->input('SalesID'),

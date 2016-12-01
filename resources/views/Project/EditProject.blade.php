@@ -11,12 +11,14 @@
     <form id="EditProjectForm" class="form-horizontal" role="form" action method="POST">
         <input type="hidden" name="_token" value="{{{ csrf_token() }}}">
         <input type="hidden" id="ProjectID" name="ProjectID" value="{{$ProjectData->ID}}"> 
+        <!--
         <div class="form-group">
             <label for="referenceNumber" class="col-md-2 control-label">開發案代號</label>
             <div class="col-md-5">
                 <input type="text" class="form-control" name="referenceNumber" value="{{$ProjectData->referenceNumber}}" required>
             </div>
         </div>
+        -->
         <div class="form-group">
             <label for="ProjectName" class="col-md-2 control-label">開發案名稱</label>
             <div class="col-md-5">

@@ -44,18 +44,29 @@
             <tbody>
                 @foreach($ProjectList as $list)
                     <tr>
-                        <td class="text-center"><a href="{{url('/')}}/Project/EditProject/{{$list->ID}}" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
-                        <td class="text-center"><a href="{{url('/')}}/Product/ProductList/{{$list->ID}}" class="btn btn-sm btn-info">產品</a></td>
+                        <td class="text-center"><a href="{{ url('/Project/EditProject/') }}/{{ $list->ID }}" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                        <td class="text-center"><a href="{{ url('/Product/ProductList/') }}/{{ $list->ID }}" class="btn btn-sm btn-info">產品</a></td>
                         <td>{{$list->referenceNumber}}</td>
                         <td>{{$list->referenceName}}</td>
                         <td>{{$list->clientName}}</td>
                         <td>{{$list->salesName}}</td>
                         <td class="text-center">
                             @if(isset($list->startDate))
-                                {{date('Y-m-d', strtotime($list->startDate))}}
-                                
-                                @if(isset($list->endDate))
-                                    ~{{date('Y-m-d', strtotime($list->endDate))}}
+                                @if(strtotime($list->startDate) > strtotime($list->projectDeadline))
+                                    <span class="label label-danger">
+                                        {{ date('Y-m-d', strtotime($list->startDate)) }}
+                                    </span>
+                                @else
+                                    {{ date('Y-m-d', strtotime($list->startDate)) }}
+                                @endif
+                            @endif
+                            @if(isset($list->endDate))
+                                @if(strtotime($list->endDate) > strtotime($list->projectDeadline))
+                                    <span class="label label-danger">
+                                        ~{{ date('Y-m-d', strtotime($list->endDate)) }}
+                                    </span>
+                                @else
+                                    ~{{ date('Y-m-d', strtotime($list->endDate)) }}
                                 @endif
                             @endif
                         </td>

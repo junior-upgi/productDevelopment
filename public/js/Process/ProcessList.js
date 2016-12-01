@@ -15,7 +15,7 @@ $(function () {
         language: 'zh-TW'
     });
     //表格托拽設定
-    $("#tableSort").sortable({
+    $("#tableSort_").sortable({
         helper: fixWidthHelper,
         update: function(event, ui) {
             
@@ -139,6 +139,18 @@ $(function () {
         //console.log('onUnsetSelectValue');
         $('#EditModal #StaffID').val('');
     });
+
+    
+    $('[data-toggle="popover"]').mouseenter(function () {
+        $('[data-toggle="popover"]').popover({
+            html: true
+        });
+        $(this).popover('show');
+    });
+    $('[data-toggle="popover"]').mouseleave(function () {
+        $(this).popover('hide');
+    });
+    
 })
 function showimage(source) {
     $("#PicModal").find("#img_show").html("<image src='"+source+"' class='carousel-inner img-responsive img-rounded' />");
@@ -375,38 +387,10 @@ function GetStaff(type) {
     });
 }
 function DoInsert() {
-    var staff = $('#AddModal #StaffID').val();
-    if (staff == '') {
-        swal({
-            title: "請選擇正確的負責人名稱",
-            text: "",
-            type: "warning",
-            showCancelButton: false,
-            confirmButtonClass: "btn-warning",
-            confirmButtonText: "確定",
-            closeOnConfirm: true
-        });
-        return;
-    } else {
-        $("#AddProcessForm").submit();
-    }
+    $("#AddProcessForm").submit();
 }
 function DoUpdate(ProcessID) {
-    var staff = $('#EditModal #StaffID').val();
-    if (staff == '') {
-        swal({
-            title: "請選擇正確的業務名稱",
-            text: "",
-            type: "warning",
-            showCancelButton: false,
-            confirmButtonClass: "btn-warning",
-            confirmButtonText: "確定",
-            closeOnConfirm: true
-        });
-        return;
-    } else {
-        $("#EditProcessForm").submit();
-    }
+    $("#EditProcessForm").submit();
 }
 function Complete($ProcessID) {
     var ProductID = $('#ProductID').val();

@@ -37,7 +37,7 @@ Route::get('errorRoute', function () {
     return view('errors.roleError');
 })->name('errorRoute');
 
-//Route::get('test', 'Service\WebServiceController@test');
+//Route::get('test', 'ProductDevelopment\ProcessController@resetSort');
 
 Route::group(['prefix' => 'Service'], function() {
     Route::get('UserLogin/{Account}/{Password}/{DeviceOS}/{DeviceID}/{DeviceToken}', 'Service\WebServiceController@userLogin');

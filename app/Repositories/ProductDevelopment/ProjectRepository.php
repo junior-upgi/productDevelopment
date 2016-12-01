@@ -199,6 +199,7 @@ class ProjectRepository
         }
         return $jo;
     }
+
     public function insertData($table, $params)
     {
         $result = $this->common->insert($table, $params);
@@ -285,6 +286,55 @@ class ProjectRepository
 
         return $jo;
     }
+
+    public function resetSort($productID)
+    {
+        //$list = $this->getChildList('00000000-0000-0000-0000-000000000000');
+        //$sort = $this->setSort([], $productID, '00000000-0000-0000-0000-000000000000');
+        //return $sort;
+
+        $list = $this->vProcessList->where('productID', $productID)
+            ->orderBy('processStartDate')
+            ->orderBy('processEndDate')
+            ->orderBy('projectProcessPhaseID')
+            ->get();
+        for ($i = 0; $i < count($list); $i++) {
+            $this->projectProcess->where('ID', $list[$i]->ID)->update(['sequentialIndex' => $i + 1]);
+        }
+    }
+    
+    private function setSort($list, $productID, $parentID)
+    {
+        $children = $this->getChildList($productID, $parentID);
+        if (count($children) > 0) {
+            $next = [];
+            foreach ($children as $child) {
+                $in = in_array($child, $list);
+                if (!$in) {
+                    array_push($list, $child);
+                    array_push($next, $child);
+                }
+            }
+            foreach ($next as $n) {
+                $this->setSort($list, $productID, $n);
+            }
+        }
+        return $list;
+    }
+
+    private function getChildList($productID, $parentID)
+    {
+        $list = $this->processTree->join('vProcessList', 'processTree.projectProcessID', '=', 'vProcessList.ID')
+            ->where('processTree.projectContentID', $productID)
+            ->where('processTree.parentProcessID', $parentID)
+            ->orderBy('vProcessList.processStartDate')
+            ->orderBy('vProcessList.processEndDate')
+            ->orderBy('projectProcessPhaseID')
+            ->select('processTree.projectProcessID')
+            ->get()->toArray();
+        return $list;
+    }
+
     public function setPreparation($productID, $processID, $select)
     {
         try {
@@ -296,11 +346,11 @@ class ProjectRepository
             if (count($data) == 0) {
                 array_push($data, '00000000-0000-0000-0000-000000000000');
             }
-            foreach ($data as $list) {
+            foreach ($data as $parentID) {
                 $params = array(
                     'projectContentID' => $productID,
                     'projectProcessID' => $processID,
-                    'parentProcessID' => $list,
+                    'parentProcessID' => $parentID,
                 );
                 $params = $this->common->convBig5($params);
                 $this->processTree->insert($params);
@@ -308,6 +358,7 @@ class ProjectRepository
             //調整流程開始時間
             $this->updateStartDate($processID);
             $this->processTree->getConnection()->commit();
+            $this->resetSort($productID);
             $jo = array(
                 'success' => true,
                 'msg' => '設定前置流程成功!',
@@ -437,6 +488,15 @@ class ProjectRepository
         
         return $jo;
     }
+
+    public function getPreparationInfo($productID)
+    {
+        $info = $this->processTree->join('vProcessList', 'processTree.parentProcessID', '=', 'vProcessList.ID')
+            ->where('processTree.projectContentID', $productID)
+            ->orderBy('vProcessList.sequentialIndex');
+        return $info;
+    }
+
     public function getPreparationList($productID, $processID)
     {
         return $this->vProcessList
@@ -569,5 +629,22 @@ class ProjectRepository
             ->orderBy('processStartDate')
             ->get();
         return $process;
+    }
+
+    public function getProjectNumber()
+    {
+        $now = date('Y-m-d', strtotime($this->carbon->now()));
+        //sprintf("%'.09d\n", 123);
+        $number = $this->project->where('referenceNumber', 'like', $now . '-%');
+        if ($number->count() > 0) {
+            $max = 1;
+            foreach ($number->get() as $n) {
+                $set = (int) substr($n->referenceNumber, -3);
+                $set > $max ? $max = $set: $max = $max;
+            }
+            return $now . '-' . sprintf("%'.03d", $max + 1);
+        } else {
+            return $now . '-001';
+        }
     }
 }

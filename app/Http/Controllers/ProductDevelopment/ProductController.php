@@ -45,9 +45,10 @@ class ProductController extends Controller
     public function addProduct($projectID)
     {
         $priority = $this->projectRepository->getParaList('priorityLevel');
-
+        $projectNumber = $this->projectRepository->getProjectByID($projectID)->referenceNumber;
         return view('Product.AddProduct')
             ->with('ProjectID', $projectID)
+            ->with('ProjectNumber', $projectNumber)
             ->with('PriorityLevelList', $priority);
     }
     //

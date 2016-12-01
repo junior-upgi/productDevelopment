@@ -2,7 +2,7 @@
 @section('project', 'active')
 @section('content')
     <link rel="stylesheet" type="" href="{{ url('/css/Process/ProcessList.css') }}">
-    <script src="{{ url('/js/Process/ProcessList.js?x=6') }}"></script>
+    <script src="{{ url('/js/Process/ProcessList.js?x=1') }}"></script>
     <style>
         .panel-body .btn {
             margin-bottom: 10px;
@@ -34,7 +34,7 @@
                 <span class="glyphicon glyphicon-chevron-left"></span>
             </a>
             <button type="button" class="btn btn-primary" onclick="AddShow({{ $UserRole }})"><span class="glyphicon glyphicon-plus">新增</span></button>
-            <button type="button" class="btn btn-warning" onclick="SaveSort()"><span class="glyphicon glyphicon-floppy-save">儲存排序</button>
+            <!--<button type="button" class="btn btn-warning" onclick="SaveSort()"><span class="glyphicon glyphicon-floppy-save">儲存排序</button>-->
             @if($ProductData->execute == 0)
                 <button type="button" class="btn btn-warning {{ $UserRole }}" onclick="Execute('run')"><span class="glyphicon glyphicon-play">執行開發</span></button>
             @else
@@ -99,7 +99,29 @@
                             </button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-default {{ $complete }} {{ $self }}" data-toggle="tooltip" data-placement="top" title="前置流程" onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')"><span class="glyphicon glyphicon-tasks"></button>
+                            @php
+                                $preStr = '';
+                                foreach ($Preparation as $p) {
+                                    if ($p->projectProcessID == $list->ID) {
+                                        $preStr = $preStr . "#$p->sequentialIndex $p->PhaseName $p->referenceNumber  $p->referenceName  $p->name" . '</br>';
+                                    }
+                                }
+                                if ($preStr == '') {
+                                    $preStr = '無任何前置流程';
+                                }
+                            @endphp
+                            @if($list->complete == "0")
+                                <button type="button" class="btn btn-default {{ $self }}"  
+                                    data-toggle="popover" data-placement="right" title="前置流程" data-content="{{ $preStr }}"
+                                    onclick="SetPreparationShow('{{ $ProductData->ID }}', '{{ $list->ID }}')">
+                                    <span class="glyphicon glyphicon-tasks">
+                                </button>
+                            @elseif($list->complete == '1')
+                                <button type="button" class="btn btn-default {{ $self }}"  
+                                    data-toggle="popover" data-placement="right" title="前置流程" data-content="{{ $preStr }}">
+                                    <span class="glyphicon glyphicon-tasks">
+                                </button>
+                            @endif
                         </td>
                         <td>{{ $list->sequentialIndex }}</td>
                         <td class="text-center">
@@ -128,14 +150,13 @@
                                     {{ date('Y-m-d', $StartDate) }}
                                 </span>
                             @endif
-                            <span>~</span>
                             @if($EndDate > $Deadline)
                                 <span class="label label-danger  sEnd">
-                                    {{ date('Y-m-d', $EndDate) }}
+                                    ~{{ date('Y-m-d', $EndDate) }}
                                 <span>
                             @else
                                 <span class="sEnd">
-                                    {{ date('Y-m-d', $EndDate) }}
+                                    ~{{ date('Y-m-d', $EndDate) }}
                                 <span>
                             @endif 
                         </td>
