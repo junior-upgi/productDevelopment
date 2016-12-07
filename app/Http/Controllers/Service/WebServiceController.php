@@ -218,4 +218,13 @@ class WebServiceController extends Controller
         }
         return $jo;
     }
+
+    public function sendMessage(Request $request)
+    {
+        $getData = $request->json()->all();
+        $result = $this->telegram->productDevelopmentBotSendToUser($getData['erpID'], $getData['message']);
+        if ($result) {
+            return ['success' => true];
+        }
+    }
 }
