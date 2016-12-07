@@ -16,7 +16,7 @@
     </ol>
     <!--tool bar-->
     @php
-        Auth::user()->authorization === '1' ? $UserRole = ' disabled' : $UserRole='';
+        Auth::user()->authorization == '1' ? $UserRole = ' disabled' : $UserRole='';
     @endphp
     <div class="panel panel-default">
         <div class="panel-body">
