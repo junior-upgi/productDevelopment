@@ -72,7 +72,13 @@ class ProjectCheckService
                 $erp_id = $list->staffID;
                 $url = 'http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/' . $list->ID . '/' . $list->staffID;
                 $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 完工日： ' . $endDate . ' ，剩餘 ' . $reciprocal . ' 日';
-                $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+                $user = $server->getuserByerpID($erp_id);
+                if (isset($user)) {
+                    $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+                } else {
+                    $message = '**此工序尚未指定負責人** ' . $message;
+                    $this->telegram->sendProductTeam($message);
+                }
             }
         }
     }

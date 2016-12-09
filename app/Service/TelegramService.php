@@ -61,7 +61,8 @@ class TelegramService
 
     public function sendMessageToUser($token, $erp_id, $message, $queue = false)
     {
-        $user_id = $this->server->getuserByerpID($erp_id)->telegramID;
+        $user = $this->server->getuserByerpID($erp_id);
+        $user_id = $user->telegramID;
         $send = $this->botSendMessage($token, $user_id, $message);
         return $send;
     }
