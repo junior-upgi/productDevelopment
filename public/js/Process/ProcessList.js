@@ -470,7 +470,7 @@ function ExcuteAjax(ProductID) {
                     document.location.href = url + '/Process/ProcessList/' + ProductID;
                 });
             } else {
-                swal("更新資料失敗!", obj.msg, "error");
+                swal("更新資料失敗!", result.msg, "error");
             }
         }
     });
