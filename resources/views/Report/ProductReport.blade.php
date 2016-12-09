@@ -19,8 +19,8 @@
                 <tr style="background-color:#eee;">
                     <td>產品代號</td>
                     <td>產品名稱</td>
-                    <td class="text-center">報價</td>
                     <td class="text-center">前置</td>
+                    <td class="text-center">報價</td>
                     <td class="text-center">設計</td>
                     <td class="text-center">試樣</td>
                     <td class="text-center">量產</td>

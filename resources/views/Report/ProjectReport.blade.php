@@ -8,8 +8,8 @@
                 <td width="80">專案代號</td>
                 <td width="120">專案名稱</td>
                 <td>客戶名稱</td>
-                <td class="text-center" width="65">報價</td>
                 <td class="text-center" width="65">前置</td>
+                <td class="text-center" width="65">報價</td>
                 <td class="text-center" width="65">設計</td>
                 <td class="text-center" width="65">試樣</td>
                 <td class="text-center" width="65">量產</td>
