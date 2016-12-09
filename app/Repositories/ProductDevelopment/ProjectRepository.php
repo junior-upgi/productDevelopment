@@ -219,6 +219,13 @@ class ProjectRepository
     }
     public function setProductExecute($productID)
     {
+        $process = $this->getProcessList($productID);
+        if (count($process) < 1) {
+            return [
+                'success' => false,
+                'msg' => '必須至少要有1個工序才能執行開發!',
+            ];
+        }
         $executeStatus = $this->getProductByID($productID)->execute;
         if ($executeStatus == '0') {
             $type = '執行產品開發';
