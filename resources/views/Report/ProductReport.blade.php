@@ -19,6 +19,7 @@
                 <tr style="background-color:#eee;">
                     <td>產品代號</td>
                     <td>產品名稱</td>
+                    <td class="text-center">報價</td>
                     <td class="text-center">前置</td>
                     <td class="text-center">設計</td>
                     <td class="text-center">試樣</td>
@@ -33,12 +34,13 @@
                         <tr style="vertical-align:middle;">
                             <td style="vertical-align:middle;">{{$d->productNumber}}</td>
                             <td style="vertical-align:middle;">{{$d->productName}}</td>
-                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase0) ? number_format($d->phase0,1).'%' : $Non}}</td>
-                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase1) ? number_format($d->phase1,1).'%' : $Non}}</td>
-                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase2) ? number_format($d->phase2,1).'%' : $Non}}</td>
-                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase3) ? number_format($d->phase3,1).'%' : $Non}}</td>
-                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase9) ? number_format($d->phase9,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase5) ? number_format($d->phase5,1).'%' : $Non}}</td>
                             <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase10) ? number_format($d->phase10,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase15) ? number_format($d->phase15,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase20) ? number_format($d->phase20,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase25) ? number_format($d->phase25,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase30) ? number_format($d->phase30,1).'%' : $Non}}</td>
+                            <td style="vertical-align:middle;" class="text-right" width="65">{{isset($d->phase35) ? number_format($d->phase35,1).'%' : $Non}}</td>
                             <td style="vertical-align:middle;" width="110">{{date('Y-m-d', strtotime($d->startDate))}}~
                                 <br/>{{date('Y-m-d', strtotime($d->endDate))}}</td>
                             <td style="vertical-align:middle;" width="100">{{date('Y-m-d', strtotime($d->deadline))}}</td>
