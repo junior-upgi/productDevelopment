@@ -220,15 +220,15 @@ class ProjectRepository
     public function setProductExecute($productID)
     {
         $process = $this->getProcessList($productID);
-        if (count($process) < 1) {
-            return [
-                'success' => false,
-                'msg' => '必須至少要有1個工序才能執行開發!',
-                'toNotify' => false,
-            ];
-        }
         $executeStatus = $this->getProductByID($productID)->execute;
         if ($executeStatus == '0') {
+            if (count($process) < 1) {
+                return [
+                    'success' => false,
+                    'msg' => '必須至少要有1個工序才能執行開發!',
+                    'toNotify' => false,
+                ];
+            }
             $type = '執行產品開發';
             $params = array('execute' => '1');
             $result = $this->updateData($this->projectContent, $params, $productID);
