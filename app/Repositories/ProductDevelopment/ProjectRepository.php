@@ -224,6 +224,7 @@ class ProjectRepository
             return [
                 'success' => false,
                 'msg' => '必須至少要有1個工序才能執行開發!',
+                'toNotify' => false,
             ];
         }
         $executeStatus = $this->getProductByID($productID)->execute;
