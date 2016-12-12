@@ -122,7 +122,7 @@ class Common
                 'success' => true,
                 'msg' => 'success!',
             );
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             $table->getConnection()->rollback();
             return array(
                 'success' => false,
@@ -150,7 +150,7 @@ class Common
                 'success' => true,
                 'msg' => 'success!',
             );
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             $table->getConnection()->rollback();
             return array(
                 'success' => false,
@@ -177,7 +177,7 @@ class Common
                 'success' => true,
                 'msg' => 'success!',
             );
-        } catch (\Exception $e) {
+        } catch (\PDOException $e) {
             $table->getConnection()->rollback();
             return array(
                 'success' => false,

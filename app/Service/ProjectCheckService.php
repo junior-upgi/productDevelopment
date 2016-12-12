@@ -122,7 +122,14 @@ class ProjectCheckService
             $url = 'http://upgi.ddns.net/productDevelopment/Mobile/UserSettingCost/' . $list->ID . '/' . $list->staffID;
             $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，完成時間延至今日，詳細資訊請點連結：' . $url;
             $erp_id = $list->staffID;
-            $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+            //$this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+            $user = $server->getuserByerpID($erp_id);
+            if (isset($user)) {
+                $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
+            } else {
+                $message = '**此工序尚未指定負責人** ' . $message;
+                $this->telegram->sendProductTeam($message);
+            }
         }
     }
     public function notifyOverdue($list)
