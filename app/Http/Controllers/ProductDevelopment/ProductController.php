@@ -163,12 +163,13 @@ class ProductController extends Controller
         $file = $this->common->getFileInfo($id);
         $filename = date('Ymdhis', strtotime(Carbon::now())) . "_$file->name";
         $base64 = base64_decode($file->code);
-        file_put_contents($filename, $file);
-        header("Content-type: $file->type");
-        header("Content-Disposition: attachment; filename=\"$filename\"");
-        if (file_exists($filename)) {
-            unlink($filename);
-        }
-        return $base64;
+
+        return response($base64)
+            //->header('Cache-Control', 'no-cache private')
+            //->header('Content-Description', 'File Transfer')
+            ->header('Content-Type', $file->type)
+            ->header('Content-length', strlen($base64))
+            ->header('Content-Disposition', 'attachment; filename=' . $filename)
+            ->header('Content-Transfer-Encoding', 'binary');
     }
 }
