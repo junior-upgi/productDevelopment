@@ -76,6 +76,7 @@ class ProjectCheckService
                 if (isset($user)) {
                     $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
                 } else {
+                    $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 完工日： ' . $endDate . ' ，剩餘 ' . $reciprocal . ' 日';
                     $message = '**此工序尚未指定負責人** ' . $message;
                     $this->telegram->sendProductTeam($message);
                 }
@@ -127,6 +128,7 @@ class ProjectCheckService
             if (isset($user)) {
                 $this->telegram->productDevelopmentBotSendToUser($erp_id, $message);
             } else {
+                $message = '[' . $list->referenceNumber . ']' . $list->referenceName . ' 已延誤，完成時間延至今日。';
                 $message = '**此工序尚未指定負責人** ' . $message;
                 $this->telegram->sendProductTeam($message);
             }
