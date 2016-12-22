@@ -45,8 +45,7 @@ class ProjectCheckService
     public function sendOverdue()
     {
         /**
-         * 1、取得SendOverdue群組成員清單
-         * 2、發送逾期清單給SendOverdue群組成員
+         * 1、發送逾期清單訊息到產品開發案群組
          */
 
         $url = "http://upgi.ddns.net/productDevelopment/Mobile/overdueList";
