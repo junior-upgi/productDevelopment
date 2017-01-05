@@ -78,7 +78,7 @@ class ProjectRepository
     public function getNonCompleteProject($padding = 0)
     {
         $list = $this->vProjectList
-            ->where('completeStatus', '<>', '2')
+            //->where('completeStatus', '<>', '2')
             ->orderBy('completeStatus')
             ->orderBy('created', 'desc');
             

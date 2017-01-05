@@ -42,7 +42,7 @@ class NotificationService
     {
         $user = Auth::user();
         $product = $this->project->getProductByID($id);
-        $message = '新增[' . $product->projectNumber . '][' . $product->referenceNumber . ']產品開發，請同仁上系統新增產品開發工序';
+        $message = '新增[' . $product->projectName . '][' . $product->referenceName . ']產品開發，請同仁上系統新增產品開發工序';
         //$this->telegram->sendProductTeam($message);
         $token = $this->telegram->getBotToken('productDevelopmentBot');
         $this->telegram->botSendMessage($token, $groupID, $message, true);
@@ -51,8 +51,7 @@ class NotificationService
     public function productExecute($productID)
     {
         $project = $this->project->getNonCompleteProcessList($productID)->first();
-        $message = '[' . $project->projectNumber . ']' . $project->projectName . ' [' . $project->productNumber . ']' . 
-            $project->productName . ' 開始執行開發';
+        $message = '[' . $project->projectName . ']' . ' [' . $project->productName . ']' . ' 開始執行開發';
         $this->telegram->sendProductTeam($message, true);
     }
 
@@ -92,7 +91,7 @@ class NotificationService
         $phaseName = $process->PhaseName;
         $startDate = date('Y-m-d', strtotime($process->processStartDate));
         $cost = $process->timeCost;
-        $message = '[' . $phaseName . '][' . $processNumber . ']' . $processName . 
+        $message = '[' . $phaseName . '][' . $processName . ']' . 
             ',開始時間' . $startDate . ',工時：' . $cost . ' 天';
         $erp_id = $process->staffID;
         $this->telegram->productDevelopmentBotSendToUser($erp_id, $message, true);

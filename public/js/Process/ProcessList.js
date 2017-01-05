@@ -14,7 +14,7 @@ $(function () {
         todayHighlight: true,
         language: 'zh-TW'
     });
-    //表格托拽設定
+    `//表格托拽設定
     $("#tableSort_").sortable({
         helper: fixWidthHelper,
         update: function(event, ui) {
@@ -27,7 +27,7 @@ $(function () {
             $(this).width($(this).width());
         });
         return ui;
-    };
+    };`
     //設定 ajax token
     $.ajaxSetup({
         headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') }
