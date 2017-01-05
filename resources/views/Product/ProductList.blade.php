@@ -56,8 +56,14 @@
                     $Now = strtotime(Carbon::now() . '-1 day');
                 @endphp
                 @foreach($ProductList as $list)
+                    @php
+                        $self = 'disabled';
+                        if (Auth::user()->erpID == $list->salesID) {
+                            $self = '';
+                        }
+                    @endphp
                     <tr>
-                        <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default {{$UserRole}}"><span class="glyphicon glyphicon-edit"></span></a></td>
+                        <td><a href="{{url('/')}}/Product/EditProduct/{{$list->ID}}" data-toggle="tooltip" data-placement="top" title="編輯" class="btn btn-sm btn-default {{ $UserRole }} {{ $self }}"><span class="glyphicon glyphicon-edit"></span></a></td>
                         <td><a href="{{url('/')}}/Process/ProcessList/{{$list->ID}}" class="btn btn-sm btn-info">時程</a></td>
                         <td>{{$list->referenceNumber}}</td>
                         <td>
@@ -116,7 +122,7 @@
                             @endif
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-danger {{$UserRole}}" data-toggle="tooltip" data-placement="top" title="刪除" onclick="DoDelete('{{$ProjectData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
+                            <button class="btn btn-sm btn-danger {{$UserRole}} {{ $self }}" data-toggle="tooltip" data-placement="top" title="刪除" onclick="DoDelete('{{$ProjectData->ID}}', '{{$list->ID}}')"><span class="glyphicon glyphicon-trash"></span></button>
                         </td>
                     </tr>
                 @endforeach
