@@ -423,11 +423,11 @@ class ProjectRepository
                     if ($subEndDate > $setDate) {
                         $newTimeCost = (($subEndDate - $setDate) / 86400);
                     } else {
-                        $newTimeCost = $subTimeCost / 86400;
+                        $newTimeCost = $subTimeCost;
                     }
                 }
                 $subParams = array(
-                    'timeCost' => $newTimeCost,
+                    'timeCost' => round($newTimeCost),
                     'processStartDate' => date('Y-m-d', $setDate),
                 );
                 $this->projectProcess->where('ID', $subProcessID)->update($subParams);

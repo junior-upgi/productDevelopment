@@ -12,4 +12,5 @@ class Project extends Model
     protected $connection = 'DB_productDevelopment';
     protected $table = "project";
     protected $softDelete = true;
+    protected $dateFormat = 'Y-m-d H:i:s';
 }

@@ -194,6 +194,9 @@ class ProcessController extends Controller
             return $jo = array('success' => false, 'msg' => '資料異常!');
         }
         if ($result['success'] && $completeStatus === '0') {
+            //發送完成程序訊息給業務
+            $this->notification->processComplete($processID);
+
             return array('success' => true, 'msg' => '完成程序!');
         } elseif ($result['success'] && $completeStatus === '1') {
             return array('success' => true, 'msg' => '取消完成程序!');

@@ -13,4 +13,5 @@ class ProjectContent extends Model
     protected $table = "projectContent";
     public $timestamps = true;
     protected $softDelete = true;
+    protected $dateFormat = 'Y-m-d H:i:s';
 }

@@ -96,4 +96,15 @@ class NotificationService
         $erp_id = $process->staffID;
         $this->telegram->productDevelopmentBotSendToUser($erp_id, $message, true);
     }
+
+    public function processComplete($processID)
+    {
+        $process = $this->project->getProcessByID($processID);
+        $productID = $process->productID;
+        $url = 'http://upgi.ddns.net/productDevelopment/Process/ProcessList/' . $productID;
+        $message = '[' . $process->projectName .'][' . $process->productName . '][' . $process->PhaseName . '][' .
+            $process->referenceName . ']' . $process->name . ' 已完成，詳細內容請點擊連結：' . $url;
+        $erp_id = $process->salesID;
+        $this->telegram->productDevelopmentBotSendToUser($erp_id, $message, true);
+    }
 }

@@ -13,4 +13,5 @@ class ProjectProcess extends Model
     protected $table = "projectProcess";
     public $timestamps = true;
     protected $softDelete = true;
+    protected $dateFormat = 'Y-m-d H:i:s';
 }
