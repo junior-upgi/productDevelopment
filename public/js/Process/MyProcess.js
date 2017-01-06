@@ -13,22 +13,15 @@ function EditShow(ID) {
         },
         success: function (result) {
             if (result.success) {
-                var StaffList = result.StaffList;
                 $('#EditProcessForm #ProcessID').val(result.ID);
                 $('#EditProcessForm #ProcessNumber').val(result.ProcessNumber);
                 $('#EditProcessForm #ProcessName').val(result.ProcessName);
                 $("#EditProcessForm #PhaseID option[value=" + result.PhaseID + "]").attr('selected', true);
                 $('#EditProcessForm #ProcessStartDate').val(result.ProcessStartDate);
                 $('#EditProcessForm #TimeCost').val(result.TimeCost);
-                $("#EditProcessForm #NodeID option[value=" + result.NodeID + "]").attr('selected', true);
-                if (StaffList.length > 0) {
-                    $("#EditProcessForm #StaffID").empty();
-                    $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", "").text("請選擇"));
-                    for (i = 0; i < StaffList.length; i++) {
-                        $("#EditProcessForm #StaffID").append($("<option></option>").attr("value", StaffList[i].ID).text(StaffList[i].name));
-                    }
-                    $("#EditProcessForm #StaffID option[value=" + result.StaffID + "]").attr('selected', true);
-                }
+                $("#EditProcessForm #searchEditUser").val(result.StaffName);
+                //$("#EditProcessForm #StaffID").val(result.StaffID)
+                $('#EditProcessForm #note').val(result.note);
                 if (result.processImg != null) {
                     var img = "<img src='" + result.processImg + "' class='kv-preview-data file-preview-image' style='width:auto;height:160px;'>";
                     $('#EditProcessForm #fileSet').val('true');

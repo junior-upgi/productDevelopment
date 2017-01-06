@@ -54,21 +54,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="NodeID" class="col-md-4 control-label">負責人</label>
-                            <div class="col-md-3">
-                                <select class="form-control" {{$disabled}} id="NodeID" name="NodeID" onchange="GetStaff('Edit')" required>
-                                    <option value="">請選擇單位</option>
-                                    @foreach($NodeList as $list)
-                                        <option value="{{$list->ID}}">{{$list->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-control" {{$disabled}} id="StaffID" name="StaffID" required>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
                             <label for="note" class="col-md-4 control-label">備註</label>
                             <div class="col-md-7">
                                 <textarea class="form-control" name="note" id="note" rows="5" style="resize: none;">{{ $list->note }}</textarea>

@@ -2,7 +2,7 @@
 @section('personal', 'active')
 @section('content')
     <link rel="stylesheet" type="" href="{{url('/')}}/css/Process/ProcessList.css">
-    <script src="{{url('/')}}/js/Process/MyProcess.js?x=2"></script>
+    <script src="{{url('/')}}/js/Process/MyProcess.js?x=3"></script>
     @inject('system', 'App\Presenters\SystemPresenter')
     <table class="table table-bordered">
         <thead>
