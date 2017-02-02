@@ -67,7 +67,8 @@ class Common
         $countInput = count($input);
         list($key, $value) = array_divide($input);
         for ($i = 0; $i < $countInput; $i++) {
-            $big5 = iconv('utf8', 'big5', $value[$i]);
+            //$big5 = iconv('utf8', 'big5', $value[$i]);
+            $big5 = mb_convert_encoding($value[$i], "big5", "utf-8");
             $params[$key[$i]] = $big5;
         }
         return $params;
