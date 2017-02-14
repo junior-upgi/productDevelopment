@@ -141,6 +141,7 @@ class ProcessController extends Controller
     //
     public function updateProcess(Request $request)
     {
+        $input = $request->input();
         $processID = $request->input('ProcessID');
         $processName = $request->input('StaffID');
         $file = $request->file('img');
@@ -154,7 +155,7 @@ class ProcessController extends Controller
             }
             $upload = true;
         } else {
-            if ($request->input('fileSet') == 'true') {
+            if ($request->input('fileSet') == 'true' && $request->input('fileremove') == 'true') {
                 $upload = true;
                 $pic = null;
             }

@@ -13,6 +13,7 @@
                         <input type="hidden" id="ProductID" name="ProductID" value="{{$ProductData->ID}}">
                         <input type="hidden" id="ProcessID" name="ProcessID" value="">
                         <input type="hidden" id="fileSet" name="fileSet" value="">
+                        <input type="hidden" id="fileremove" name="fileremove" value="false">
                         @php 
                             $disabled = 'disabled';
                             if ($user->authorization === '99') {

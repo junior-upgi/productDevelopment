@@ -123,7 +123,7 @@ class ProductController extends Controller
             }
             $upload = true;
         } else {
-            if ($request->input('fileSet') == 'true') {
+            if ($request->input('fileSet') == 'true' && $request->input('fileremove') == 'true') {
                 $upload = true;
                 $pic = null;
             }

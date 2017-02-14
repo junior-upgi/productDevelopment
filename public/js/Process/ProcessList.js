@@ -152,10 +152,12 @@ $(function () {
     });
     
 })
+
 function showimage(source) {
     $("#PicModal").find("#img_show").html("<image src='"+source+"' class='carousel-inner img-responsive img-rounded' />");
     $("#PicModal").modal('show');
 }
+
 function SaveSort() {
     var sort = [];
     $("#tableSort tr").each(function (index, element) {
@@ -266,6 +268,7 @@ function EditShow(ID) {
                     resetModal('Edit');
                 });
                 $('#editImg').on('filecleared', function(event) {
+                    $('#fileremove').val(true);
                     resetModal('Edit');
                 });
                 $("#editPreview").attr("src", img);
