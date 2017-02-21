@@ -79,7 +79,7 @@ class ProjectRepository
     {
         $list = $this->vProjectList
             //->where('completeStatus', '<>', '2')
-            ->orderBy('completeStatus')
+            //->orderBy('completeStatus')
             ->orderBy('referenceNumber', 'desc');
             
         if ($padding > 0) return $list->paginate($padding);
